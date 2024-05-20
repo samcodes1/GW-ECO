@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.efrcs.echofriend.appconsts.AppConstants;
@@ -66,9 +67,9 @@ public class CompanyController {
             @ApiResponse(code = 500, message = "internal server error."),
         }
     )
-    @GetMapping("/getAllCompanies")
-    public ResponseEntity<CompaniesResponse> getMethodName() {
-        CompaniesResponse response = companiesServiceObj.getAllCompanies();
+    @GetMapping("/getCompanies")
+    public ResponseEntity<CompaniesResponse> getMethodName(@RequestParam(required = false) Long companyId) {
+        CompaniesResponse response = companiesServiceObj.getAllCompanies(companyId);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }

@@ -1,7 +1,9 @@
 package com.efrcs.echofriend.services;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,4 +59,54 @@ public class AdminService {
         return response;
     }
 
+    public AdminResponse getAdminsServiceMethod(Long adminId){
+        AdminResponse response = new AdminResponse();
+        if(adminId==null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(adminRespoObj.findAll());
+            return response;
+        }
+
+        List<AdminEntity> admins = new ArrayList<>();
+        admins.add(adminRespoObj.findById(adminId).orElseThrow(
+            ()-> new RecordNotFoundException("Record of admin '" + adminId + "' does not exists")
+        ));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(admins);
+        return response;
+    }
+
+    public AdminResponse updateAdmin(Long adminId, AdminRequest adminRequestObj) throws NoSuchAlgorithmException{
+        AdminResponse response = new AdminResponse();
+        Optional<AdminEntity> dbresponse= adminRespoObj.findById(adminId);
+        if(!dbresponse.isPresent()){
+            throw new RecordNotFoundException("Record of adminId '" + adminId + "' does not exist.");
+        }
+
+        AdminEntity responseEntity = dbresponse.get();
+
+        responseEntity.setAdmintype(
+            (adminRequestObj.getAdminType()==null || adminRequestObj.getAdminType().isEmpty())?
+            responseEntity.getAdmintype():adminRequestObj.getAdminType()
+        );
+
+        responseEntity.setEmail(
+            (adminRequestObj.getAdminEmail()==null || adminRequestObj.getAdminEmail().isEmpty())?
+            responseEntity.getEmail():adminRequestObj.getAdminEmail()
+        );
+
+        responseEntity.setPassword(
+            (adminRequestObj.getAdminPassword()==null || adminRequestObj.getAdminPassword().isEmpty())?
+            responseEntity.getPassword():Utility.hashPassword(adminRequestObj.getAdminPassword())
+        );
+
+        responseEntity.setUsername(
+            (adminRequestObj.getAdminName()==null || adminRequestObj.getAdminName().isEmpty())?
+            responseEntity.getUsername():adminRequestObj.getAdminName()
+        );
+
+        adminRespoObj.save(responseEntity);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
 }

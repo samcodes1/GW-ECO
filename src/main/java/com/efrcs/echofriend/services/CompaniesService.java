@@ -1,5 +1,6 @@
 package com.efrcs.echofriend.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,12 +33,20 @@ public class CompaniesService {
         return response;
     }
 
-    public CompaniesResponse getAllCompanies(){
-        List<CompaniesEntity> allCompaniesList = companiesRepoObj.findAll();
+    public CompaniesResponse getAllCompanies(Long companyId){
         CompaniesResponse response = new CompaniesResponse();
-        // response.setResponseCode(AppConstants.SUCCESS);
+        if(companyId==null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(companiesRepoObj.findAll());
+            return response;
+        }
+        List<CompaniesEntity> company = new ArrayList<>();
+        company.add(companiesRepoObj.findById(companyId).orElseThrow(
+            ()-> new RecordNotFoundException("Record of company '" + companyId + "' does not exists")
+        ));
+
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        response.setResponseData(allCompaniesList);
+        response.setData(company);
         return response;
     }
 

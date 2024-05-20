@@ -1,6 +1,8 @@
 package com.efrcs.echofriend.services;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ public class BannerService {
         return response;
     }
 
-    public BannerResponse updateBannerServiceMethod(Long bannerId, BannerRequest bannerUpdateRequestObj) throws ParseException{
+    public BannerResponse updateBannerExpiryServiceMethod(Long bannerId, BannerRequest bannerUpdateRequestObj) throws ParseException{
         BannerResponse response = new BannerResponse();
 
         CompaniesEntity companiesdata = companiesRepoObj.findCompanyIdByNameAndBannerId(bannerUpdateRequestObj.getCompanyBanner(), bannerId);
@@ -63,8 +65,57 @@ public class BannerService {
         }
         BannerEntity bannerEntity = bannerData.get();
         bannerEntity.setBannerexpiry(Utility.convertToTimestamp(bannerUpdateRequestObj.getBannerExpiry()));
-        // response.setResponseCode(AppConstants.SUCCESS);
+        bannerRepoObj.save(bannerEntity);
+        
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public BannerResponse updateBannerServiceMethod(Long bannerId, BannerRequest bannerUpdateRequestObj) throws ParseException{
+        BannerResponse response = new BannerResponse();
+        Optional<BannerEntity> bannerData = bannerRepoObj.findById(bannerId);
+        if(!bannerData.isPresent()){
+            throw new RecordNotFoundException("Record of bannerId '" + bannerId + "' does not exist.");
+        }
+        BannerEntity bannerEntity = bannerData.get();
+        bannerEntity.setBannerexpiry(
+            (bannerUpdateRequestObj.getBannerExpiry()==null || bannerUpdateRequestObj.getBannerExpiry().isEmpty())?
+            bannerEntity.getBannerexpiry():Utility.convertToTimestamp(bannerUpdateRequestObj.getBannerExpiry())
+        );
+        bannerEntity.setBannerimage(
+            bannerUpdateRequestObj.getBannerImage()==null || bannerUpdateRequestObj.getBannerImage().isEmpty()?
+            bannerEntity.getBannerimage() :bannerUpdateRequestObj.getBannerImage()
+        );
+        bannerEntity.setBannername(
+            (bannerUpdateRequestObj.getBannerName()==null || bannerUpdateRequestObj.getBannerName().isEmpty())?
+            bannerEntity.getBannername():bannerUpdateRequestObj.getBannerName()
+        );
+        bannerRepoObj.save(bannerEntity);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public BannerResponse deleteBanner(Long bannerId){
+        BannerResponse response = new BannerResponse();
+        bannerRepoObj.deleteById(bannerId);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public BannerResponse getBannerServiceMethod(Long bannerId){
+        BannerResponse response = new BannerResponse();
+        if(bannerId==null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(bannerRepoObj.findAll());
+            return response;
+        }
+
+        List<BannerEntity> banner = new ArrayList<BannerEntity>();
+        banner.add(bannerRepoObj.findById(bannerId).orElseThrow(
+            ()-> new RecordNotFoundException("Record of banner '" + bannerId + "' does not exists")
+        ));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(banner);
         return response;
     }
     

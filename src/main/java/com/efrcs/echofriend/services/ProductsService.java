@@ -87,7 +87,7 @@ public class ProductsService {
             ()-> new RecordNotFoundException("Record of product '" + productId + "' does not exists")
         ));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        response.setData(productsRepoObj.findAll());
+        response.setData(product);
         return response;
     }
 }
