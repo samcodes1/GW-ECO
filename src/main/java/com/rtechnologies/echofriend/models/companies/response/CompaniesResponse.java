@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class CompaniesResponse extends EcoFriendlyBaseResponse {
     private Long companyId;
     private String companyName;

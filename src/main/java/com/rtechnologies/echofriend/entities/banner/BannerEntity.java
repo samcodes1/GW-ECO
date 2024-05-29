@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity( name = "banner" )
 @Table( name = "banner" )
 public class BannerEntity {

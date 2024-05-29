@@ -14,7 +14,7 @@ public interface AdminRespo extends JpaRepository <AdminEntity, Long>{
 
     public Boolean existsByEmail(String email);
 
-    @Query("SELECT a FROM admins a WHERE a.email = :email")
+    @Query("SELECT a FROM admin a WHERE a.email = :email")
     public AdminEntity findAdminIdAndTypeByEmail(@Param("email") String email);
 
     Optional<AdminEntity> findByEmail(String username);
