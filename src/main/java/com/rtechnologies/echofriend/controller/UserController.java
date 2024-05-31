@@ -7,6 +7,7 @@ import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.request.UserUpdateRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
 import com.rtechnologies.echofriend.services.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -115,6 +116,22 @@ public class UserController {
         UserResponse response = userServiceObj.getUser(userId);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
+    }
+
+    @ApiOperation(value = "Change Password for Mentee", response = String.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Password changed successfully"),
+            @ApiResponse(code = 400, message = "Invalid request data"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @PatchMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+            @RequestParam("email") String email,
+            @RequestParam("oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword) {
+
+        String responseMessage = userServiceObj.changePassword(email, oldPassword, newPassword);
+        return ResponseEntity.ok(responseMessage);
     }
     
 }

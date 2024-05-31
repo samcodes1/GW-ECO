@@ -26,6 +26,7 @@ import com.rtechnologies.echofriend.models.user.response.UserResponse;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
+import org.webjars.NotFoundException;
 
 @Service
 public class UserService {
@@ -157,5 +158,20 @@ public class UserService {
         response.setData(users);
         return response;
 
+    }
+
+    public String changePassword(String email, String oldPassword, String newPassword) {
+        Optional<UserEntity> dbResponse = userRepoObj.findByEmail(email);
+        if(!dbResponse.isPresent()){
+            throw new NotFoundException("email or password not correct.");
+        }
+
+        if (!passwordEncoder.matches(oldPassword, dbResponse.get().getPassword())) {
+            throw new RuntimeException("Incorrect old password");
+        }
+
+        dbResponse.get().setPassword(passwordEncoder.encode(newPassword));
+        userRepoObj.save(dbResponse.get());
+        return "Password changed successfully";
     }
 }
