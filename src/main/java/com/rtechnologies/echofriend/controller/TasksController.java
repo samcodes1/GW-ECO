@@ -6,14 +6,16 @@ import com.rtechnologies.echofriend.models.tasks.response.TasksResponse;
 import com.rtechnologies.echofriend.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RestController
+@RequestMapping("/api/task")
 public class TasksController {
 
     @Autowired
@@ -28,7 +30,7 @@ public class TasksController {
             @ApiResponse(code = 500, message = "internal server error."),
         }
     )
-    @PostMapping("/createTask")
+    @PostMapping("/create")
     public ResponseEntity<TasksResponse> createTask(@RequestBody TasksResquest tasksResquestObj) {
         TasksResponse response = taskServiceObj.createTaskServiceMethod(tasksResquestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
@@ -44,7 +46,7 @@ public class TasksController {
             @ApiResponse(code = 500, message = "internal server error."),
         }
     )
-    @PostMapping("/assignTask")
+    @PostMapping("/assign")
     public ResponseEntity<TasksResponse> postMethodName(@RequestBody TaskAssignmentRequest taskAssignmentRequestObj) {
         TasksResponse response = taskServiceObj.assignTaskServiceMethod(taskAssignmentRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
