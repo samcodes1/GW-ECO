@@ -1,13 +1,22 @@
 package com.rtechnologies.echofriend.services;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.rtechnologies.echofriend.appconsts.Membershiptype;
+import com.rtechnologies.echofriend.models.user.request.UserUpdateRequest;
 import com.rtechnologies.echofriend.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
@@ -22,19 +31,41 @@ import com.rtechnologies.echofriend.entities.user.UserEntity;
 public class UserService {
     @Autowired
     UserRepo userRepoObj;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private Cloudinary cloudinary;
 
-    public UserResponse userSignupServiceMethod(UserRequest userRequestObj) throws NoSuchAlgorithmException, ParseException{
-        if(userRepoObj.existsByEmail(userRequestObj.getEmail())){
+    public UserResponse userSignupServiceMethod(UserRequest userRequestObj) throws NoSuchAlgorithmException, ParseException {
+        if (userRepoObj.existsByEmail(userRequestObj.getEmail())) {
             throw new RecordAlreadyExistsException("Record already exists in the database.");
         }
-        userRepoObj.save(
-            new UserEntity(
-                null, userRequestObj.getUserName(),userRequestObj.getEmail(), Utility.hashPassword(userRequestObj.getPassword()),
-                userRequestObj.getMembershiptype(), userRequestObj.getPoints(), userRequestObj.getProfilephoto(),
-                (userRequestObj.getMemebershipexpiry()==null || userRequestObj.getMemebershipexpiry().isEmpty())?
-                null:Utility.convertToTimestamp(userRequestObj.getMemebershipexpiry())
-            )
-        );
+
+        String profilePicUrl = "";
+        try {
+            String folder = "profile-pics"; // Change this to your preferred folder name
+            String publicId = folder + "/" + userRequestObj.getProfilephoto().getName();
+            Map data = cloudinary.uploader().upload(userRequestObj.getProfilephoto().getBytes(), ObjectUtils.asMap("public_id", publicId));
+            profilePicUrl = data.get("secure_url").toString();
+        } catch (IOException ioException) {
+            throw new RuntimeException("File uploading failed");
+        }
+
+        String hashedPassword = new BCryptPasswordEncoder().encode(userRequestObj.getPassword());
+        userRequestObj.setPassword(hashedPassword);
+
+        UserEntity userEntity = UserEntity.builder()
+                .username(userRequestObj.getUserName())
+                .email(userRequestObj.getEmail())
+                .password(hashedPassword)
+                .membershiptype(Membershiptype.FREE) // Setting membership as free
+                .points(0) // Setting points as 0
+                .profilephoto(profilePicUrl)
+                .memebershipexpiry(new Timestamp(-1)) // Setting timestamp as -1
+                .build();
+
+        userRepoObj.save(userEntity);
+
         UserResponse response = new UserResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
@@ -56,58 +87,61 @@ public class UserService {
         return response;
     }
 
-    public UserResponse updateUserServiceMethod(Long usrId, UserRequest userRequestObj) throws ParseException, NoSuchAlgorithmException{
-        Optional<UserEntity> userData = userRepoObj.findById(usrId);
-        if(!userData.isPresent()){
-            throw new RecordNotFoundException("user not found");
+    public UserResponse updateUser(Long userId, UserUpdateRequest userUpdateRequestObj) throws NoSuchAlgorithmException, ParseException {
+        Optional<UserEntity> existingUserOpt = userRepoObj.findById(userId);
+        if (!existingUserOpt.isPresent()) {
+            throw new RecordNotFoundException("User not found.");
         }
-        UserEntity userDbData = userData.get();
 
-        userDbData.setEmail(
-            (userRequestObj.getEmail()==null || userRequestObj.getEmail().isEmpty())?
-            userDbData.getEmail():userRequestObj.getEmail()
-        );
-        userDbData.setMembershiptype(
-            (userRequestObj.getMembershiptype()==null)?
-            userDbData.getMembershiptype():userRequestObj.getMembershiptype()
-        );
-        userDbData.setMemebershipexpiry(
-            (userRequestObj.getMemebershipexpiry()==null || userRequestObj.getMemebershipexpiry().isEmpty())?
-            userDbData.getMemebershipexpiry():Utility.convertToTimestamp(userRequestObj.getMemebershipexpiry())
-        );
-        userDbData.setPassword(
-            (userRequestObj.getPassword()==null || userRequestObj.getPassword().isEmpty())?
-            userDbData.getPassword():Utility.hashPassword(userRequestObj.getPassword())
-        );
-        userDbData.setPoints(
-            (userRequestObj.getPoints()==null)?
-            userDbData.getPoints():userRequestObj.getPoints()
-        );
-        userDbData.setProfilephoto(
-            (userRequestObj.getProfilephoto()==null || userRequestObj.getProfilephoto().isEmpty())?
-            userDbData.getProfilephoto():userRequestObj.getProfilephoto()
-        );
-        userDbData.setUsername(
-            (userRequestObj.getUserName()==null || userRequestObj.getUserName().isEmpty())?
-            userDbData.getUsername():userRequestObj.getUserName()
-        );
+        UserEntity existingUser = existingUserOpt.get();
 
-        userRepoObj.save(userDbData);
-        UserResponse response = new UserResponse();
-        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        userDbData.setPassword(null);
-        response.setData(userDbData);
-        return response;
-    }
+        String profilePicUrl = "";
+        if(userUpdateRequestObj.getProfilephoto() != null) {
+            try {
+                String folder = "profile-pics"; // Change this to your preferred folder name
+                String publicId = folder + "/" + userUpdateRequestObj.getProfilephoto().getName();
+                Map data = cloudinary.uploader().upload(userUpdateRequestObj.getProfilephoto().getBytes(), ObjectUtils.asMap("public_id", publicId));
+                profilePicUrl = data.get("secure_url").toString();
+            } catch (IOException ioException) {
+                throw new RuntimeException("File uploading failed");
+            }
+        } else {
+            profilePicUrl = existingUser.getProfilephoto();
+        }
 
-    public UserResponse deleteUserServiceMethod(Long usrId){
-        userRepoObj.deleteById(usrId);
+
+        UserEntity updatedUserEntity = UserEntity.builder()
+                .userid(existingUser.getUserid())
+                .username(userUpdateRequestObj.getUserName() != null ? userUpdateRequestObj.getUserName() : existingUser.getUsername())
+                .email(userUpdateRequestObj.getEmail() != null ? userUpdateRequestObj.getEmail() : existingUser.getEmail())
+                .password(existingUser.getPassword()) // Keeping existing password
+                .membershiptype(existingUser.getMembershiptype()) // Keeping existing membership type
+                .points(existingUser.getPoints()) // Keeping existing points
+                .profilephoto(profilePicUrl)
+                .memebershipexpiry(existingUser.getMemebershipexpiry()) // Keeping existing membership expiry
+                .build();
+
+        userRepoObj.save(updatedUserEntity);
+
         UserResponse response = new UserResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
 
-    public UserResponse getUsersServiceMethod(Long userId){
+
+    public UserResponse deleteUserServiceMethod(Long userId){
+        Optional<UserEntity> existingUserOpt = userRepoObj.findById(userId);
+        if (!existingUserOpt.isPresent()) {
+            throw new RecordNotFoundException("User not found.");
+        }
+
+        userRepoObj.deleteById(userId);
+        UserResponse response = new UserResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public UserResponse getUser(Long userId){
         UserResponse response = new UserResponse();
         if(userId==null){
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);

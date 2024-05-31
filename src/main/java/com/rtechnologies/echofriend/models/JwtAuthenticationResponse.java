@@ -1,6 +1,8 @@
 package com.rtechnologies.echofriend.models;
 
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
+import com.rtechnologies.echofriend.entities.user.UserEntity;
+import org.apache.catalina.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
@@ -10,18 +12,20 @@ public class JwtAuthenticationResponse {
     private String tokenType = "Bearer";
     private Collection<? extends GrantedAuthority> authorities;
     private String role;
-//    private Compan teacher;
-//    private Student student;
     private AdminEntity admin;
+    private UserEntity user;
+
     public JwtAuthenticationResponse() {
     }
 
     public JwtAuthenticationResponse(String accessToken, Collection<? extends GrantedAuthority> authorities, String role,
-                                     AdminEntity admin) {
+                                     AdminEntity admin, UserEntity userEntity) {
+        System.out.println("Done 3");
         this.accessToken = accessToken;
         this.authorities = authorities;
         this.role = role;
         this.admin = admin;
+        this.user = userEntity;
     }
 
     public String getAccessToken() {
@@ -62,5 +66,13 @@ public class JwtAuthenticationResponse {
 
     public void setAdmin(AdminEntity admin) {
         this.admin = admin;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

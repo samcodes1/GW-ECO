@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.config;
 
+import com.rtechnologies.echofriend.models.LoginRequest;
 import com.rtechnologies.echofriend.models.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -34,7 +35,6 @@ public class JwtConfig implements Serializable {
     public static Key keyGenerator() {
             // Generate a new random secret key for HS512
             Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-            System.out.println(secretKey);
             return secretKey;
     }
     public String generateToken(Authentication authentication) {
@@ -54,6 +54,39 @@ public class JwtConfig implements Serializable {
                 .compact();
     }
 
+    public String generateToken(LoginRequest loginRequest) {
+        String username = loginRequest.getUsernameOrEmail();
+        Set<String> roles = Set.of("ROLE_USER");
+
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + expirationMs);
+
+        System.out.println("Roles in generate token: " + roles.toString());
+        return Jwts.builder()
+                .setSubject(username)
+                .claim("roles", roles)  // Include roles in the token
+                .setIssuedAt(new Date())
+                .setExpiration(expiryDate)
+                .signWith(secretKey, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    public String generateToken(LoginRequest loginRequest, int num) {
+        String username = loginRequest.getUsernameOrEmail();
+        Set<String> roles = Set.of("ROLE_ADMIN");
+
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + expirationMs);
+
+        System.out.println("Roles in generate token: " + roles.toString());
+        return Jwts.builder()
+                .setSubject(username)
+                .claim("roles", roles)  // Include roles in the token
+                .setIssuedAt(new Date())
+                .setExpiration(expiryDate)
+                .signWith(secretKey, SignatureAlgorithm.HS512)
+                .compact();
+    }
 //    public String getUsernameFromToken(String token) {
 //        return getClaimsFromToken(token).getSubject();
 //    }

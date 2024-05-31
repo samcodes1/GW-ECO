@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
@@ -31,10 +32,13 @@ public class AdminService {
             throw new RecordAlreadyExistsException("Record already exists in the database.");
         }
 
+        String hashedPassword = new BCryptPasswordEncoder().encode(adminRequestObj.getAdminPassword());
+        adminRequestObj.setAdminPassword(hashedPassword);
+
         adminRespoObj.save(new AdminEntity(
             null, adminRequestObj.getAdminName(), 
             adminRequestObj.getAdminEmail(), 
-            Utility.hashPassword(adminRequestObj.getAdminPassword()), 
+            adminRequestObj.getAdminPassword(),
             adminRequestObj.getAdminType()
         ));
 

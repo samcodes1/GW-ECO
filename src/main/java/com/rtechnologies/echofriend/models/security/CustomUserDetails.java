@@ -1,6 +1,7 @@
 package com.rtechnologies.echofriend.models.security;
 
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
+import com.rtechnologies.echofriend.entities.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class CustomUserDetails implements UserDetails {
     private final String userType;  // For example, "TEACHER" or "STUDENT"
     private final Set<String> roles;
     private AdminEntity admin;
-
+    private UserEntity userEntity;
     public Set<String> getRoles() {
         return roles;
     }
@@ -37,8 +38,22 @@ public class CustomUserDetails implements UserDetails {
         this.userId = admin.getId();
         this.userType = "ADMIN";
         this.admin = admin;
+        this.userEntity = null;
         // Add roles based on your application logic
         this.roles = Set.of("ROLE_ADMIN");
+
+    }
+
+    public CustomUserDetails(UserEntity user) {
+        this.username = user.getEmail();
+        this.password = user.getPassword();
+        this.authorities = Collections.singletonList(() -> "ROLE_USER");
+        this.userId = user.getUserid();
+        this.userType = "`USER`";
+        this.userEntity = user;
+        this.admin = null;
+        // Add roles based on your application logic
+        this.roles = Set.of("ROLE_USER");
 
     }
 
@@ -85,6 +100,22 @@ public class CustomUserDetails implements UserDetails {
         return userType;
     }
 
+    public AdminEntity getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(AdminEntity admin) {
+        this.admin = admin;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -119,4 +150,6 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
