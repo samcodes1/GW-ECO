@@ -25,7 +25,7 @@ public class UserPaymentService {
         userPaymentRepoObj.findById(id).get();
         UserPaymentResponse response = new UserPaymentResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        response.setData(userPaymentRepoObj.findById(id).get());
+        response.setData(userPaymentRepoObj.findByUseridfk(id).get());
         return response;
     }
 }
