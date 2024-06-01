@@ -15,4 +15,5 @@ public class ProductsRequest {
     private Float productPrice;
     private Integer productQuantity;
     private String productOfCompany;
+    private Long categoryidfk;
 }

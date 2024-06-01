@@ -37,7 +37,7 @@ public class ProductsService {
 
         productsRepoObj.save(new ProductsEntity(
             null, productsRequestObj.getProductName(), productsRequestObj.getProductPrice(),
-            productsRequestObj.getProductQuantity(), companiesdata.getCompanyid()
+            productsRequestObj.getProductQuantity(), companiesdata.getCompanyid(),productsRequestObj.getCategoryidfk()
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -74,11 +74,17 @@ public class ProductsService {
         return response;
     }
 
-    public ProductsResponse getProducts(Long productId){
+    public ProductsResponse getProducts(Long productId, Long categoryId){
         ProductsResponse response = new ProductsResponse();
-        if(productId==null){
+        if(productId==null && categoryId==null){
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-            response.setData(productsRepoObj.findAll());
+            response.setData(productsRepoObj.findProducts());
+            return response;
+        }
+
+        if(productId==null && categoryId!=null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(productsRepoObj.findProductsByCategory(categoryId));
             return response;
         }
 
@@ -99,4 +105,5 @@ public class ProductsService {
         response.setData(productsRepoObj.findAll());
         return response;
     }
+
 }

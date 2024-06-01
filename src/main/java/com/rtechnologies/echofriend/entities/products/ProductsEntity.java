@@ -23,4 +23,5 @@ public class ProductsEntity {
     private int productquantity;
 
     private Long companyidfk;
+    private Long categoryidfk;
 }

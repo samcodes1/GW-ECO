@@ -60,5 +60,12 @@ public class TasksController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @GetMapping("/getTask")
+    public ResponseEntity<TasksResponse> getMethodName(@RequestParam(required = false) Long taskId) {
+        TasksResponse response = taskServiceObj.getTask(taskId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
     
 }

@@ -1,8 +1,10 @@
 package com.rtechnologies.echofriend.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
@@ -107,6 +109,22 @@ public class TaskService {
         TasksResponse response = new TasksResponse();
         // taskRepoObj.findTopSixTasks();
         response.setData(taskRepoObj.findTopSixTasks());
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public TasksResponse getTask(Long id){
+        TasksResponse response = new TasksResponse();
+        if(id!=null){
+            List <TasksEntity> taskList = new ArrayList<>();
+            taskList.add(taskRepoObj.findById(id).get());
+            
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(taskList);
+            return response;
+        }
+
+        response.setData(taskRepoObj.findAll());
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }

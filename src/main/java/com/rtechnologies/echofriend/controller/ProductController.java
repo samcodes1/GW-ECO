@@ -81,8 +81,8 @@ public class ProductController {
         }
     )
     @GetMapping("/getProducts")
-    public ResponseEntity<ProductsResponse> getProducts(@RequestParam(required = false) Long productId) {
-        ProductsResponse response = productsServiceObj.getProducts(productId);
+    public ResponseEntity<ProductsResponse> getProducts(@RequestParam(required = false) Long productId, @RequestParam(required = false) Long categoryId) {
+        ProductsResponse response = productsServiceObj.getProducts(productId, categoryId);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
@@ -93,6 +93,5 @@ public class ProductController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
-    
     
 }
