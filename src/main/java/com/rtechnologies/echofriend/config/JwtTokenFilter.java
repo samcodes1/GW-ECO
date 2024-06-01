@@ -19,7 +19,7 @@ import java.util.List;
 
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
-
+//comented
     @Autowired
     private JwtConfig jwtConfig;
 
