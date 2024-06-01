@@ -90,4 +90,13 @@ public class ProductsService {
         response.setData(product);
         return response;
     }
+
+    public ProductsResponse getPopularProducts(){
+        ProductsResponse response = new ProductsResponse();
+        // List<ProductsEntity> product = new ArrayList<ProductsEntity>();
+        // product.add();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(productsRepoObj.findAll());
+        return response;
+    }
 }

@@ -2,6 +2,7 @@ package com.rtechnologies.echofriend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
@@ -101,4 +102,13 @@ public class TaskService {
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
+
+    public TasksResponse topTask(){
+        TasksResponse response = new TasksResponse();
+        // taskRepoObj.findTopSixTasks();
+        response.setData(taskRepoObj.findTopSixTasks());
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
 }

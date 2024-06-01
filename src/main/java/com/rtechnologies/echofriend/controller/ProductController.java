@@ -86,5 +86,13 @@ public class ProductController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @GetMapping("/getPopularProducts")
+    public ResponseEntity<ProductsResponse> getMethodName() {
+        ProductsResponse response = productsServiceObj.getPopularProducts();
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
     
 }

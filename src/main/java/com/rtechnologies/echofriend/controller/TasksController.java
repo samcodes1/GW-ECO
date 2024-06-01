@@ -13,6 +13,7 @@ import com.rtechnologies.echofriend.appconsts.AppConstants;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/task")
@@ -52,4 +53,12 @@ public class TasksController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @GetMapping("/getTopTask")
+    public ResponseEntity<TasksResponse> getMethodName() {
+        TasksResponse response = taskServiceObj.topTask();
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
 }
