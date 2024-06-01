@@ -21,7 +21,8 @@ public class ProductsEntity {
     private String productname;
     private float productprice;
     private int productquantity;
-
+    private String productimage;
     private Long companyidfk;
     private Long categoryidfk;
+    private Long producttypeidfk;
 }

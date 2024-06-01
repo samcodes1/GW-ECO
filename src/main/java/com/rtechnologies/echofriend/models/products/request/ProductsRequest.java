@@ -16,4 +16,6 @@ public class ProductsRequest {
     private Integer productQuantity;
     private String productOfCompany;
     private Long categoryidfk;
+    private Long producttypeidfk;
+    private String productimage;
 }

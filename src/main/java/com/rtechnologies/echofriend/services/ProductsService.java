@@ -37,7 +37,8 @@ public class ProductsService {
 
         productsRepoObj.save(new ProductsEntity(
             null, productsRequestObj.getProductName(), productsRequestObj.getProductPrice(),
-            productsRequestObj.getProductQuantity(), companiesdata.getCompanyid(),productsRequestObj.getCategoryidfk()
+            productsRequestObj.getProductQuantity(), productsRequestObj.getProductimage(), 
+            companiesdata.getCompanyid(),productsRequestObj.getCategoryidfk(), productsRequestObj.getProducttypeidfk()
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);

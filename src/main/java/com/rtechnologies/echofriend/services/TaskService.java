@@ -9,15 +9,18 @@ import org.springframework.stereotype.Service;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
 import com.rtechnologies.echofriend.entities.task.TaskAssigmentEntity;
+import com.rtechnologies.echofriend.entities.task.TaskCategoryEntity;
 import com.rtechnologies.echofriend.entities.task.TasksEntity;
 import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.tasks.request.TaskAssignmentRequest;
 import com.rtechnologies.echofriend.models.tasks.request.TasksResquest;
+import com.rtechnologies.echofriend.models.tasks.response.TaskCategortProjections;
 import com.rtechnologies.echofriend.models.tasks.response.TasksResponse;
 import com.rtechnologies.echofriend.repositories.adminrepo.AdminRespo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskAssignmentRepo;
+import com.rtechnologies.echofriend.repositories.tasks.TaskCategoryRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskRepo;
 
 @Service
@@ -28,6 +31,9 @@ public class TaskService {
 
     @Autowired
     AdminRespo adminRespoObj;
+
+    @Autowired
+    TaskCategoryRepo taskCategoryRepoObj;
 
     @Autowired
     TaskAssignmentRepo taskAssignmentRepoObj;
@@ -56,7 +62,7 @@ public class TaskService {
         Long adminId = result.getId();
 
         taskRepoObj.save(new TasksEntity(
-            null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(),adminId
+            null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory()
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -116,17 +122,37 @@ public class TaskService {
     public TasksResponse getTask(Long id){
         TasksResponse response = new TasksResponse();
         if(id!=null){
-            List <TasksEntity> taskList = new ArrayList<>();
-            taskList.add(taskRepoObj.findById(id).get());
-            
+            // List <TaskCategortProjections> taskList = new ArrayList<>();
+            // taskList.add(taskRepoObj.findtaskcategory(id));
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-            response.setData(taskList);
+            response.setData(taskRepoObj.findtaskcategory(id));
             return response;
         }
 
-        response.setData(taskRepoObj.findAll());
+        response.setData(taskRepoObj.findtaskcategory());
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
 
+    public TasksResponse createTaskCategory(TaskCategoryEntity taskCategoryEntityObj){
+        taskCategoryRepoObj.save(taskCategoryEntityObj);
+        TasksResponse response = new TasksResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public TasksResponse getTaskCategory(Long id){
+        // taskCategoryRepoObj.save(taskCategoryEntityObj);
+        TasksResponse response = new TasksResponse();
+        if(id == null){
+            List<TaskCategoryEntity> res = new ArrayList<>();
+            res.add(taskCategoryRepoObj.findById(id).get());
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(res);
+            return response;
+        }
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(taskCategoryRepoObj.findAll());
+        return response;
+    }
 }

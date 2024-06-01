@@ -13,9 +13,9 @@ public interface ProductProjections {
     public String getProductname();
     public Float getProductprice();
     public Integer getProductquantity();
-
+    public String getProductimage();
     public String getCategory();
-
+    public String getProducttype();
     public Long getCompanyid();
     public String getCompanyname();
     public String getSubscriptiontype();

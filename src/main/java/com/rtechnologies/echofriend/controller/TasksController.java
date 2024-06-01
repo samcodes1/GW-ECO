@@ -9,9 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
+import com.rtechnologies.echofriend.entities.task.TaskCategoryEntity;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -67,5 +69,20 @@ public class TasksController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @PostMapping("/createTaskCategory")
+    public ResponseEntity<TasksResponse> postMethodName(@RequestBody TaskCategoryEntity taskCategoryEntityObj) {
+        TasksResponse response = taskServiceObj.createTaskCategory(taskCategoryEntityObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @PostMapping("/getTaskCategory")
+    public ResponseEntity<TasksResponse> getCategories(@RequestParam(required = false) Long taskCategoryId) {
+        TasksResponse response = taskServiceObj.getTaskCategory(taskCategoryId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
     
 }

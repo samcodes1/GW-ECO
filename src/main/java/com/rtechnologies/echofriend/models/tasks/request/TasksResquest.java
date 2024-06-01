@@ -11,4 +11,6 @@ public class TasksResquest {
     private String creatorEmail;
     private String taskDescription;
     private int taskPoints;
+    private String taskname;
+    private Long taskcategory;
 }
