@@ -20,4 +20,12 @@ public class CategoryService {
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
+
+    public CategoryResponse getCategory(){
+        // categoryRepoObj.findAll();
+        CategoryResponse response = new CategoryResponse();
+        response.setData(categoryRepoObj.findAll());
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
 }

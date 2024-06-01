@@ -12,6 +12,9 @@ import com.rtechnologies.echofriend.services.CategoryService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -29,6 +32,12 @@ public class CategoryController {
         200:500).body(response);
     }
 
+    @GetMapping("/getCategory")
+    public ResponseEntity<CategoryResponse> getMethodName() {
+        CategoryResponse response = categoryServiceObj.getCategory();
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
     
     
 }
