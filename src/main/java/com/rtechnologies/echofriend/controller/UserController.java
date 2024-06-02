@@ -111,8 +111,8 @@ public class UserController {
         200:500).body(response);
     }
 
-    @GetMapping("/get/{userId}")
-    public ResponseEntity<UserResponse> getUsers(@PathVariable Long userId) {
+    @GetMapping("/get")
+    public ResponseEntity<UserResponse> getUsers(@RequestParam(required = false) Long userId) {
         UserResponse response = userServiceObj.getUser(userId);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
