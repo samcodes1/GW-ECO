@@ -7,6 +7,8 @@ import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.request.UserUpdateRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
 import com.rtechnologies.echofriend.services.UserService;
+import com.rtechnologies.echofriend.services.VoucherService;
+
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,10 @@ import com.rtechnologies.echofriend.appconsts.AppConstants;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -26,6 +32,9 @@ public class UserController {
 
     @Autowired
     UserService userServiceObj;
+
+    @Autowired
+    VoucherService voucherServiceObj;
 
     @ApiResponses(
         value = {
@@ -133,5 +142,20 @@ public class UserController {
         String responseMessage = userServiceObj.changePassword(email, oldPassword, newPassword);
         return ResponseEntity.ok(responseMessage);
     }
+
+    @GetMapping("/redeemVoucher")
+    public ResponseEntity<UserResponse> redeemvoucher(@RequestParam Long userId, @RequestParam Long voucherid) {
+        UserResponse response = userServiceObj.redeemVoucher(userId, voucherid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
+    @GetMapping("/getAllNonUsedVouchers")
+    public ResponseEntity<UserResponse> getAllNonUsedVouchers(@RequestParam Long userId) {
+        UserResponse response = userServiceObj.getUnUsedVouchers(userId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
     
 }

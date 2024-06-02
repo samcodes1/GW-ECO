@@ -41,6 +41,7 @@ public class VoucherService {
         ve.setUsedstatus(voucherObj.getUsedstatus());
         ve.setVoucherimageurl(voucherPicUrl);
         ve.setVoucherpointscost(voucherObj.getVoucherpointscost());
+        ve.setDiscountpercentage(voucherObj.getDiscountpercentage());
         VoucherRepoObj.save(ve);
         VoucherResponse response = new VoucherResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
@@ -70,7 +71,7 @@ public class VoucherService {
         update.setVoucherimageurl(voucherObj.getVoucherimage()==null?update.getVoucherimageurl():voucherPicUrl);
         update.setVoucherpointscost(voucherObj.getVoucherpointscost()==null?update.getVoucherpointscost():voucherObj.getVoucherpointscost());
         update.setVoucherbarcode(voucherObj.getVoucherbarcode()==null?update.getVoucherbarcode():voucherObj.getVoucherbarcode());
-
+        update.setDiscountpercentage(voucherObj.getDiscountpercentage()==null?update.getDiscountpercentage():voucherObj.getDiscountpercentage());
         VoucherResponse response = new VoucherResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(VoucherRepoObj.save(update));

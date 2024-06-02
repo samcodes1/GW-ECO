@@ -35,5 +35,6 @@ public class VoucherEntity {
     private String usedstatus;
     private String voucherimageurl;
     private Integer voucherpointscost;
+    private Float discountpercentage;
 
 }

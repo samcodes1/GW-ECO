@@ -1,0 +1,16 @@
+package com.rtechnologies.echofriend.repositories.voucher;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import com.rtechnologies.echofriend.entities.voucher.VoucherProjection;
+import com.rtechnologies.echofriend.entities.voucher.VoucherUserAssociation;
+
+@Repository
+public interface VoucherUserRepo extends CrudRepository<VoucherUserAssociation, Long> {
+    @Query(value = "SELECT * from voucher v INNER join voucheruserbridge vu on vu.voucheridfk=v.voucherid where vu.useridfk=?1 and vu.isused=false", nativeQuery = true)
+    List<VoucherProjection> findUseableVoucherById(Long id);
+}

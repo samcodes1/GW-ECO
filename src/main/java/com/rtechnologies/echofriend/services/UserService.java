@@ -19,13 +19,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
+import com.rtechnologies.echofriend.repositories.voucher.VoucherRepo;
+import com.rtechnologies.echofriend.repositories.voucher.VoucherUserRepo;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
+import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
+import com.rtechnologies.echofriend.entities.voucher.VoucherUserAssociation;
+
 import org.webjars.NotFoundException;
 
 @Service
@@ -36,6 +42,10 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    VoucherRepo voucherRepoObj;
+    @Autowired
+    VoucherUserRepo voucherUserRepoObj;
 
     public UserResponse userSignupServiceMethod(UserRequest userRequestObj) throws NoSuchAlgorithmException, ParseException {
         if (userRepoObj.existsByEmail(userRequestObj.getEmail())) {
@@ -173,5 +183,41 @@ public class UserService {
         dbResponse.get().setPassword(passwordEncoder.encode(newPassword));
         userRepoObj.save(dbResponse.get());
         return "Password changed successfully";
+    }
+
+    public UserResponse redeemVoucher(Long userId, Long voucherid){
+        if(userId==null || voucherid==null){
+            throw new RecordNotFoundException("please provide the user and voucher ids");
+        }
+        Optional<UserEntity> userdata = userRepoObj.findById(userId);
+        if(! userdata.isPresent()){
+            throw new RecordNotFoundException("User not found.");
+        }
+        Optional<VoucherEntity> voucherdata = voucherRepoObj.findById(voucherid);
+        if(!voucherdata.isPresent()){
+            throw new RecordNotFoundException("Voucher not found");
+        }
+        UserEntity user = userdata.get();
+        VoucherEntity voucher = voucherdata.get();
+        if(user.getPoints()<voucher.getVoucherpointscost()){
+            throw new OperationNotAllowedException("can not redeem the voucher not enought points, required "+(voucher.getVoucherpointscost()-user.getPoints())+" points");
+        }
+        // getDaysExpiryFromCurrentDate
+        VoucherUserAssociation redeemdata = new VoucherUserAssociation(
+            null, voucherid, userId, Utility.getDaysExpiryFromCurrentDate(7),false
+        );
+        voucherUserRepoObj.save(redeemdata);
+        UserResponse response = new UserResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        // response.setData(users);
+        return response;
+    }
+
+    public UserResponse getUnUsedVouchers(Long id){
+        UserResponse response = new UserResponse();
+        voucherUserRepoObj.findUseableVoucherById(id);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(voucherUserRepoObj.findUseableVoucherById(id));
+        return response;
     }
 }

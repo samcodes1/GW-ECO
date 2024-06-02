@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.utility;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -62,5 +63,21 @@ public class Utility {
     public static java.sql.Date stringToSqlDate(String dateStr) throws ParseException{
         return new java.sql.Date(
             ((java.util.Date) new SimpleDateFormat("yyyy-MM-dd").parse(dateStr)).getTime());
+    }
+
+    public static Timestamp getDaysExpiryFromCurrentDate(int numberofdays){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        // Convert timestamp to calendar
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp.getTime());
+
+        // Add 7 days to the calendar
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+
+        // Convert calendar back to timestamp
+        Timestamp newTimestamp = new Timestamp(calendar.getTimeInMillis());
+
+        return newTimestamp;
     }
 }

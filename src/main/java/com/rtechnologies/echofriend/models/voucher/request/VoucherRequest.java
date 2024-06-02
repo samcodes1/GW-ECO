@@ -17,4 +17,5 @@ public class VoucherRequest {
     private String usedstatus;
     private MultipartFile voucherimage;
     private Integer voucherpointscost;
+    private Float discountpercentage;
 }
