@@ -1,13 +1,12 @@
 package com.rtechnologies.echofriend.entities.voucher;
 
-import javax.mail.Multipart;
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -23,17 +22,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity( name = "voucher" )
-@Table( name = "voucher" )
-public class VoucherEntity {
+@Entity( name = "voucheruserbridge" )
+@Table( name = "voucheruserbridge" )
+public class VoucherUserAssociation {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long voucherid;
-
-    private String voucherbarcode;
-    private Long shopidfk;
-    private String usedstatus;
-    private String voucherimageurl;
-    private Integer voucherpointscost;
-
+    private Long voucheruserid;
+    private Long voucheridfk;
+    private Long useridfk;
+    private Timestamp voucheruserexpry;
+    private Boolean isused;
 }
