@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.task.TaskCategoryEntity;
+import com.rtechnologies.echofriend.entities.task.TaskUserAssociation;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 
 
 
@@ -88,6 +90,27 @@ public class TasksController {
     @GetMapping("/getRecentTasks")
     public ResponseEntity<TasksResponse> ecentTask(@RequestParam(required = false) String email, @RequestParam(required = false) Integer limit) {
         TasksResponse response = taskServiceObj.recentTasks(email, limit);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @PostMapping("/applyForTask")
+    public ResponseEntity<TasksResponse> postMethodName(@RequestBody TaskUserAssociation userTaskObj) {
+        TasksResponse response = taskServiceObj.applyForTask(userTaskObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @PutMapping("/markTaskComplete")
+    public ResponseEntity<TasksResponse> markTaskComplete(@RequestBody TaskUserAssociation userTaskObj) {
+        TasksResponse response = taskServiceObj.markTaskComplete(userTaskObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
+    @GetMapping("/getTasks")
+    public ResponseEntity<TasksResponse> getTasks(@RequestParam Long userid, @RequestParam Boolean taskstatus) {
+        TasksResponse response = taskServiceObj.getTasks(userid, taskstatus);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }

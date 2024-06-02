@@ -16,12 +16,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity( name = "taskcategory" )
-@Table( name = "taskcategory" )
-public class TaskCategoryEntity {
+@Entity( name = "taskuserbridge" )
+@Table( name = "taskuserbridge" )
+public class TaskUserAssociation {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long taskcategoryid;
+    private Long taskuserid;
 
-    private String taskcategory;   
+    private Long taskidfk;
+    private Long useridfk;
+    private Boolean iscomplete;
 }

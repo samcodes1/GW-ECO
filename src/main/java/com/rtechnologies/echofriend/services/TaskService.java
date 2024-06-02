@@ -2,15 +2,21 @@ package com.rtechnologies.echofriend.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
 import com.rtechnologies.echofriend.entities.task.TaskAssigmentEntity;
 import com.rtechnologies.echofriend.entities.task.TaskCategoryEntity;
+import com.rtechnologies.echofriend.entities.task.TaskUserAssociation;
 import com.rtechnologies.echofriend.entities.task.TasksEntity;
+import com.rtechnologies.echofriend.entities.user.UserEntity;
 import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
@@ -22,6 +28,8 @@ import com.rtechnologies.echofriend.repositories.adminrepo.AdminRespo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskAssignmentRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskCategoryRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskRepo;
+import com.rtechnologies.echofriend.repositories.tasks.TaskUserRepo;
+import com.rtechnologies.echofriend.repositories.user.UserRepo;
 
 @Service
 public class TaskService {
@@ -37,6 +45,12 @@ public class TaskService {
 
     @Autowired
     TaskAssignmentRepo taskAssignmentRepoObj;
+
+    @Autowired 
+    TaskUserRepo taskUserRepoObj;
+
+    @Autowired
+    UserRepo userRepoObj;
 
     public TasksResponse createTaskServiceMethod(TasksResquest tasksResquestObj) {
         TasksResponse response = new TasksResponse();
@@ -186,5 +200,58 @@ public class TaskService {
             return response;
         }
         return null;
+    }
+
+    public TasksResponse applyForTask(TaskUserAssociation userTaskObj){
+        Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfk(userTaskObj.getTaskidfk());
+        if(voucherapplieddata.isPresent()){
+            throw new OperationNotAllowedException("task already applied");
+        }
+        userTaskObj.setIscomplete(false);
+        taskUserRepoObj.save(userTaskObj);
+        TasksResponse response = new TasksResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    @Transactional
+    public TasksResponse markTaskComplete(TaskUserAssociation userTaskObj){
+        Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfk(userTaskObj.getTaskidfk());
+        if(!voucherapplieddata.isPresent()){
+            throw new OperationNotAllowedException("This task has not been applied wrong action");
+        }
+
+        Optional<UserEntity> userdata = userRepoObj.findById(userTaskObj.getUseridfk());
+        if(!userdata.isPresent()){
+            throw new OperationNotAllowedException("User does not exists");
+        }
+
+        if(voucherapplieddata.get().getIscomplete()){
+            throw new OperationNotAllowedException("This task is already complete");
+        }
+
+
+        // get task points from data base
+        Optional<TasksEntity> taskpointsdata = taskRepoObj.findById(userTaskObj.getTaskidfk());
+        // get user data from data base
+        UserEntity updatepoints = userdata.get();
+        // add up the points
+        updatepoints.setPoints(updatepoints.getPoints()==null?taskpointsdata.get().getPointsassigned():updatepoints.getPoints()+taskpointsdata.get().getPointsassigned());
+        userRepoObj.save(updatepoints);
+
+        TaskUserAssociation updatereq = voucherapplieddata.get();
+        updatereq.setIscomplete(true);
+        taskUserRepoObj.save(updatereq);
+
+        TasksResponse response = new TasksResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public TasksResponse getTasks(Long userid, Boolean taskstatus){
+        TasksResponse response = new TasksResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(taskUserRepoObj.findTaskByUseridCompleteStatus(userid, taskstatus));
+        return response;
     }
 }
