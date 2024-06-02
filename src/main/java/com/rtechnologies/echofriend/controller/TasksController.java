@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiResponses;
 
 
 
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/task")
@@ -84,5 +85,11 @@ public class TasksController {
         200:500).body(response);
     }
     
+    @GetMapping("/getRecentTasks")
+    public ResponseEntity<TasksResponse> ecentTask(@RequestParam(required = false) String email, @RequestParam(required = false) Integer limit) {
+        TasksResponse response = taskServiceObj.recentTasks(email, limit);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
     
 }

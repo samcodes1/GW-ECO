@@ -155,4 +155,36 @@ public class TaskService {
         response.setData(taskCategoryRepoObj.findAll());
         return response;
     }
+
+    public TasksResponse recentTasks(String email, Integer limit){
+        TasksResponse response = new TasksResponse();
+        if(email == null && limit == null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(taskRepoObj.findAllRecentTask());
+            return response;
+        }
+
+        if(email == null && limit != null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(taskRepoObj.findAllRecentTaskLimit(limit));
+            return response;
+        }
+
+        if(email != null && limit == null){
+            AdminEntity admin = adminRespoObj.findAdminIdAndTypeByEmail(email);
+
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(taskRepoObj.findAllRecentTaskCreatedBy(admin.getId()));
+            return response;
+        }
+
+        if(email != null && limit != null){
+            AdminEntity admin = adminRespoObj.findAdminIdAndTypeByEmail(email);
+
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(taskRepoObj.findAllRecentTaskCreatedByLimit(admin.getId(), limit));
+            return response;
+        }
+        return null;
+    }
 }
