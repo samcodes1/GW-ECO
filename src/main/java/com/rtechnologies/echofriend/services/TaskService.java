@@ -66,12 +66,12 @@ public class TaskService {
         
         String adminType = result.getAdmintype();
 
-        if(! AppConstants.SUPER_ADMIN.equalsIgnoreCase(adminType)){
-            // response.setResponseCode(AppConstants.CANNOT_INSERT_DATA);
-            response.setResponseMessage(AppConstants.CANNOT_INSERT_DATA_MESSAGE);
-            // return response;
-            throw new OperationNotAllowedException("email '" + tasksResquestObj.getCreatorEmail() + "' is not allwed to create task");
-        }
+        // if(! AppConstants.SUPER_ADMIN.equalsIgnoreCase(adminType)){
+        //     // response.setResponseCode(AppConstants.CANNOT_INSERT_DATA);
+        //     response.setResponseMessage(AppConstants.CANNOT_INSERT_DATA_MESSAGE);
+        //     // return response;
+        //     throw new OperationNotAllowedException("email '" + tasksResquestObj.getCreatorEmail() + "' is not allwed to create task");
+        // }
 
         Long adminId = result.getId();
 
@@ -100,21 +100,21 @@ public class TaskService {
 
         AdminEntity assignedByDBdata = adminRespoObj.findAdminIdAndTypeByEmail(taskAssignmentRequestObj.getAssignedByEmail());
 
-        if(! AppConstants.SUPER_ADMIN.equalsIgnoreCase(assignedByDBdata.getAdmintype())){
-            // response.setResponseCode(AppConstants.ONLY_SA_CAN_ASSIGN_TASK);
-            response.setResponseMessage(AppConstants.ONLY_SA_CAN_ASSIGN_TASK_MESSAGE);
-            throw new OperationNotAllowedException("email '" + taskAssignmentRequestObj.getAssignedByEmail() + "' is not allwed to assign task");
-            // return response;
-        }
+        // if(! AppConstants.SUPER_ADMIN.equalsIgnoreCase(assignedByDBdata.getAdmintype())){
+        //     // response.setResponseCode(AppConstants.ONLY_SA_CAN_ASSIGN_TASK);
+        //     response.setResponseMessage(AppConstants.ONLY_SA_CAN_ASSIGN_TASK_MESSAGE);
+        //     throw new OperationNotAllowedException("email '" + taskAssignmentRequestObj.getAssignedByEmail() + "' is not allwed to assign task");
+        //     // return response;
+        // }
 
         AdminEntity assignedToDBdata = adminRespoObj.findAdminIdAndTypeByEmail(taskAssignmentRequestObj.getAssignedToemail());
         
-        if(AppConstants.SUPER_ADMIN.equalsIgnoreCase(assignedToDBdata.getAdmintype())){
-            // response.setResponseCode(AppConstants.CANNOT_ASSIGN_TASK_TO_SA);
-            response.setResponseMessage(AppConstants.CANNOT_ASSIGN_TASK_TO_SA_MESSAGE);
-            throw new OperationNotAllowedException("can not assign task to the user.");
+        // if(AppConstants.SUPER_ADMIN.equalsIgnoreCase(assignedToDBdata.getAdmintype())){
+        //     // response.setResponseCode(AppConstants.CANNOT_ASSIGN_TASK_TO_SA);
+        //     response.setResponseMessage(AppConstants.CANNOT_ASSIGN_TASK_TO_SA_MESSAGE);
+        //     throw new OperationNotAllowedException("can not assign task to the user.");
             
-        }
+        // }
 
         taskAssignmentRepoObj.save(new TaskAssigmentEntity(
             null, assignedByDBdata.getId(), assignedToDBdata.getId(), taskAssignmentRequestObj.getTaskId()
