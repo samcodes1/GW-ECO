@@ -14,6 +14,9 @@ import com.rtechnologies.echofriend.services.VoucherService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -33,6 +36,6 @@ public class VoucherController {
     public ResponseEntity<VoucherResponse> updateVoucher(@PathVariable Long voucherId, @ModelAttribute VoucherRequest voucherEntityObj) {
         VoucherResponse response = voucherServiceObj.updateVoucherService(voucherId, voucherEntityObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
-    }
+    }    
     
 }

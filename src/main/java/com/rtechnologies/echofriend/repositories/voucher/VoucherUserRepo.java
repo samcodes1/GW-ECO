@@ -13,4 +13,6 @@ import com.rtechnologies.echofriend.entities.voucher.VoucherUserAssociation;
 public interface VoucherUserRepo extends CrudRepository<VoucherUserAssociation, Long> {
     @Query(value = "SELECT * from voucher v INNER join voucheruserbridge vu on vu.voucheridfk=v.voucherid where vu.useridfk=?1 and vu.isused=false", nativeQuery = true)
     List<VoucherProjection> findUseableVoucherById(Long id);
+
+    VoucherUserAssociation findByUseridfkAndVoucheridfk(Long userid, Long voucherid);
 }

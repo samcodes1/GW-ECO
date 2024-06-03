@@ -11,4 +11,5 @@ public interface TaskUserProjection {
     public String getTaskname();
     public Long getTaskcreatedby();
     public Long getTaskcategoryfk();
+    public Long getTaskcount();
 }

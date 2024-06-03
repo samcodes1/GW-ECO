@@ -17,4 +17,6 @@ public interface TaskUserRepo extends CrudRepository<TaskUserAssociation, Long> 
     @Query(value = "select * from taskuserbridge tu inner join tasks t on t.taskid=tu.taskidfk where tu.useridfk=?1 and tu.iscomplete=?2",
     nativeQuery = true)
     List<TaskUserProjection> findTaskByUseridCompleteStatus(Long userid, Boolean status);
+
+    Integer countByIscompleteTrue();
 }

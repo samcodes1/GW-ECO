@@ -7,6 +7,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
@@ -79,5 +81,17 @@ public class Utility {
         Timestamp newTimestamp = new Timestamp(calendar.getTimeInMillis());
 
         return newTimestamp;
+    }
+
+    public static java.sql.Date getcurrentDate(){
+        LocalDate currentDate = LocalDate.now();
+        return java.sql.Date.valueOf(currentDate);
+    }
+
+    public static Timestamp getcurrentTimeStamp(){
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        // Convert LocalDateTime to java.sql.Timestamp
+        return Timestamp.valueOf(currentDateTime);
     }
 }

@@ -1,8 +1,5 @@
 package com.rtechnologies.echofriend.entities.sales;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,16 +16,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity( name = "sales" )
-@Table( name = "sales" )
-public class SalesEntity {
+@Entity( name = "saleproduct" )
+@Table( name = "saleproduct" )
+public class SaleProductEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long saleid;
-    private Long useridfk;
-    private Date date;
-    private Timestamp salestimestamp;
-    private String address;
-    private String state;
-
+    private Long saleproductid;
+    private Long saleidfk;
+    private Long productidfk;
+    private Integer quantity;
+    private Float total;
+    private Long voucheridfk;
 }
