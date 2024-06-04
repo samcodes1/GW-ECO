@@ -19,4 +19,7 @@ public interface TaskUserRepo extends CrudRepository<TaskUserAssociation, Long> 
     List<TaskUserProjection> findTaskByUseridCompleteStatus(Long userid, Boolean status);
 
     Integer countByIscompleteTrue();
+
+    @Query(value = "select count(taskuserid) from taskuserbridge where iscomplete=true and useridfk=?1", nativeQuery = true)
+    Integer countByIscompleteTrueWhereUserid(Long userid);
 }

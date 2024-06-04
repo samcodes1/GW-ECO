@@ -24,4 +24,17 @@ public class DashBoardController {
         200:500).body(response);
     }
 
+    @GetMapping("/getDashBoardDatav2")
+    public ResponseEntity<DashboardResponse> getdashboarddatav2() {
+        DashboardResponse response = dashboardServiceObj.getDashboarddata();
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @GetMapping("/getDashBoardDataUser")
+    public ResponseEntity<DashboardResponse> getdashboarddataUser(Long userid) {
+        DashboardResponse response = dashboardServiceObj.getDashboarddataUser(userid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
 }

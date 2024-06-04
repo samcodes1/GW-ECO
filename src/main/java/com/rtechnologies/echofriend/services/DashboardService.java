@@ -11,6 +11,7 @@ import com.rtechnologies.echofriend.models.dashboard.DashboardResponse;
 import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskUserRepo;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
+import com.rtechnologies.echofriend.repositories.voucher.VoucherUserRepo;
 
 @Service
 public class DashboardService {
@@ -33,6 +34,9 @@ public class DashboardService {
     @Autowired
     CompaniesRepo companiesRepoObj;
 
+    @Autowired
+    VoucherUserRepo voucherUserRepoObj;
+
     public DashboardResponse getDashboarddata(){
         DashboardResponse response = new DashboardResponse();
         Map<String, Object> dashboarddata = new HashMap<>();
@@ -53,6 +57,18 @@ public class DashboardService {
         dashboarddata.put("totalcompanies", companiesRepoObj.count());
 
         dashboarddata.put("usersdata", userRepoObj.findusersAndTasksCompleted());
+        response.setData(dashboarddata);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public DashboardResponse getDashboarddataUser(Long id){
+        DashboardResponse response = new DashboardResponse();
+        Map<String, Object> dashboarddata = new HashMap<>();
+        dashboarddata.put("pointsearned", userRepoObj.findById(id).get().getPoints());
+        dashboarddata.put("pointsredeemed", userRepoObj.sumAllPoints());
+        dashboarddata.put("totaltaskscompleted", taskUserRepoObj.countByIscompleteTrueWhereUserid(id));
+        dashboarddata.put("voucherslist", voucherUserRepoObj.countUnusedVoucher(id));
         response.setData(dashboarddata);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;

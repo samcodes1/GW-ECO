@@ -206,10 +206,13 @@ public class UserService {
         VoucherUserAssociation redeemdata = new VoucherUserAssociation(
             null, voucherid, userId, Utility.getDaysExpiryFromCurrentDate(7),false
         );
+
+        user.setPoints(user.getPoints()-voucher.getVoucherpointscost());
+        userRepoObj.save(user);
+        
         voucherUserRepoObj.save(redeemdata);
         UserResponse response = new UserResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        // response.setData(users);
         return response;
     }
 
