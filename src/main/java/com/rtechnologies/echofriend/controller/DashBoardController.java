@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
@@ -26,13 +27,13 @@ public class DashBoardController {
 
     @GetMapping("/getDashBoardDatav2")
     public ResponseEntity<DashboardResponse> getdashboarddatav2() {
-        DashboardResponse response = dashboardServiceObj.getDashboarddata();
+        DashboardResponse response = dashboardServiceObj.getDashboarddatav2();
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
 
     @GetMapping("/getDashBoardDataUser")
-    public ResponseEntity<DashboardResponse> getdashboarddataUser(Long userid) {
+    public ResponseEntity<DashboardResponse> getdashboarddataUser(@RequestParam Long userid) {
         DashboardResponse response = dashboardServiceObj.getDashboarddataUser(userid);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);

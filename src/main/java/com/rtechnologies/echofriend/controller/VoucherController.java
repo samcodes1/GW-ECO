@@ -36,6 +36,12 @@ public class VoucherController {
     public ResponseEntity<VoucherResponse> updateVoucher(@PathVariable Long voucherId, @ModelAttribute VoucherRequest voucherEntityObj) {
         VoucherResponse response = voucherServiceObj.updateVoucherService(voucherId, voucherEntityObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
-    }    
+    }
+    
+    @GetMapping("/getVoucherData")
+    public ResponseEntity<VoucherResponse> getVocuherData(@RequestParam String param) {
+        return null;
+    }
+    
     
 }
