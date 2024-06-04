@@ -51,7 +51,14 @@ public class CompanyController {
         }
     )
     @PutMapping("/changeSubscription/{companyId}")
-    public ResponseEntity<CompaniesResponse> updateCompanySubscription(@PathVariable Long companyId, @RequestBody CompaniesRequest companiesUpdateRequestObj) {
+    public ResponseEntity<CompaniesResponse> chnagesubscription(@PathVariable Long companyId, @RequestBody CompaniesRequest companiesUpdateRequestObj) {
+        CompaniesResponse response = companiesServiceObj.updateCompanySubscription(companyId, companiesUpdateRequestObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @PutMapping("/updateCompany/{companyId}")
+    public ResponseEntity<CompaniesResponse> updateCompnay(@PathVariable Long companyId, @RequestBody CompaniesRequest companiesUpdateRequestObj) {
         CompaniesResponse response = companiesServiceObj.updateCompanySubscription(companyId, companiesUpdateRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);

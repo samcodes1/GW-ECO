@@ -254,4 +254,42 @@ public class TaskService {
         response.setData(taskUserRepoObj.findTaskByUseridCompleteStatus(userid, taskstatus));
         return response;
     }
+
+    public TasksResponse deletetask(Long deletetask){
+        TasksResponse response = new TasksResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        taskRepoObj.deleteById(deletetask);
+        return response;
+    }
+
+    public TasksResponse updatetask(Long taskid, TasksEntity tasksEntityObj){
+        TasksResponse response = new TasksResponse();
+
+        Optional<TasksEntity> taskdata = taskRepoObj.findById(taskid);
+
+        if(!taskdata.isPresent()){
+            throw new RecordNotFoundException("Record not found");
+        }
+        TasksEntity updateTask = taskdata.get();
+
+        updateTask.setTaskdescription(
+            tasksEntityObj.getTaskdescription()==null?updateTask.getTaskdescription():tasksEntityObj.getTaskdescription()
+        );
+        updateTask.setPointsassigned(
+            tasksEntityObj.getPointsassigned()==null?updateTask.getPointsassigned():tasksEntityObj.getPointsassigned()
+        );
+        updateTask.setTaskname(
+            tasksEntityObj.getTaskname()==null?updateTask.getTaskname():tasksEntityObj.getTaskname()
+        );
+        updateTask.setTaskcreatedby(
+            tasksEntityObj.getTaskcreatedby()==null?updateTask.getTaskcreatedby():tasksEntityObj.getTaskcreatedby()
+        );
+        updateTask.setTaskcategoryfk(
+            tasksEntityObj.getTaskcategoryfk()==null?updateTask.getTaskcategoryfk():tasksEntityObj.getTaskcategoryfk()
+        );
+
+        response.setData(taskRepoObj.save(updateTask));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
 }

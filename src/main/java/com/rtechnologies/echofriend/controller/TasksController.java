@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.task.TaskCategoryEntity;
 import com.rtechnologies.echofriend.entities.task.TaskUserAssociation;
+import com.rtechnologies.echofriend.entities.task.TasksEntity;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 
 
 
@@ -114,5 +116,20 @@ public class TasksController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @DeleteMapping("/deletetask/{taskid}")
+    public ResponseEntity<TasksResponse> deletetask(@PathVariable Long taskid) {
+        TasksResponse response = taskServiceObj.deletetask(taskid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @PutMapping("/updatetask/{taskid}")
+    public ResponseEntity<TasksResponse> putMethodName(@PathVariable Long taskid, @RequestBody TasksEntity tasksEntityObj) {
+        TasksResponse response = taskServiceObj.updatetask(taskid, tasksEntityObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
     
 }

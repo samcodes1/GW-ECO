@@ -18,7 +18,7 @@ public class TasksEntity {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long taskID;
     private String taskdescription;
-    private int pointsassigned;
+    private Integer pointsassigned;
     private String taskname;
     private Long taskcreatedby;
     private Long taskcategoryfk;

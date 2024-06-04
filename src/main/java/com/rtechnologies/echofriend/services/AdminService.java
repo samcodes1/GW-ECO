@@ -113,4 +113,11 @@ public class AdminService {
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
+
+    public AdminResponse deleteAdmin(Long adminId){
+        adminRespoObj.deleteById(adminId);
+        AdminResponse response = new AdminResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
 }

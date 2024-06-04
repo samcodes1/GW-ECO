@@ -9,6 +9,7 @@ import com.rtechnologies.echofriend.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,4 +93,10 @@ public class AdminController {
         200:500).body(response);
     }
     
+    @DeleteMapping("deleteAdmin/{adminId}")
+    public ResponseEntity<AdminResponse> updateAdmin(@PathVariable Long adminId){
+        AdminResponse response = adminServiceObj.deleteAdmin(adminId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
 }

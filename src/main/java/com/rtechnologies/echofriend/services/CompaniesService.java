@@ -63,8 +63,15 @@ public class CompaniesService {
         }
 
         CompaniesEntity companyEntity = companyObj.get();
-        companyEntity.setSubscriptiontype(companiesUpdateRequestObj.getSubscriptionType());
-        companyEntity.setSubscriptionexpiry(companiesUpdateRequestObj.getSubscriptionExpiry());
+        companyEntity.setSubscriptiontype(
+            companiesUpdateRequestObj.getSubscriptionType()==null?companyEntity.getSubscriptiontype():companiesUpdateRequestObj.getSubscriptionType()
+        );
+        companyEntity.setSubscriptionexpiry(
+            companiesUpdateRequestObj.getSubscriptionExpiry()==null?companyEntity.getSubscriptionexpiry():companiesUpdateRequestObj.getSubscriptionExpiry()
+        );
+        companyEntity.setCompanyname(
+            companiesUpdateRequestObj.getCompanyName()==null?companyEntity.getCompanyname():companiesUpdateRequestObj.getCompanyName()
+        );
         // response.setResponseCode(AppConstants.SUCCESS);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
