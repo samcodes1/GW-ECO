@@ -18,4 +18,5 @@ public class ProductsRequest {
     private Long categoryidfk;
     private Long producttypeidfk;
     private String productimage;
+    private String productdescription;
 }

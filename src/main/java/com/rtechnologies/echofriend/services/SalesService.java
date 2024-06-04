@@ -1,16 +1,18 @@
 package com.rtechnologies.echofriend.services;
 
+import java.sql.Timestamp;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
-import com.mysql.cj.exceptions.OperationCancelledException;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.sales.SaleProductEntity;
 import com.rtechnologies.echofriend.entities.sales.SalesEntity;
 import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
-import com.rtechnologies.echofriend.entities.voucher.VoucherProjection;
 import com.rtechnologies.echofriend.entities.voucher.VoucherUserAssociation;
 import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.models.sale.request.SaleRequest;
@@ -58,8 +60,10 @@ public class SalesService {
                 totalBill[0] += productRepoObj.findById(productid).get().getProductprice()*(float)quantity;
             }
         );
-
-        VoucherEntity voucherEntity = voucherRepoObj.findById(saleRequestObj.getVoucherid()).get();
+        
+        VoucherEntity voucherEntity = voucherRepoObj.findById(saleRequestObj.getVoucherid()).orElse(
+            new VoucherEntity(null,null, null,null,null, null,0.0f)
+        );
 
         Float discountAmount = (voucherEntity.getDiscountpercentage() / 100) * totalBill[0];
 
@@ -85,6 +89,47 @@ public class SalesService {
         uservoucher.setIsused(true);
         voucherUserRepoObj.save(uservoucher);
         SaleResponse response = new SaleResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public SaleResponse getOrder(Long userid, Timestamp orderTimestamp){
+        SaleResponse response = new SaleResponse();
+        if(userid==null && orderTimestamp == null){
+            
+            response.setData(salesRepoObj.findOrders());
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }
+
+        if(userid!=null && orderTimestamp==null){
+            
+            response.setData(salesRepoObj.findOrdersByUserid(userid));
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }
+
+        if(userid==null && orderTimestamp !=null){
+            
+            response.setData(salesRepoObj.findOrdersByDateTime(orderTimestamp));
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }
+
+        response.setData(salesRepoObj.findOrdersByDateTimeUserid(orderTimestamp, userid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public SaleResponse updateState(Long saleid, SaleRequest saleRequestObj){
+        Optional<SalesEntity> saledata = salesRepoObj.findById(saleid);
+        if(!saledata.isPresent()){
+            throw new NotFoundException("Sales data not found");
+        }
+        SalesEntity salesEntity = saledata.get();
+        salesEntity.setState(saleRequestObj.getState());
+        SaleResponse response = new SaleResponse();
+        response.setData(salesRepoObj.save(salesEntity));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }

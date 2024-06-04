@@ -25,4 +25,5 @@ public class ProductsEntity {
     private Long companyidfk;
     private Long categoryidfk;
     private Long producttypeidfk;
+    private String productdescription;
 }

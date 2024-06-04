@@ -15,4 +15,5 @@ public class SaleRequest {
     private Float total;
     private Long voucherid;
     private String address;
+    private String state;
 }

@@ -1,5 +1,7 @@
 package com.rtechnologies.echofriend.controller;
 
+import java.sql.Timestamp;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,6 +14,12 @@ import com.rtechnologies.echofriend.services.SalesService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -24,6 +32,20 @@ public class SalesController {
     @PostMapping("/placeOrder")
     public ResponseEntity<SaleResponse> placeOrder(@RequestBody SaleRequest saleRequestObj) {
         SaleResponse response = salesServiceobj.placeOrder(saleRequestObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @GetMapping("/getOrderData")
+    public ResponseEntity<SaleResponse> getMethodName(@RequestParam(required = false) Long userId, @RequestParam(required = false) Timestamp ordertimestamp) {
+        SaleResponse response = salesServiceobj.getOrder(userId, ordertimestamp);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
+    @PutMapping("/updateSale/{saleid}")
+    public ResponseEntity<SaleResponse> updateSales(@PathVariable Long saleid, @RequestBody SaleRequest saleRequestObj) {
+        SaleResponse response = salesServiceobj.updateState(saleid, saleRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }

@@ -21,4 +21,5 @@ public interface ProductProjections {
     public String getSubscriptiontype();
     public String getProducts();
     public Date getSubscriptionexpiry();
+    public String getProductdescription();
 }
