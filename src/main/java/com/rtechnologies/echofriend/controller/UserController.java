@@ -21,6 +21,10 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 
@@ -157,5 +161,11 @@ public class UserController {
         200:500).body(response);
     }
     
+    // @PutMapping("/updateUser/{userid}")
+    // public ResponseEntity<UserResponse> updateuser(@PathVariable Long userid, @RequestBody String entity) {
+    //     UserResponse response = userServiceObj.updateUser(userId);
+    //     return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+    //     200:500).body(response);
+    // }
     
 }

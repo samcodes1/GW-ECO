@@ -39,8 +39,9 @@ public class VoucherController {
     }
     
     @GetMapping("/getVoucherData")
-    public ResponseEntity<VoucherResponse> getVocuherData(@RequestParam String param) {
-        return null;
+    public ResponseEntity<VoucherResponse> getVocuherData(@RequestParam(required = false) Long voucherId) {
+        VoucherResponse response = voucherServiceObj.getVoucherService(voucherId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
     
     

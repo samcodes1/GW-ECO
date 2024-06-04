@@ -1,6 +1,8 @@
 package com.rtechnologies.echofriend.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -75,6 +77,27 @@ public class VoucherService {
         VoucherResponse response = new VoucherResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(VoucherRepoObj.save(update));
+        return response;
+    }
+
+    public VoucherResponse getVoucherService(Long voucherid){
+        VoucherResponse response = new VoucherResponse();
+        if(voucherid==null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(VoucherRepoObj.findAll());
+            return response;
+        }
+        Optional<VoucherEntity> voucheropdata = VoucherRepoObj.findById(voucherid);
+        List<VoucherEntity> voucherlst = new ArrayList<>();
+
+        if(voucheropdata.isPresent()){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            voucherlst.add(voucheropdata.get());
+            response.setData(voucherlst);
+            return response;
+        }
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(voucherlst);
         return response;
     }
 }
