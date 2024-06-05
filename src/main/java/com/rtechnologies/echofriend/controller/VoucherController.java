@@ -44,5 +44,11 @@ public class VoucherController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
     
+    @GetMapping("/getNonRedeemedVouchersForUser")
+    public ResponseEntity<VoucherResponse> getMethodName(@RequestParam Long userid) {
+        VoucherResponse response = voucherServiceObj.getNonRedeemedVouchersForUserservice(userid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
+    }
+    
     
 }

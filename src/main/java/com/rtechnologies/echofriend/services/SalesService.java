@@ -61,7 +61,7 @@ public class SalesService {
             }
         );
         
-        VoucherEntity voucherEntity = voucherRepoObj.findById(saleRequestObj.getVoucherid()).orElse(
+        VoucherEntity voucherEntity = voucherRepoObj.findById(saleRequestObj.getVoucherid()==null?-1:saleRequestObj.getVoucherid()).orElse(
             new VoucherEntity(null,null, null,null,null, null,0.0f)
         );
 
@@ -69,7 +69,7 @@ public class SalesService {
 
         float finalAmount = totalBill[0] - discountAmount;
 
-
+        System.out.println("FINAL AMOUNT>>>>>>> "+finalAmount);
         final Float tolerance = 0.01f;
 
         if(Math.abs(finalAmount - saleRequestObj.getTotal()) > tolerance){
@@ -84,10 +84,12 @@ public class SalesService {
                 ));
             }
         );
-
-        VoucherUserAssociation uservoucher = voucherUserRepoObj.findByUseridfkAndVoucheridfk(saleRequestObj.getUserid(), saleRequestObj.getVoucherid());
-        uservoucher.setIsused(true);
-        voucherUserRepoObj.save(uservoucher);
+        if(saleRequestObj.getVoucherid()!=null){
+            VoucherUserAssociation uservoucher = voucherUserRepoObj.findByUseridfkAndVoucheridfk(saleRequestObj.getUserid(), saleRequestObj.getVoucherid());
+            uservoucher.setIsused(true);
+            voucherUserRepoObj.save(uservoucher);
+        }
+        
         SaleResponse response = new SaleResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;

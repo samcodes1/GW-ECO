@@ -100,4 +100,13 @@ public class VoucherService {
         response.setData(voucherlst);
         return response;
     }
+
+    public VoucherResponse getNonRedeemedVouchersForUserservice(Long userid){
+        VoucherResponse response = new VoucherResponse();
+        List<VoucherEntity> voucherlst = VoucherRepoObj.findAllVoucherNotRedeemedByUserYet(userid);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(voucherlst);
+        return response;
+    }
+    
 }
