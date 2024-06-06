@@ -34,7 +34,9 @@ public class VoucherController {
 
     @PutMapping("/updateVoucher/{voucherId}")
     public ResponseEntity<VoucherResponse> updateVoucher(@PathVariable Long voucherId, @ModelAttribute VoucherRequest voucherEntityObj) {
+        System.err.println("LANDED IN UPDATE");
         VoucherResponse response = voucherServiceObj.updateVoucherService(voucherId, voucherEntityObj);
+        System.err.println("LANDED IN UPDATE");
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
     

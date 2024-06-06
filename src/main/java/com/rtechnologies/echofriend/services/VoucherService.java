@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -51,6 +54,7 @@ public class VoucherService {
         return response;
     }
 
+    @Transactional
     public VoucherResponse updateVoucherService(Long voucherid, VoucherRequest voucherObj){
         Optional<VoucherEntity> updateVoucher =VoucherRepoObj.findById(voucherid);
         if(!updateVoucher.isPresent()){
@@ -58,7 +62,10 @@ public class VoucherService {
         }
         VoucherEntity update = updateVoucher.get();
         String voucherPicUrl = "";
-        if(voucherObj.getVoucherimage() == null){
+        System.err.println(voucherObj.getVoucherimage());
+        
+        MultipartFile voucherImage = voucherObj.getVoucherimage();
+        if(voucherImage != null && !voucherImage.isEmpty()){
             try {
                 String folder = "vouchers-pics"; // Change this to your preferred folder name
                 String publicId = folder + "/" + voucherObj.getVoucherimage().getName();
@@ -70,7 +77,7 @@ public class VoucherService {
         }
         update.setShopidfk(voucherObj.getShopidfk()==null?update.getShopidfk():voucherObj.getShopidfk());
         update.setUsedstatus(voucherObj.getUsedstatus()==null?update.getUsedstatus():voucherObj.getUsedstatus());
-        update.setVoucherimageurl(voucherObj.getVoucherimage()==null?update.getVoucherimageurl():voucherPicUrl);
+        update.setVoucherimageurl(voucherImage==null?update.getVoucherimageurl():voucherPicUrl);
         update.setVoucherpointscost(voucherObj.getVoucherpointscost()==null?update.getVoucherpointscost():voucherObj.getVoucherpointscost());
         update.setVoucherbarcode(voucherObj.getVoucherbarcode()==null?update.getVoucherbarcode():voucherObj.getVoucherbarcode());
         update.setDiscountpercentage(voucherObj.getDiscountpercentage()==null?update.getDiscountpercentage():voucherObj.getDiscountpercentage());

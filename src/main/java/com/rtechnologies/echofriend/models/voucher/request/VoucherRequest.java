@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.models.voucher.request;
 
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,6 +16,7 @@ public class VoucherRequest {
     private String voucherbarcode;
     private Long shopidfk;
     private String usedstatus;
+    @Nullable
     private MultipartFile voucherimage;
     private Integer voucherpointscost;
     private Float discountpercentage;
