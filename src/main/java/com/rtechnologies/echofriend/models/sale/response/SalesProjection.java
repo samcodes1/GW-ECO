@@ -21,4 +21,6 @@ public interface SalesProjection {
     public Integer getQuantity();
     public Float getTotal();
     public Long getVoucheridfk();
+    public Float getProductprice();
+    public String getProductimage();
 }

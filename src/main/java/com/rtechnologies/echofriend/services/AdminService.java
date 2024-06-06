@@ -101,7 +101,7 @@ public class AdminService {
 
         responseEntity.setPassword(
             (adminRequestObj.getAdminPassword()==null || adminRequestObj.getAdminPassword().isEmpty())?
-            responseEntity.getPassword():Utility.hashPassword(adminRequestObj.getAdminPassword())
+            responseEntity.getPassword():new BCryptPasswordEncoder().encode(adminRequestObj.getAdminPassword())
         );
 
         responseEntity.setUsername(
