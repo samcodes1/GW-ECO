@@ -79,4 +79,12 @@ public class CompanyController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+
+    @GetMapping("/getCompanyData")
+    public ResponseEntity<CompaniesResponse> companyManagement(@RequestParam Long companyId) {
+        CompaniesResponse response = companiesServiceObj.getCompanyDashboarddata(companyId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
 }

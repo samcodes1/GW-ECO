@@ -17,4 +17,6 @@ public class CompaniesRequest {
     private String subscriptionType;
     private String  products;
     private Date subscriptionExpiry;
+    private String role;
+    private String companyEmail;
 }

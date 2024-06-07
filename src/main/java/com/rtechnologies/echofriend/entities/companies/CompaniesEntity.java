@@ -22,4 +22,7 @@ public class CompaniesEntity {
     private String subscriptiontype;
     private String products;
     private Date subscriptionexpiry;
+    private Date joindate;
+    private String role;
+    private String companyEmail;
 }

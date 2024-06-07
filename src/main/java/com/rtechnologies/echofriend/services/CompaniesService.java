@@ -1,7 +1,9 @@
 package com.rtechnologies.echofriend.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.companies.request.CompaniesRequest;
 import com.rtechnologies.echofriend.models.companies.response.CompaniesResponse;
 import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
+import com.rtechnologies.echofriend.repositories.products.ProductsRepo;
+import com.rtechnologies.echofriend.utility.Utility;
 
 import javax.transaction.Transactional;
 
@@ -22,10 +26,14 @@ public class CompaniesService {
     @Autowired
     CompaniesRepo companiesRepoObj;
 
+    @Autowired
+    ProductsRepo productsRepoObj;
+
     public CompaniesResponse addCompanyServiceMethod(CompaniesRequest companiesRequestObj){
         companiesRepoObj.save(new CompaniesEntity(
             null, companiesRequestObj.getCompanyName(), companiesRequestObj.getSubscriptionType(), 
-            companiesRequestObj.getProducts(), companiesRequestObj.getSubscriptionExpiry()
+            companiesRequestObj.getProducts(), companiesRequestObj.getSubscriptionExpiry(), Utility.getcurrentDate(), 
+            companiesRequestObj.getRole(), companiesRequestObj.getCompanyEmail()
         ));
         CompaniesResponse response = new CompaniesResponse();
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -74,6 +82,23 @@ public class CompaniesService {
         );
         // response.setResponseCode(AppConstants.SUCCESS);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public CompaniesResponse getCompanyDashboarddata(Long companyId){
+        CompaniesResponse response = new CompaniesResponse();
+        Map<String, Object> companyData =  new HashMap<>();
+        CompaniesEntity company = companiesRepoObj.findById(companyId).get();
+        companyData.put("poductCount", productsRepoObj.countCompanyProducts(companyId));
+        companyData.put("vouchersCreated", productsRepoObj.countCompanyVoucher(companyId));
+        companyData.put("subscriptionExpiry", company.getSubscriptionexpiry());
+        companyData.put("companyemail", company.getCompanyEmail());
+        companyData.put("joiningdate", company.getJoindate());
+        companyData.put("role", company.getRole());
+        companyData.put("subscription", company.getSubscriptiontype());
+        
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(companyData);
         return response;
     }
 

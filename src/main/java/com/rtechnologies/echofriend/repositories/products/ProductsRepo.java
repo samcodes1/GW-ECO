@@ -17,6 +17,13 @@ public interface ProductsRepo extends JpaRepository<ProductsEntity, Long> {
     @Query(value = "select * from products p inner join productcategory c on c.categoryid=p.categoryidfk inner join producttype pt on pt.producttypeid=p.producttypeidfk where p.categoryidfk=?1", nativeQuery = true)
     List<ProductProjections> findProductsByCategory(Long id);
 
+    @Query(value = "SELECT COUNT(*) from products p inner JOIN companies c on c.companyid=p.companyidfk where c.companyid=?1",
+    nativeQuery = true)
+    Integer countCompanyProducts(Long companyId);
+
+    @Query(value = "select count(*) from voucher v inner join companies c on v.shopidfk=c.companyid where c.companyid=?1",
+    nativeQuery = true)
+    Integer countCompanyVoucher(Long companyId);
 
 
 }
