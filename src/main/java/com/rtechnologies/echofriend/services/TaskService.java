@@ -30,6 +30,7 @@ import com.rtechnologies.echofriend.repositories.tasks.TaskCategoryRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskUserRepo;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
+import com.rtechnologies.echofriend.utility.Utility;
 
 @Service
 public class TaskService {
@@ -76,7 +77,8 @@ public class TaskService {
         Long adminId = result.getId();
 
         taskRepoObj.save(new TasksEntity(
-            null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory()
+            null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), 
+            tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), Utility.getcurrentTimeStamp()
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);

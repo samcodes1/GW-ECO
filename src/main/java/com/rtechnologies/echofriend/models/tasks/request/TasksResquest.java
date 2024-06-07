@@ -1,5 +1,7 @@
 package com.rtechnologies.echofriend.models.tasks.request;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,4 +15,5 @@ public class TasksResquest {
     private int taskPoints;
     private String taskname;
     private Long taskcategory;
+    // private Timestamp taskCreatedTimestamp;
 }

@@ -14,12 +14,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.google.zxing.BarcodeFormat;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.voucher.request.VoucherRequest;
 import com.rtechnologies.echofriend.models.voucher.response.VoucherResponse;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherRepo;
+import com.rtechnologies.echofriend.utility.Utility;
 
 @Service
 public class VoucherService {
@@ -30,23 +32,17 @@ public class VoucherService {
     private Cloudinary cloudinary;
 
     public VoucherResponse createVoucherService(VoucherRequest voucherObj){
-
-        String voucherPicUrl = "";
-        try {
-            String folder = "vouchers-pics"; // Change this to your preferred folder name
-            String publicId = folder + "/" + voucherObj.getVoucherimage().getName();
-            Map data = cloudinary.uploader().upload(voucherObj.getVoucherimage().getBytes(), ObjectUtils.asMap("public_id", publicId));
-            voucherPicUrl = data.get("secure_url").toString();
-        } catch (IOException ioException) {
-            throw new RuntimeException("File uploading failed");
-        }
         VoucherEntity ve = new VoucherEntity();
-        ve.setVoucherbarcode(voucherObj.getVoucherbarcode());
+        String barcode = Utility.generateBarcodeDigits(
+            voucherObj.getShopidfk()+""+voucherObj.getUsedstatus()+""+voucherObj.getVoucherpointscost()+""+voucherObj.getDiscountpercentage()+""+voucherObj.getVoucherexpiry(), 
+            BarcodeFormat.CODE_128, 300, 100
+        );
+        ve.setVoucherbarcode(barcode);
         ve.setShopidfk(voucherObj.getShopidfk());
         ve.setUsedstatus(voucherObj.getUsedstatus());
-        ve.setVoucherimageurl(voucherPicUrl);
         ve.setVoucherpointscost(voucherObj.getVoucherpointscost());
         ve.setDiscountpercentage(voucherObj.getDiscountpercentage());
+        ve.setVoucherexpiry(voucherObj.getVoucherexpiry());
         VoucherRepoObj.save(ve);
         VoucherResponse response = new VoucherResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
@@ -61,25 +57,18 @@ public class VoucherService {
                         throw new RecordNotFoundException("Voucher not found.");
         }
         VoucherEntity update = updateVoucher.get();
-        String voucherPicUrl = "";
-        System.err.println(voucherObj.getVoucherimage());
+
+        String barcode = Utility.generateBarcodeDigits(
+            voucherObj.getShopidfk()+""+voucherObj.getUsedstatus()+""+voucherObj.getVoucherpointscost()+""+voucherObj.getDiscountpercentage()+""+voucherObj.getVoucherexpiry(), 
+            BarcodeFormat.CODE_128, 300, 100
+        );
         
-        MultipartFile voucherImage = voucherObj.getVoucherimage();
-        if(voucherImage != null && !voucherImage.isEmpty()){
-            try {
-                String folder = "vouchers-pics"; // Change this to your preferred folder name
-                String publicId = folder + "/" + voucherObj.getVoucherimage().getName();
-                Map data = cloudinary.uploader().upload(voucherObj.getVoucherimage().getBytes(), ObjectUtils.asMap("public_id", publicId));
-                voucherPicUrl = data.get("secure_url").toString();
-            } catch (IOException ioException) {
-                throw new RuntimeException("File uploading failed");
-            }
-        }
         update.setShopidfk(voucherObj.getShopidfk()==null?update.getShopidfk():voucherObj.getShopidfk());
         update.setUsedstatus(voucherObj.getUsedstatus()==null?update.getUsedstatus():voucherObj.getUsedstatus());
-        update.setVoucherimageurl(voucherImage==null?update.getVoucherimageurl():voucherPicUrl);
+
         update.setVoucherpointscost(voucherObj.getVoucherpointscost()==null?update.getVoucherpointscost():voucherObj.getVoucherpointscost());
-        update.setVoucherbarcode(voucherObj.getVoucherbarcode()==null?update.getVoucherbarcode():voucherObj.getVoucherbarcode());
+        update.setVoucherbarcode(barcode);
+        update.setVoucherexpiry(voucherObj.getVoucherexpiry()==null?update.getVoucherexpiry():voucherObj.getVoucherexpiry());
         update.setDiscountpercentage(voucherObj.getDiscountpercentage()==null?update.getDiscountpercentage():voucherObj.getDiscountpercentage());
         VoucherResponse response = new VoucherResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);

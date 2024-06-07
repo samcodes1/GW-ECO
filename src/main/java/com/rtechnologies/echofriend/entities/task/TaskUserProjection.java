@@ -1,5 +1,8 @@
 package com.rtechnologies.echofriend.entities.task;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public interface TaskUserProjection {
     public Long getTaskuserid();
     public Long getTaskidfk();
@@ -12,4 +15,7 @@ public interface TaskUserProjection {
     public Long getTaskcreatedby();
     public Long getTaskcategoryfk();
     public Long getTaskcount();
+    public String getEmail();
+    public String getMembershiptype();
+    
 }

@@ -1,5 +1,7 @@
 package com.rtechnologies.echofriend.entities.voucher;
 
+import java.sql.Timestamp;
+
 import javax.mail.Multipart;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,5 +38,6 @@ public class VoucherEntity {
     private String voucherimageurl;
     private Integer voucherpointscost;
     private Float discountpercentage;
+    private Timestamp voucherexpiry;
 
 }

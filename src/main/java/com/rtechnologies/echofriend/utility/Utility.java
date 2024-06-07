@@ -11,6 +11,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 
 public class Utility {
@@ -93,5 +97,25 @@ public class Utility {
 
         // Convert LocalDateTime to java.sql.Timestamp
         return Timestamp.valueOf(currentDateTime);
+    }
+
+    public static String generateBarcodeDigits(String barcodeText, BarcodeFormat format, int width, int height) {
+        try {
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(barcodeText, format, width, height);
+            int barcodeWidth = bitMatrix.getWidth();
+            int barcodeHeight = bitMatrix.getHeight();
+            StringBuilder barcodeDigits = new StringBuilder();
+            
+            for (int y = 0; y < barcodeHeight; y++) {
+                for (int x = 0; x < barcodeWidth; x++) {
+                    barcodeDigits.append(bitMatrix.get(x, y) ? "1" : "0");
+                }
+            }
+            
+            return barcodeDigits.toString();
+        } catch (WriterException e) {
+            System.err.println("Error generating barcode digits: " + e.getMessage());
+            return null;
+        }
     }
 }

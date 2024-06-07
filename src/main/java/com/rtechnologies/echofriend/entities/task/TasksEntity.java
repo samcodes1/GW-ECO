@@ -2,6 +2,8 @@ package com.rtechnologies.echofriend.entities.task;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +24,5 @@ public class TasksEntity {
     private String taskname;
     private Long taskcreatedby;
     private Long taskcategoryfk;
+    private Timestamp taskCreatedTime;
 }
