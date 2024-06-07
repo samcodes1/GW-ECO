@@ -32,4 +32,5 @@ public class UserEntity {
     private Integer points;
     private String profilephoto;
     private Timestamp memebershipexpiry;
+    private String role;
 }

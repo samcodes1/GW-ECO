@@ -18,10 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
+import com.rtechnologies.echofriend.models.user.request.AdminUserUpdate;
 import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
@@ -221,6 +223,26 @@ public class UserService {
         voucherUserRepoObj.findUseableVoucherById(id);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(voucherUserRepoObj.findUseableVoucherById(id));
+        return response;
+    }
+
+    public UserResponse updateUser(Long userid, AdminUserUpdate updateReq){
+        UserEntity user = userRepoObj.findById(userid).get();
+        //membership role expiryUpdate
+        user.setRole(
+            updateReq.getRole()==null?user.getRole():updateReq.getRole()
+        );
+
+        user.setMembershiptype(
+            updateReq.getMembership()==null?user.getMembershiptype():updateReq.getMembership()
+        );
+
+        user.setMemebershipexpiry(
+            updateReq.getExpiryUpdate()==null?user.getMemebershipexpiry():updateReq.getExpiryUpdate()
+        );
+        userRepoObj.save(user);
+        UserResponse response = new UserResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
 }

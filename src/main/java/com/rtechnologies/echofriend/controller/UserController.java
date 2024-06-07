@@ -3,6 +3,7 @@ package com.rtechnologies.echofriend.controller;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
+import com.rtechnologies.echofriend.models.user.request.AdminUserUpdate;
 import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.request.UserUpdateRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
@@ -19,11 +20,6 @@ import com.rtechnologies.echofriend.appconsts.AppConstants;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 
@@ -157,6 +153,13 @@ public class UserController {
     @GetMapping("/getAllNonUsedVouchers")
     public ResponseEntity<UserResponse> getAllNonUsedVouchers(@RequestParam Long userId) {
         UserResponse response = userServiceObj.getUnUsedVouchers(userId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @PutMapping("/adminUpdateUser/{userid}")
+    public ResponseEntity<UserResponse> updateuser(@PathVariable Long userid, @RequestBody AdminUserUpdate updateReq) {
+        UserResponse response = userServiceObj.updateUser(userid, updateReq);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
