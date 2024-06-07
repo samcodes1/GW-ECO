@@ -53,7 +53,7 @@ public class VoucherController {
     }
     
     @GetMapping("/voucherstats")
-    public ResponseEntity<VoucherResponse> voucherstats(@RequestParam String param) {
+    public ResponseEntity<VoucherResponse> voucherstats() {
         VoucherResponse response = voucherServiceObj.getVoucherStats();
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
