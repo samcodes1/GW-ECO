@@ -1,5 +1,7 @@
 package com.rtechnologies.echofriend.models.tasks.response;
 
+import java.sql.Timestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -16,5 +18,6 @@ public interface TaskCategortProjections {
 
     public String getUsername();
     public String getEmail();
+    public Timestamp getTask_created_time();
     
 }
