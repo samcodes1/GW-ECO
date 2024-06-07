@@ -75,6 +75,8 @@ public class UserService {
                 .points(0) // Setting points as 0
                 .profilephoto(profilePicUrl)
                 .memebershipexpiry(new Timestamp(-1)) // Setting timestamp as -1
+                .joiningdate(Utility.getcurrentDate())
+                .fullname(userRequestObj.getFullname())
                 .build();
 
         userRepoObj.save(userEntity);

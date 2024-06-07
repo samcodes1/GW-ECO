@@ -1,5 +1,7 @@
 package com.rtechnologies.echofriend.entities.task;
 
+import java.sql.Timestamp;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -17,5 +19,9 @@ public interface TaskUserProjection {
     public Long getTaskcount();
     public String getEmail();
     public String getMembershiptype();
-    
+    public String getProfilephoto();
+    public String getRole();
+    public String getUsername();
+    public Timestamp getMemebershipexpiry();
+
 }

@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.entities.user;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import com.rtechnologies.echofriend.appconsts.Membershiptype;
@@ -33,4 +34,6 @@ public class UserEntity {
     private String profilephoto;
     private Timestamp memebershipexpiry;
     private String role;
+    private String fullname;
+    private Date joiningdate;
 }

@@ -19,4 +19,5 @@ public class UserRequest {
     private String email;
     private String password;
     private MultipartFile profilephoto;
+    private String fullname;
 }

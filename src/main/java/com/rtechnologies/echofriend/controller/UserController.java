@@ -49,12 +49,14 @@ public class UserController {
             @RequestParam String userName,
             @RequestParam String email,
             @RequestParam String password,
+            @RequestParam String fullname,
             @RequestParam(required = false) MultipartFile profilephoto) throws NoSuchAlgorithmException, ParseException {
 
         UserRequest userRequestObj = UserRequest.builder()
                 .userName(userName)
                 .email(email)
                 .password(password)
+                .fullname(fullname)
                 .profilephoto(profilephoto)
                 .build();
 
