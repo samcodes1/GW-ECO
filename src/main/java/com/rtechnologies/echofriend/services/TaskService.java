@@ -78,7 +78,7 @@ public class TaskService {
 
         taskRepoObj.save(new TasksEntity(
             null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), 
-            tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), Utility.getcurrentTimeStamp()
+            tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), Utility.getcurrentTimeStamp(),true,tasksResquestObj.getExternallink()
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);

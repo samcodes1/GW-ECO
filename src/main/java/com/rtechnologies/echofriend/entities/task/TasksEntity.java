@@ -25,4 +25,6 @@ public class TasksEntity {
     private Long taskcreatedby;
     private Long taskcategoryfk;
     private Timestamp taskCreatedTime;
+    private Boolean active;
+    private String externallink;
 }

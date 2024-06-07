@@ -15,5 +15,6 @@ public class TasksResquest {
     private int taskPoints;
     private String taskname;
     private Long taskcategory;
+    private String externallink;
     // private Timestamp taskCreatedTimestamp;
 }
