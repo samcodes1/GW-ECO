@@ -61,7 +61,7 @@ public class TasksController {
         200:500).body(response);
     }
 
-    @GetMapping("/getTopTask")
+    @GetMapping("/getAllTask")
     public ResponseEntity<TasksResponse> getMethodName() {
         TasksResponse response = taskServiceObj.topTask();
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
@@ -130,6 +130,5 @@ public class TasksController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
-
     
 }
