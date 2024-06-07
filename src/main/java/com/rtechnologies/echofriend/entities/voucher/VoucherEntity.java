@@ -38,6 +38,7 @@ public class VoucherEntity {
     private String voucherimageurl;
     private Integer voucherpointscost;
     private Float discountpercentage;
+    private Timestamp vocuhercreatedat;
     private Timestamp voucherexpiry;
 
 }

@@ -62,7 +62,7 @@ public class SalesService {
         );
         
         VoucherEntity voucherEntity = voucherRepoObj.findById(saleRequestObj.getVoucherid()==null?-1:saleRequestObj.getVoucherid()).orElse(
-            new VoucherEntity(null,null, null,null,null, null,0.0f, Utility.getcurrentTimeStamp())
+            new VoucherEntity(null,null, null,null,null, null,0.0f, Utility.getcurrentTimeStamp(), Utility.getcurrentTimeStamp())
         );
 
         Float discountAmount = (voucherEntity.getDiscountpercentage() / 100) * totalBill[0];

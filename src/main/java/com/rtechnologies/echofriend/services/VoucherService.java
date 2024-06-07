@@ -2,6 +2,7 @@ package com.rtechnologies.echofriend.services;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +44,7 @@ public class VoucherService {
         ve.setVoucherpointscost(voucherObj.getVoucherpointscost());
         ve.setDiscountpercentage(voucherObj.getDiscountpercentage());
         ve.setVoucherexpiry(voucherObj.getVoucherexpiry());
+        ve.setVocuhercreatedat(Utility.getcurrentTimeStamp());
         VoucherRepoObj.save(ve);
         VoucherResponse response = new VoucherResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
@@ -102,6 +104,19 @@ public class VoucherService {
         List<VoucherEntity> voucherlst = VoucherRepoObj.findAllVoucherNotRedeemedByUserYet(userid);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(voucherlst);
+        return response;
+    }
+
+    public VoucherResponse getVoucherStats(){
+        VoucherResponse response = new VoucherResponse();
+        Map<String, Object> vocuherstats = new HashMap<>();
+        vocuherstats.put("runningvouchers", VoucherRepoObj.countVoucherRedeemedToday());
+        vocuherstats.put("totalvoucherredeemed", VoucherRepoObj.countredeemed());
+        vocuherstats.put("totalvouchercreated", VoucherRepoObj.voucherCreated());
+        vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers());
+        
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(null);
         return response;
     }
     

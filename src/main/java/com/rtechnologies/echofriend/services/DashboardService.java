@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.models.dashboard.DashboardResponse;
 import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
+import com.rtechnologies.echofriend.repositories.tasks.TaskRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskUserRepo;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherUserRepo;
@@ -36,6 +37,8 @@ public class DashboardService {
 
     @Autowired
     VoucherUserRepo voucherUserRepoObj;
+    @Autowired
+    TaskRepo taskRepoObj;
 
     public DashboardResponse getDashboarddata(){
         DashboardResponse response = new DashboardResponse();
@@ -57,6 +60,7 @@ public class DashboardService {
         dashboarddata.put("totalcompanies", companiesRepoObj.count());
 
         dashboarddata.put("usersdata", userRepoObj.findusersAndTasksCompleted());
+        dashboarddata.put("recenttasks", taskRepoObj.findAllRecentTask());
         response.setData(dashboarddata);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
