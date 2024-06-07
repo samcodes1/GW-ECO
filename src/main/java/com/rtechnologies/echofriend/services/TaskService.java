@@ -290,6 +290,14 @@ public class TaskService {
             tasksEntityObj.getTaskcategoryfk()==null?updateTask.getTaskcategoryfk():tasksEntityObj.getTaskcategoryfk()
         );
 
+        updateTask.setActive(
+            tasksEntityObj.getActive()==null?updateTask.getActive():tasksEntityObj.getActive()
+        );
+
+        updateTask.setExternallink(
+            tasksEntityObj.getExternallink()==null?updateTask.getExternallink():tasksEntityObj.getExternallink()
+        );
+
         response.setData(taskRepoObj.save(updateTask));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
