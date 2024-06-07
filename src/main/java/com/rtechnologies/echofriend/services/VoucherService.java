@@ -116,8 +116,14 @@ public class VoucherService {
         vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers());
         
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        response.setData(null);
+        response.setData(vocuherstats);
         return response;
     }
-    
+
+    public VoucherResponse deleteVoucher(Long id){
+        VoucherResponse response = new VoucherResponse();
+        VoucherRepoObj.deleteById(id);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
 }

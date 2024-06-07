@@ -3,6 +3,7 @@ package com.rtechnologies.echofriend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,6 +58,11 @@ public class VoucherController {
         VoucherResponse response = voucherServiceObj.getVoucherStats();
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
-    
+
+    @DeleteMapping("/deleteVoucher/{voucherid}")
+    public ResponseEntity<VoucherResponse> voucherDelete(@PathVariable Long voucherid) {
+        VoucherResponse response = voucherServiceObj.deleteVoucher(voucherid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
+    }
     
 }
