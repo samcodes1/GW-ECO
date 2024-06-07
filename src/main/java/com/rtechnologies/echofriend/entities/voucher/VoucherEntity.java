@@ -40,5 +40,7 @@ public class VoucherEntity {
     private Float discountpercentage;
     private Timestamp vocuhercreatedat;
     private Timestamp voucherexpiry;
+    private String name;
+    private String description;
 
 }

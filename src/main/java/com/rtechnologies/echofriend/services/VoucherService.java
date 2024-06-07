@@ -45,6 +45,8 @@ public class VoucherService {
         ve.setDiscountpercentage(voucherObj.getDiscountpercentage());
         ve.setVoucherexpiry(voucherObj.getVoucherexpiry());
         ve.setVocuhercreatedat(Utility.getcurrentTimeStamp());
+        ve.setName(voucherObj.getName());
+        ve.setDescription(voucherObj.getDescription());
         VoucherRepoObj.save(ve);
         VoucherResponse response = new VoucherResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);

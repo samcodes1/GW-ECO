@@ -18,4 +18,6 @@ public class VoucherRequest {
     private Integer voucherpointscost;
     private Float discountpercentage;
     private Timestamp voucherexpiry;
+    private String name;
+    private String description;
 }
