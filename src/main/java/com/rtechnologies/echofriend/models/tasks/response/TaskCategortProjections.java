@@ -19,5 +19,6 @@ public interface TaskCategortProjections {
     public String getUsername();
     public String getEmail();
     public Timestamp getTask_created_time();
+    public Integer getParticipants();
     
 }
