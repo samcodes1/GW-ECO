@@ -43,7 +43,7 @@ public class VoucherService {
         ve.setUsedstatus(voucherObj.getUsedstatus());
         ve.setVoucherpointscost(voucherObj.getVoucherpointscost());
         ve.setDiscountpercentage(voucherObj.getDiscountpercentage());
-        ve.setVoucherexpiry(voucherObj.getVoucherexpiry());
+        ve.setVoucherexpiry(Utility.parseTimestamp(voucherObj.getVoucherexpiry()));
         ve.setVocuhercreatedat(Utility.getcurrentTimeStamp());
         ve.setName(voucherObj.getName());
         ve.setDescription(voucherObj.getDescription());
@@ -72,8 +72,15 @@ public class VoucherService {
 
         update.setVoucherpointscost(voucherObj.getVoucherpointscost()==null?update.getVoucherpointscost():voucherObj.getVoucherpointscost());
         update.setVoucherbarcode(barcode);
-        update.setVoucherexpiry(voucherObj.getVoucherexpiry()==null?update.getVoucherexpiry():voucherObj.getVoucherexpiry());
+        update.setVoucherexpiry(voucherObj.getVoucherexpiry()==null?update.getVoucherexpiry():Utility.parseTimestamp(voucherObj.getVoucherexpiry()));
         update.setDiscountpercentage(voucherObj.getDiscountpercentage()==null?update.getDiscountpercentage():voucherObj.getDiscountpercentage());
+        update.setName(
+            voucherObj.getName()==null?update.getName():voucherObj.getName()
+        );
+
+        update.setDescription(
+            voucherObj.getDescription()==null?update.getDescription():voucherObj.getDescription()
+        );
         VoucherResponse response = new VoucherResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(VoucherRepoObj.save(update));
