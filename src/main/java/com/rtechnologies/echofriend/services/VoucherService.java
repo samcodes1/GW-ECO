@@ -81,8 +81,15 @@ public class VoucherService {
     public VoucherResponse getVoucherService(Long voucherid){
         VoucherResponse response = new VoucherResponse();
         if(voucherid==null){
+            
+            Map<String, Object> vocuherstats = new HashMap<>();
+            vocuherstats.put("runningvouchers", VoucherRepoObj.countVoucherRedeemedToday());
+            vocuherstats.put("totalvoucherredeemed", VoucherRepoObj.countredeemed());
+            vocuherstats.put("totalvouchercreated", VoucherRepoObj.voucherCreated());
+            vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers());
+            vocuherstats.put("voucherslist", VoucherRepoObj.findAll());
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-            response.setData(VoucherRepoObj.findAll());
+            response.setData(vocuherstats);
             return response;
         }
         Optional<VoucherEntity> voucheropdata = VoucherRepoObj.findById(voucherid);

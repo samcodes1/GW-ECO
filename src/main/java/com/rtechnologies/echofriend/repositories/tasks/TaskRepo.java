@@ -11,7 +11,7 @@ import com.rtechnologies.echofriend.models.tasks.response.TaskCategortProjection
 @Repository
 public interface TaskRepo extends CrudRepository<TasksEntity, Long>{
     
-    @Query(value = "select *, (select count(*) from users inner join taskuserbridge tb on tb.useridfk=users.userid where t.taskid=tb.taskidfk) as participants from tasks t INNER join taskcategory tc on t.taskcategoryfk=tc.taskcategoryid order by participants desc limit 6", nativeQuery = true)
+    @Query(value = "select *, (select count(*) from users inner join taskuserbridge tb on tb.useridfk=users.userid where t.taskid=tb.taskidfk) as participants from tasks t INNER join taskcategory tc on t.taskcategoryfk=tc.taskcategoryid order by participants desc", nativeQuery = true)
     List<TaskCategortProjections> findTopSixTasks();
 
     @Query(value = "select * from tasks t INNER join taskcategory tc on t.taskcategoryfk=tc.taskcategoryid", nativeQuery = true)
@@ -22,7 +22,7 @@ public interface TaskRepo extends CrudRepository<TasksEntity, Long>{
 
 
 
-    @Query(value = "select * from tasks order by taskid desc", nativeQuery = true)
+    @Query(value = "select * from tasks order by taskid desc limit 3", nativeQuery = true)
     List<TasksEntity> findAllRecentTask();
 
     @Query(value = "select * from tasks order by taskid desc limit ?1", nativeQuery = true)
