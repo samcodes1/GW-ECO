@@ -1,9 +1,20 @@
 package com.rtechnologies.echofriend.services;
 
+import com.rtechnologies.echofriend.appconsts.AppConstants;
+import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
+import com.rtechnologies.echofriend.entities.otp.OtpEntity;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
+import com.rtechnologies.echofriend.models.otp.OtpRequest;
+import com.rtechnologies.echofriend.models.otp.OtpResponse;
 import com.rtechnologies.echofriend.models.security.CustomUserDetails;
+import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
+import com.rtechnologies.echofriend.repositories.otp.OtpRepo;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
+import com.rtechnologies.echofriend.utility.Utility;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -13,11 +24,24 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.swing.text.Utilities;
+
 @Service
 public class CustomEndUserDetailService {
 
     @Autowired
     private UserRepo userRepository;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    CompaniesRepo companiesRepoObj;
+
+    @Autowired
+    OtpRepo otpRepoObj;
 
     public CustomUserDetails loadUserByUsername(String username)  {
         // Try to load a mentor
@@ -33,6 +57,46 @@ public class CustomEndUserDetailService {
                     .build();
         }
         throw new NotFoundException("User not found with email: " + username);
+    }
+
+    public OtpResponse sendotp(OtpRequest otp) throws MessagingException{
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        String otpCode = Utility.generateOTP();
+        Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(otp.getEmail());
+        if(!companydata.isPresent()){
+            throw new NotFoundException("Company not found with email: " + otp.getEmail());
+        }
+        OtpEntity otpdata = new OtpEntity(
+            null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getCompanyid(), Utility.getcurrentTimeStamp()
+        );
+        otpRepoObj.save(otpdata);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(otp.getEmail());
+        helper.setSubject("OTP for Password reset");
+        helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
+        javaMailSender.send(message);
+        return null;
+    }
+
+    public OtpResponse verify(OtpRequest otp) throws MessagingException{
+
+        Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(otp.getEmail());
+        if(!companydata.isPresent()){
+            throw new NotFoundException("Company not found with email: " + otp.getEmail());
+        }
+        OtpEntity otpdata = otpRepoObj.otpdata(companydata.get().getCompanyid());
+        if(otpdata==null){
+            throw new NotFoundException("OTP expired");
+        }
+        OtpResponse response = new OtpResponse();
+        if(otpdata.getOtp().equalsIgnoreCase(otp.getOtp())){
+            otpdata.setIsused(true);
+            otpRepoObj.save(otpdata);
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }
+        throw new NotFoundException("Otp Failed ");
     }
 }
 

@@ -6,6 +6,7 @@ import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
 import com.rtechnologies.echofriend.models.JwtAuthenticationResponse;
 import com.rtechnologies.echofriend.models.LoginRequest;
+import com.rtechnologies.echofriend.models.otp.OtpRequest;
 import com.rtechnologies.echofriend.models.security.CustomUserDetails;
 import com.rtechnologies.echofriend.repositories.adminrepo.AdminRespo;
 import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
@@ -155,4 +157,17 @@ public class AuthenticationController {
         }
         return ResponseEntity.ok("Logout successful");
     }
+
+    @PostMapping("/sendotp")
+    public ResponseEntity<?> postMethodName(@RequestBody OtpRequest otp) throws MessagingException {
+        customEndUserDetailService.sendotp(otp);
+        return ResponseEntity.ok("OTP SEND");
+    }
+
+    @PostMapping("/verifyOtp")
+    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otp) throws MessagingException {
+        customEndUserDetailService.sendotp(otp);
+        return ResponseEntity.ok("OTP SEND");
+    }
+    
 }
