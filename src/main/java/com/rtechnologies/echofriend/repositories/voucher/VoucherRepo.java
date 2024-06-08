@@ -37,5 +37,8 @@ public interface VoucherRepo extends CrudRepository<VoucherEntity, Long> {
     Integer countexpiredVouchers(Long companyid);
 
     @Query(value = "SELECT v.shopidfk,v.usedstatus,v.useridfk,v.voucherbarcode,v.voucherid,v.voucherpointscost,v.discountpercentage,v.voucherexpiry,v.vocuhercreatedat,v.description,v.name,c.companyid,c.companyname,c.subscriptionexpiry,c.subscriptiontype,c.company_email from voucher v inner join companies c on c.companyid=v.shopidfk where c.companyid=?1", nativeQuery = true)
-    List<VoucherProjection> getCompanyVouchers(Long companyid);    
+    List<VoucherProjection> getCompanyVouchers(Long companyid); 
+    
+    @Query(value = "SELECT v.shopidfk,v.usedstatus,v.useridfk,v.voucherbarcode,v.voucherid,v.voucherpointscost,v.discountpercentage,v.voucherexpiry,v.vocuhercreatedat,v.description,v.name,c.companyid,c.companyname,c.subscriptionexpiry,c.subscriptiontype,c.company_email from voucher v inner join companies c on c.companyid=v.shopidfk where v.voucherid=?1", nativeQuery = true)
+    VoucherProjection getCompanyVouchersByid(Long voucherid);
 }

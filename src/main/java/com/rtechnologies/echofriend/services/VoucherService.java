@@ -152,6 +152,15 @@ public class VoucherService {
         vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers(id));
         vocuherstats.put("companyvouchers", VoucherRepoObj.getCompanyVouchers(id));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(vocuherstats);
+        return response;
+    }
+
+    public VoucherResponse getCompanyVoucherById(Long id){
+        VoucherResponse response = new VoucherResponse();
+        // vocuherstats.put("companyvouchers", );
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(VoucherRepoObj.getCompanyVouchers(id));
         return response;
     }
 }

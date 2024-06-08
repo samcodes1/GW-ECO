@@ -70,6 +70,12 @@ public class VoucherController {
         VoucherResponse response = voucherServiceObj.getCompanyVouchers(companyid);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
+
+    @GetMapping("/getCompanyVoucher")
+    public ResponseEntity<VoucherResponse> gtevoucherByid(@RequestParam(required = false) Long voucherid) {
+        VoucherResponse response = voucherServiceObj.getCompanyVoucherById(voucherid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
+    }
     
     
 }
