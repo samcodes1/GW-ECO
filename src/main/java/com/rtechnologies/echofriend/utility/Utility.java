@@ -79,7 +79,7 @@ public class Utility {
         calendar.setTimeInMillis(timestamp.getTime());
 
         // Add 7 days to the calendar
-        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        calendar.add(Calendar.DAY_OF_MONTH, numberofdays);
 
         // Convert calendar back to timestamp
         Timestamp newTimestamp = new Timestamp(calendar.getTimeInMillis());

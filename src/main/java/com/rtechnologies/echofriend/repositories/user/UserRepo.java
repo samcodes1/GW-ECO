@@ -25,4 +25,8 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
     @Query(value = "SELECT *,  (SELECT COUNT(*) FROM taskuserbridge t WHERE t.useridfk = u.userid AND t.iscomplete = true) as taskcount FROM `users` u JOIN taskuserbridge tub ON u.userid = tub.useridfk limit 5",
     nativeQuery = true)
     List<TaskUserProjection> findusersAndTasksCompleted();
+
+    @Query(value = "UPDATE users SET membershiptype =  CASE WHEN memebershipexpiry <= CURDATE() THEN 'FREE' ELSE membershiptype END",
+    nativeQuery = true)
+    void updateexpired();
 }

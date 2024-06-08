@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
+import com.rtechnologies.echofriend.appconsts.Membershiptype;
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
 import com.rtechnologies.echofriend.entities.task.TaskAssigmentEntity;
 import com.rtechnologies.echofriend.entities.task.TaskCategoryEntity;
@@ -238,8 +239,17 @@ public class TaskService {
         // get user data from data base
         UserEntity updatepoints = userdata.get();
         // add up the points
-        updatepoints.setPoints(updatepoints.getPoints()==null?taskpointsdata.get().getPointsassigned():updatepoints.getPoints()+taskpointsdata.get().getPointsassigned());
-        userRepoObj.save(updatepoints);
+        Optional<UserEntity> user = userRepoObj.findById(userTaskObj.getUseridfk());
+        if(!user.isPresent()){
+            throw new OperationNotAllowedException("User not allowed");
+        }
+        if(user.get().getMembershiptype().equals(Membershiptype.FREE)){
+            updatepoints.setPoints(updatepoints.getPoints()==null?taskpointsdata.get().getPointsassigned():updatepoints.getPoints()+taskpointsdata.get().getPointsassigned());
+            userRepoObj.save(updatepoints);
+        }else{
+            updatepoints.setPoints(updatepoints.getPoints()==null?taskpointsdata.get().getPointsassigned():updatepoints.getPoints()+(taskpointsdata.get().getPointsassigned()*2));
+            userRepoObj.save(updatepoints);
+        }
 
         TaskUserAssociation updatereq = voucherapplieddata.get();
         updatereq.setIscomplete(true);
@@ -302,4 +312,11 @@ public class TaskService {
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
+
+    public TasksResponse getCompanyTasks(Long companyid){
+        TasksResponse response = new TasksResponse();
+
+        return response;
+    }
+
 }

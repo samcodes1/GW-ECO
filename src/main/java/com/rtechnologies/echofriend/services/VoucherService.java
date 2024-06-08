@@ -35,7 +35,7 @@ public class VoucherService {
     public VoucherResponse createVoucherService(VoucherRequest voucherObj){
         VoucherEntity ve = new VoucherEntity();
         String barcode = Utility.generateBarcodeDigits(
-            voucherObj.getShopidfk()+""+voucherObj.getUsedstatus()+""+voucherObj.getVoucherpointscost()+""+voucherObj.getDiscountpercentage()+""+voucherObj.getVoucherexpiry(), 
+            voucherObj.getShopidfk()+"||"+voucherObj.getUsedstatus()+"||"+voucherObj.getVoucherpointscost()+"||"+voucherObj.getDiscountpercentage()+"||"+voucherObj.getVoucherexpiry(), 
             BarcodeFormat.CODE_128, 300, 100
         );
         ve.setVoucherbarcode(barcode);
@@ -63,7 +63,7 @@ public class VoucherService {
         VoucherEntity update = updateVoucher.get();
 
         String barcode = Utility.generateBarcodeDigits(
-            voucherObj.getShopidfk()+""+voucherObj.getUsedstatus()+""+voucherObj.getVoucherpointscost()+""+voucherObj.getDiscountpercentage()+""+voucherObj.getVoucherexpiry(), 
+            voucherObj.getShopidfk()+"||"+voucherObj.getUsedstatus()+"||"+voucherObj.getVoucherpointscost()+"||"+voucherObj.getDiscountpercentage()+"||"+voucherObj.getVoucherexpiry(), 
             BarcodeFormat.CODE_128, 300, 100
         );
         

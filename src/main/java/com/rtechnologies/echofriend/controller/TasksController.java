@@ -15,6 +15,9 @@ import com.rtechnologies.echofriend.entities.task.TasksEntity;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -130,5 +133,13 @@ public class TasksController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @GetMapping("/getCompanytasks")
+    public ResponseEntity<TasksResponse> getCompanyTasks(@RequestParam(required = false) Long companyid) {
+        TasksResponse response = taskServiceObj.getCompanyTasks(companyid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
     
 }
