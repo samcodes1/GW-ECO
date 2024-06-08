@@ -64,5 +64,12 @@ public class VoucherController {
         VoucherResponse response = voucherServiceObj.deleteVoucher(voucherid);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
+
+    @GetMapping("/getCompanyVouchers")
+    public ResponseEntity<VoucherResponse> getCompanyVouchers(@RequestParam(required = false) Long companyid) {
+        VoucherResponse response = voucherServiceObj.getCompanyVouchers(companyid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
+    }
+    
     
 }

@@ -142,4 +142,16 @@ public class VoucherService {
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
+
+    public VoucherResponse getCompanyVouchers(Long id){
+        VoucherResponse response = new VoucherResponse();
+        Map<String, Object> vocuherstats = new HashMap<>();
+        vocuherstats.put("runningvouchers", VoucherRepoObj.countVoucherRedeemedToday(id));
+        vocuherstats.put("totalvoucherredeemed", VoucherRepoObj.countredeemed(id));
+        vocuherstats.put("totalvouchercreated", VoucherRepoObj.voucherCreated(id));
+        vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers(id));
+        vocuherstats.put("companyvouchers", VoucherRepoObj.getCompanyVouchers(id));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
 }
