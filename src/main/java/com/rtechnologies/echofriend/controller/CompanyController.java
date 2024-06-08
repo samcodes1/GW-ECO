@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -62,7 +63,7 @@ public class CompanyController {
     }
 
     @PutMapping("/updateCompany/{companyId}")
-    public ResponseEntity<CompaniesResponse> updateCompnay(@PathVariable Long companyId, @RequestBody CompaniesRequest companiesUpdateRequestObj) {
+    public ResponseEntity<CompaniesResponse> updateCompnay(@PathVariable Long companyId, @ModelAttribute CompaniesRequest companiesUpdateRequestObj) {
         CompaniesResponse response = companiesServiceObj.updateCompanySubscription(companyId, companiesUpdateRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
@@ -106,5 +107,6 @@ public class CompanyController {
         200:500).body(response);
     }
     
+
     
 }

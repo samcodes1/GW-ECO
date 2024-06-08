@@ -15,4 +15,8 @@ public interface CompanyProjection {
     public Float getAmount();
     public String getState();
     public Timestamp getSalestimestamp();
+    public String getProductname();
+    public String getCategory();
+    public String getProductdescription();
+    public String getProductimage();
 }

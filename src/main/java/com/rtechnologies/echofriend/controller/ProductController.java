@@ -93,5 +93,13 @@ public class ProductController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @GetMapping("/getCompanyProducts")
+    public ResponseEntity<ProductsResponse> getCompanyProducts(@RequestParam(required = false) Long companyid) {
+        ProductsResponse response = productsServiceObj.getcompanyProducts(companyid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
     
 }

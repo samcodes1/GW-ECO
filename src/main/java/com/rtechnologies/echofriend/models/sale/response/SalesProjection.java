@@ -23,4 +23,7 @@ public interface SalesProjection {
     public Long getVoucheridfk();
     public Float getProductprice();
     public String getProductimage();
+    public String getUsername();
+    public String getEmail();
+
 }

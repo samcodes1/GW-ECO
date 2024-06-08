@@ -2,6 +2,8 @@ package com.rtechnologies.echofriend.models.companies.request;
 
 import java.sql.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -19,4 +21,8 @@ public class CompaniesRequest {
     private Date subscriptionExpiry;
     private String role;
     private String companyEmail;
+    private MultipartFile companylogo;
+    private Long companycategoryfk;
+    private String location;
+    private String password;
 }

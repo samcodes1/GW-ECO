@@ -42,9 +42,17 @@ public interface ProductsRepo extends JpaRepository<ProductsEntity, Long> {
     nativeQuery = true)
     List<CompanyProjection> recentOrder(Long companyId);
 
-    @Query(value = "select sp.saleproductid as transactionid, sp.total as amount, s.`state`, s.salestimestamp from saleproduct sp inner join sales s on s.saleid=sp.saleidfk inner join products p on p.productid=sp.productidfk inner JOIN companies c on c.companyid=p.companyidfk inner join users u on u.userid=s.useridfk where c.companyid=?1",
+    @Query(value = "select sp.saleproductid as transactionid, sp.total as amount, s.`state`, s.salestimestamp from saleproduct sp inner join sales s on s.saleid=sp.saleidfk inner join products p on p.productid=sp.productidfk inner JOIN companies c on c.companyid=p.companyidfk inner join users u on u.userid=s.useridfk where c.companyid=?1 order by s.salestimestamp desc",
     nativeQuery = true)
     List<CompanyProjection> orders(Long companyId);
+
+    @Query(value = "select p.productname, c.companyname, pc.category, p.productdescription, p.productimage from products p INNER join companies c on c.companyid=p.companyidfk inner join productcategory pc on pc.categoryid=p.categoryidfk",
+    nativeQuery = true)
+    List<CompanyProjection> getCompanyProducts();
+
+    @Query(value = "select p.productname, c.companyname, pc.category, p.productdescription, p.productimage from products p INNER join companies c on c.companyid=p.companyidfk inner join productcategory pc on pc.categoryid=p.categoryidfk where c.companyid=?1",
+    nativeQuery = true)
+    List<CompanyProjection> getCompanyProductsbyCompanyId(Long companyid);
 
 
 }

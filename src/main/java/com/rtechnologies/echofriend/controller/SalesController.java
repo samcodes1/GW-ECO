@@ -49,5 +49,13 @@ public class SalesController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @GetMapping("/getCompanyOrders")
+    public ResponseEntity<SaleResponse> getOrders(@RequestParam(required = false) Long userId) {
+        SaleResponse response = salesServiceobj.getOrders(userId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
     
 }

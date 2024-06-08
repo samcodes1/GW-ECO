@@ -100,10 +100,15 @@ public class ProductsService {
 
     public ProductsResponse getPopularProducts(){
         ProductsResponse response = new ProductsResponse();
-        // List<ProductsEntity> product = new ArrayList<ProductsEntity>();
-        // product.add();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(productsRepoObj.findAll());
+        return response;
+    }
+
+    public ProductsResponse getcompanyProducts(Long companyid){
+        ProductsResponse response = new ProductsResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(productsRepoObj.getCompanyProductsbyCompanyId(companyid));
         return response;
     }
 

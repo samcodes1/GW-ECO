@@ -1,6 +1,7 @@
 package com.rtechnologies.echofriend.services;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -78,9 +79,10 @@ public class SalesService {
 
         saleRequestObj.getProductidQuantity().forEach(
             (productid, quantity)->{
-                // totalBill[0] += productRepoObj.findById(productid).get().getProductprice()*(float)quantity;
+                Float totalAmountPerProduct = 0f;
+                totalAmountPerProduct = totalAmountPerProduct +  productRepoObj.findById(productid).get().getProductprice()*(float)quantity;
                 salesProductRepoObj.save(new SaleProductEntity(
-                    null, saleid[0], productid, quantity, finalAmount, voucherEntity.getVoucherid()
+                    null, saleid[0], productid, quantity, totalAmountPerProduct, voucherEntity.getVoucherid()
                 ));
             }
         );
@@ -132,6 +134,19 @@ public class SalesService {
         salesEntity.setState(saleRequestObj.getState());
         SaleResponse response = new SaleResponse();
         response.setData(salesRepoObj.save(salesEntity));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public SaleResponse getOrders(Long userid){
+        SaleResponse response = new SaleResponse();
+        if(userid==null){
+            response.setData(salesRepoObj.findAllSales());
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }
+
+        response.setData(salesRepoObj.findAllSalesbyUserid(userid));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }

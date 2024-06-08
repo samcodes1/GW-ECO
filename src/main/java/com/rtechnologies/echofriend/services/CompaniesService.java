@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.services;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity.CompaniesEntityBuilder;
@@ -31,6 +34,9 @@ public class CompaniesService {
 
     @Autowired
     ProductsRepo productsRepoObj;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     public CompaniesResponse addCompanyServiceMethod(CompaniesRequest companiesRequestObj) throws NoSuchAlgorithmException{
         companiesRepoObj.save(new CompaniesEntity(
@@ -73,6 +79,18 @@ public class CompaniesService {
             
         }
 
+        String profilePicUrl = "";
+        if(companiesUpdateRequestObj.getCompanylogo()!=null){
+            try {
+                String folder = "company-logo-pics"; // Change this to your preferred folder name
+                String publicId = folder + "/" + companiesUpdateRequestObj.getCompanylogo().getName();
+                Map data = cloudinary.uploader().upload(companiesUpdateRequestObj.getCompanylogo().getBytes(), ObjectUtils.asMap("public_id", publicId));
+                profilePicUrl = data.get("secure_url").toString();
+            } catch (IOException ioException) {
+                throw new RuntimeException("File uploading failed");
+            }
+        }
+
         CompaniesEntity companyEntity = companyObj.get();
         companyEntity.setSubscriptiontype(
             companiesUpdateRequestObj.getSubscriptionType()==null?companyEntity.getSubscriptiontype():companiesUpdateRequestObj.getSubscriptionType()
@@ -83,6 +101,13 @@ public class CompaniesService {
         companyEntity.setCompanyname(
             companiesUpdateRequestObj.getCompanyName()==null?companyEntity.getCompanyname():companiesUpdateRequestObj.getCompanyName()
         );
+        companyEntity.setCompanylogo(
+            profilePicUrl.isEmpty()?companyEntity.getCompanylogo():profilePicUrl
+        );
+        companyEntity.setLocation(
+            companiesUpdateRequestObj.getLocation()==null?companyEntity.getLocation():companiesUpdateRequestObj.getLocation()
+        );
+        
         // response.setResponseCode(AppConstants.SUCCESS);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
