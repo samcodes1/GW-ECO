@@ -2,8 +2,12 @@ package com.rtechnologies.echofriend.controller;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.models.companies.request.CompaniesRequest;
+import com.rtechnologies.echofriend.models.companies.request.CompanySignUpRequest;
 import com.rtechnologies.echofriend.models.companies.response.CompaniesResponse;
 import com.rtechnologies.echofriend.services.CompaniesService;
+
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,7 +39,7 @@ public class CompanyController {
         }
     )
     @PostMapping("/addCompany")
-    public ResponseEntity<CompaniesResponse> addCompany(@RequestBody CompaniesRequest companiesRequestObj) {
+    public ResponseEntity<CompaniesResponse> addCompany(@RequestBody CompaniesRequest companiesRequestObj) throws NoSuchAlgorithmException {
         CompaniesResponse response = companiesServiceObj.addCompanyServiceMethod(companiesRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
@@ -87,4 +91,20 @@ public class CompanyController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @PostMapping("/companySignUp")
+    public ResponseEntity<CompaniesResponse> signup(@RequestBody CompanySignUpRequest companySignUpRequestObj) throws NoSuchAlgorithmException {
+        CompaniesResponse response = companiesServiceObj.companysignup(companySignUpRequestObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @GetMapping("/companyDashboard")
+    public ResponseEntity<CompaniesResponse> companydashboard(@RequestParam Long companyId) {
+        CompaniesResponse response = companiesServiceObj.companyDashboard(companyId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
+    
 }

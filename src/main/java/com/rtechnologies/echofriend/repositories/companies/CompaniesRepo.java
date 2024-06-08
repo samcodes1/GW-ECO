@@ -1,5 +1,7 @@
 package com.rtechnologies.echofriend.repositories.companies;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +19,6 @@ public interface CompaniesRepo extends JpaRepository<CompaniesEntity, Long> {
    
     @Query("select count(*) from companies")
     long count();
+
+    Optional<CompaniesEntity> findByCompanyEmail(String usernameOrEmail);
 }

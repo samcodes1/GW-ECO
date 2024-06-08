@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.services;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
+import com.rtechnologies.echofriend.entities.companies.CompaniesEntity.CompaniesEntityBuilder;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.companies.request.CompaniesRequest;
+import com.rtechnologies.echofriend.models.companies.request.CompanySignUpRequest;
 import com.rtechnologies.echofriend.models.companies.response.CompaniesResponse;
 import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
 import com.rtechnologies.echofriend.repositories.products.ProductsRepo;
@@ -29,11 +32,11 @@ public class CompaniesService {
     @Autowired
     ProductsRepo productsRepoObj;
 
-    public CompaniesResponse addCompanyServiceMethod(CompaniesRequest companiesRequestObj){
+    public CompaniesResponse addCompanyServiceMethod(CompaniesRequest companiesRequestObj) throws NoSuchAlgorithmException{
         companiesRepoObj.save(new CompaniesEntity(
             null, companiesRequestObj.getCompanyName(), companiesRequestObj.getSubscriptionType(), 
             companiesRequestObj.getProducts(), companiesRequestObj.getSubscriptionExpiry(), Utility.getcurrentDate(), 
-            companiesRequestObj.getRole(), companiesRequestObj.getCompanyEmail()
+            companiesRequestObj.getRole(), companiesRequestObj.getCompanyEmail(), "",-1l,"", Utility.hashPassword(companiesRequestObj.getCompanyName())
         ));
         CompaniesResponse response = new CompaniesResponse();
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -99,6 +102,36 @@ public class CompaniesService {
         
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(companyData);
+        return response;
+    }
+
+    public CompaniesResponse companysignup(CompanySignUpRequest companySignUpRequestObj) throws NoSuchAlgorithmException{
+        CompaniesResponse response = new CompaniesResponse();
+        CompaniesEntityBuilder companyEntity = CompaniesEntity.builder()
+        .companyEmail(companySignUpRequestObj.getCompanyEmail())
+        .companyname(companySignUpRequestObj.getCompanyName())
+        .location(companySignUpRequestObj.getLocation())
+        .companycategoryfk(companySignUpRequestObj.getCategory())
+        .joindate(Utility.getcurrentDate())
+        .password(Utility.hashPassword(companySignUpRequestObj.getPassword()));
+
+        companiesRepoObj.save(companyEntity.build());
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public CompaniesResponse companyDashboard(Long companyid){
+        CompaniesResponse response = new CompaniesResponse();
+        Map<String, Object> companyData =  new HashMap<>();
+        companyData.put("products", productsRepoObj.countCompanyProducts(companyid));
+        companyData.put("orders", productsRepoObj.countCompanyOrderToday(companyid));
+        companyData.put("totalOrders", productsRepoObj.countCompanyTotalOrder(companyid));
+        companyData.put("customers", productsRepoObj.countCompanyCustomer(companyid));
+        companyData.put("recentOrders", productsRepoObj.recentOrder(companyid));
+        companyData.put("listOfOrders", productsRepoObj.orders(companyid));
+
+        response.setData(companyData);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
 

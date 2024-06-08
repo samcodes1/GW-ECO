@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity( name = "companies" )
 @Table( name = "companies" )
 public class CompaniesEntity {
@@ -25,4 +27,8 @@ public class CompaniesEntity {
     private Date joindate;
     private String role;
     private String companyEmail;
+    private String companylogo;
+    private Long companycategoryfk;
+    private String location;
+    private String password;
 }
