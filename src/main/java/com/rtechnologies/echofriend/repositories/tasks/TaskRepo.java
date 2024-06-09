@@ -34,5 +34,8 @@ public interface TaskRepo extends CrudRepository<TasksEntity, Long>{
     @Query(value = "select * from tasks where taskcreatedby=?1 order by taskid desc limit ?2", nativeQuery = true)
     List<TasksEntity> findAllRecentTaskCreatedByLimit(Long id, Integer limit);
 
+    @Query(value = "select * from tasks t inner join companies c on c.companyid=t.companyidfk inner join taskcategory tc on tc.taskcategoryid=t.taskcategoryfk where t.companyidfk=?1", nativeQuery = true)
+    List<TaskCategortProjections> findtasksbycompany(Long id);
+
 
 }

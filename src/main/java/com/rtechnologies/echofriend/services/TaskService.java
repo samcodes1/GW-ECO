@@ -79,7 +79,8 @@ public class TaskService {
 
         taskRepoObj.save(new TasksEntity(
             null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), 
-            tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), Utility.getcurrentTimeStamp(),true,tasksResquestObj.getExternallink()
+            tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), Utility.getcurrentTimeStamp(),true,tasksResquestObj.getExternallink(),
+            tasksResquestObj.getCompanyid()
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -315,7 +316,8 @@ public class TaskService {
 
     public TasksResponse getCompanyTasks(Long companyid){
         TasksResponse response = new TasksResponse();
-
+        response.setData(taskRepoObj.findtasksbycompany(companyid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
 

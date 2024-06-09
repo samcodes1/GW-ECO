@@ -27,4 +27,5 @@ public class TasksEntity {
     private Timestamp taskCreatedTime;
     private Boolean active;
     private String externallink;
+    private Long companyidfk;
 }
