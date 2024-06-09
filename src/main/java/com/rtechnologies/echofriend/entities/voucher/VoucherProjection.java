@@ -14,7 +14,7 @@ public interface VoucherProjection {
     public Timestamp getVoucheruserexpry();
     public Boolean getIsused();
     public Long getVoucherid();
-    public String getVoucherbarcode();
+    public byte[] getVoucherbarcode();
     public Long getShopidfk();
     public String getUsedstatus();
     public String getVoucherimageurl();
