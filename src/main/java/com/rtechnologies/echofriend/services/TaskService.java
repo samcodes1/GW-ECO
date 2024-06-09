@@ -93,7 +93,7 @@ String barcodeString = barcodeStringBuilder.toString();
             null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), 
             tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), Utility.getcurrentTimeStamp(),true,tasksResquestObj.getExternallink(),
             tasksResquestObj.getCompanyid(),tasksResquestObj.getTasktype(),tasksResquestObj.getTotalsteps(),
-            Utility.generateBarcode(barcodeString,BarcodeFormat.CODE_128, 300, 100)
+            Utility.generateBarcode(barcodeString,BarcodeFormat.CODE_128, 300, 100),barcodeString
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -364,6 +364,7 @@ barcodeStringBuilder.append(tasksEntity.getPointsassigned()).append("//")
             System.out.println("barcodeString___________ : "+barcodeStringBuilder.toString());
             // System.out.println(Utility.generateBarcode(barcodeString,BarcodeFormat.CODE_128, 150, 50));
             tasksEntity.setTaskbarcode(Utility.generateBarcode(barcodeStringBuilder.toString(),BarcodeFormat.CODE_128, 150, 50));
+            tasksEntity.setTaskbarcodeString(barcodeStringBuilder.toString());
             taskRepoObj.save(tasksEntity);
             System.err.println(Utility.decodeBarcode(Utility.generateBarcode(barcodeStringBuilder.toString(),BarcodeFormat.CODE_128, 150, 50)));
         }

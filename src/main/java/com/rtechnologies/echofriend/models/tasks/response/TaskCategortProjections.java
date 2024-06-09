@@ -24,6 +24,7 @@ public interface TaskCategortProjections {
     public Long getCompanyidfk();
     public String getTasktype();
     public Integer getTotalsteps();
-    public String getTaskbarcode();
+    public byte[] getTaskbarcode();
+    public String getTaskbarcode_string();
     
 }

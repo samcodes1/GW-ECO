@@ -32,4 +32,5 @@ public class TasksEntity {
     private Integer totalsteps;
     @Lob
     private byte[] taskbarcode;
+    private String taskbarcodeString;
 }
