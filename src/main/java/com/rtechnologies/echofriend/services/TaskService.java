@@ -337,4 +337,24 @@ public class TaskService {
         return response;
     }
 
+    public TasksResponse generate(){
+        // Optional<TaskUserAssociation> taskuserdata = taskUserRepoObj.findByTaskidfkAndUseridfk(taskid, userid);
+        Iterable<TasksEntity> all = taskRepoObj.findAll();
+        for (TasksEntity tasksEntity : all) {
+
+            String barcodeString = tasksEntity.getTaskdescription()+"||"+tasksEntity.getPointsassigned()+"||"+
+            tasksEntity.getTaskcreatedby()+"||"+tasksEntity.getTaskcategoryfk()==null?"0":tasksEntity.getTaskcategoryfk()+
+            "||"+ tasksEntity.getTaskCreatedTime()+"||"+tasksEntity.getActive()+"||"+tasksEntity.getExternallink()+"||"+"||"+tasksEntity.getTasktype()+"||"+tasksEntity.getTotalsteps();
+            System.out.println(Utility.generateBarcodeDigits(barcodeString,BarcodeFormat.CODE_128, 5, 2));
+            tasksEntity.setTaskbarcode(Utility.generateBarcodeDigits(barcodeString,BarcodeFormat.CODE_128, 5, 2));
+            taskRepoObj.save(tasksEntity);
+            
+        }
+        // List<TaskCategortProjections> taskuserstatus = taskRepoObj.findtasksbyusertask(userid,taskid);
+        TasksResponse response = new TasksResponse();
+        // response.setData(taskRepoObj.findtasksbyusertask(userid,taskid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
 }

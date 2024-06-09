@@ -107,9 +107,16 @@ public class Utility {
             int barcodeHeight = bitMatrix.getHeight();
             StringBuilder barcodeDigits = new StringBuilder();
             
+            // Determine the number of digits per group based on the barcode format
+            int digitsPerGroup = (format == BarcodeFormat.CODE_128) ? 3 : 4;
+    
             for (int y = 0; y < barcodeHeight; y++) {
-                for (int x = 0; x < barcodeWidth; x++) {
-                    barcodeDigits.append(bitMatrix.get(x, y) ? "1" : "0");
+                for (int x = 0; x < barcodeWidth; x += digitsPerGroup) {
+                    int decimalValue = 0;
+                    for (int i = 0; i < digitsPerGroup && x + i < barcodeWidth; i++) {
+                        decimalValue = (decimalValue << 1) + (bitMatrix.get(x + i, y) ? 1 : 0);
+                    }
+                    barcodeDigits.append(decimalValue);
                 }
             }
             

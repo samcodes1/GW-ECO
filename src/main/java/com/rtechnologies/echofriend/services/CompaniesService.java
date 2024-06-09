@@ -107,7 +107,7 @@ public class CompaniesService {
         companyEntity.setLocation(
             companiesUpdateRequestObj.getLocation()==null?companyEntity.getLocation():companiesUpdateRequestObj.getLocation()
         );
-        
+
         // response.setResponseCode(AppConstants.SUCCESS);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
@@ -160,4 +160,11 @@ public class CompaniesService {
         return response;
     }
 
+    public CompaniesResponse deletecompany(Long companyid){
+        CompaniesResponse response = new CompaniesResponse();
+        companiesRepoObj.deleteById(companyid);
+        // response.setData(companyData);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
 }

@@ -147,4 +147,12 @@ public class TasksController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+
+    @GetMapping("/generatebarcodeforalltasksdummyendpoint")
+    public ResponseEntity<TasksResponse> gettaskbyuser() {
+        TasksResponse response = taskServiceObj.generate();
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
 }

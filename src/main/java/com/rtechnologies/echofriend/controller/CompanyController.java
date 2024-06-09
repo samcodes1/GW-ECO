@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -107,6 +108,11 @@ public class CompanyController {
         200:500).body(response);
     }
     
-
+    @DeleteMapping("/deleteCompany/{companyId}")
+    public ResponseEntity<CompaniesResponse> deletecompany(@RequestParam Long companyId) {
+        CompaniesResponse response = companiesServiceObj.deletecompany(companyId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
     
 }
