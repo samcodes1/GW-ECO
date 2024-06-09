@@ -41,7 +41,15 @@ public class UserPaymentService {
         userPaymentRepoObj.findById(id).get();
         UserPaymentResponse response = new UserPaymentResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        response.setData(userPaymentRepoObj.findByUseridfk(id).get());
+        response.setData(userPaymentRepoObj.findByUseridfk(id));
+        return response;
+    }
+
+    public UserPaymentResponse getpaymentHistoryOfUser(Long id){
+        userPaymentRepoObj.findById(id).get();
+        UserPaymentResponse response = new UserPaymentResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(userPaymentRepoObj.findByUseridfk(id));
         return response;
     }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,10 +34,17 @@ public class UserPayment {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
 
-    @PostMapping("/getPaymentHistory")
-    public ResponseEntity<UserPaymentResponse> getPaymentHistory(@RequestParam(required = false) Long productId) {
-        UserPaymentResponse response = userPaymentServiceObj.getpaymentHistory(productId);
+    @GetMapping("/getPaymentHistory")
+    public ResponseEntity<UserPaymentResponse> getPaymentHistory(@RequestParam(required = false) Long userid) {
+        UserPaymentResponse response = userPaymentServiceObj.getpaymentHistory(userid);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
+
+    // @GetMapping("/getPaymentHistoryOfUser")
+    // public ResponseEntity<UserPaymentResponse> userpaymenthistory(@RequestParam(required = false) Long userid) {
+    //     UserPaymentResponse response = userPaymentServiceObj.getpaymentHistoryOfUser(userid);
+    //     return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
+    // }
+    
     
 }
