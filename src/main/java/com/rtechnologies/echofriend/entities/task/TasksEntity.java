@@ -30,5 +30,6 @@ public class TasksEntity {
     private Long companyidfk;
     private String tasktype;
     private Integer totalsteps;
-    private String taskbarcode;
+    @Lob
+    private byte[] taskbarcode;
 }

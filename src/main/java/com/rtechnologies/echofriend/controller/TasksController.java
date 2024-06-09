@@ -4,6 +4,9 @@ import com.rtechnologies.echofriend.models.tasks.request.TaskAssignmentRequest;
 import com.rtechnologies.echofriend.models.tasks.request.TasksResquest;
 import com.rtechnologies.echofriend.models.tasks.response.TasksResponse;
 import com.rtechnologies.echofriend.services.TaskService;
+
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -150,7 +153,7 @@ public class TasksController {
 
 
     @GetMapping("/generatebarcodeforalltasksdummyendpoint")
-    public ResponseEntity<TasksResponse> gettaskbyuser() {
+    public ResponseEntity<TasksResponse> gettaskbyuser() throws IOException {
         TasksResponse response = taskServiceObj.generate();
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
