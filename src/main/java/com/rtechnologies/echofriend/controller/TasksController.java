@@ -141,5 +141,10 @@ public class TasksController {
         200:500).body(response);
     }
     
-    
+    @GetMapping("/getTaskByUser")
+    public ResponseEntity<TasksResponse> gettaskbyuser(@RequestParam(required = false) Long taskid,@RequestParam(required = false) Long userid) {
+        TasksResponse response = taskServiceObj.getTasksbyUser(taskid, userid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.zxing.BarcodeFormat;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.appconsts.Membershiptype;
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
@@ -76,11 +77,14 @@ public class TaskService {
         // }
 
         Long adminId = result.getId();
-
+        String barcodeString = tasksResquestObj.getTaskDescription()+"||"+tasksResquestObj.getTaskPoints()+"||"+
+        tasksResquestObj.getTaskname()+"||"+adminId+"||"+tasksResquestObj.getTaskcategory()+"||"+ Utility.getcurrentTimeStamp()+"||"+(true)+"||"+tasksResquestObj.getExternallink()+"||"+
+        tasksResquestObj.getCompanyid()+"||"+tasksResquestObj.getTasktype()+"||"+tasksResquestObj.getTotalsteps();
         taskRepoObj.save(new TasksEntity(
             null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), 
             tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), Utility.getcurrentTimeStamp(),true,tasksResquestObj.getExternallink(),
-            tasksResquestObj.getCompanyid()
+            tasksResquestObj.getCompanyid(),tasksResquestObj.getTasktype(),tasksResquestObj.getTotalsteps(),
+            Utility.generateBarcodeDigits(barcodeString,BarcodeFormat.CODE_128, 300, 100)
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -317,6 +321,18 @@ public class TaskService {
     public TasksResponse getCompanyTasks(Long companyid){
         TasksResponse response = new TasksResponse();
         response.setData(taskRepoObj.findtasksbycompany(companyid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public TasksResponse getTasksbyUser( Long taskid, Long userid){
+        Optional<TaskUserAssociation> taskuserdata = taskUserRepoObj.findByTaskidfkAndUseridfk(taskid, userid);
+        if(!taskuserdata.isPresent()){
+            throw new OperationNotAllowedException("Task not applied");
+        }
+        // List<TaskCategortProjections> taskuserstatus = taskRepoObj.findtasksbyusertask(userid,taskid);
+        TasksResponse response = new TasksResponse();
+        response.setData(taskRepoObj.findtasksbyusertask(userid,taskid));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }

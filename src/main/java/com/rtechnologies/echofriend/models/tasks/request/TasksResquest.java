@@ -17,5 +17,8 @@ public class TasksResquest {
     private Long taskcategory;
     private String externallink;
     private Long companyid;
+    private String tasktype;
+    private Integer totalsteps;
+    private String taskbarcode;
     // private Timestamp taskCreatedTimestamp;
 }

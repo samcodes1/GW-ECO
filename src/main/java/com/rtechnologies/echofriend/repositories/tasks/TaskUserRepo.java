@@ -22,4 +22,6 @@ public interface TaskUserRepo extends CrudRepository<TaskUserAssociation, Long> 
 
     @Query(value = "select count(taskuserid) from taskuserbridge where iscomplete=true and useridfk=?1", nativeQuery = true)
     Integer countByIscompleteTrueWhereUserid(Long userid);
+
+    Optional<TaskUserAssociation> findByTaskidfkAndUseridfk(Long taskidfk, Long useridfk);
 }

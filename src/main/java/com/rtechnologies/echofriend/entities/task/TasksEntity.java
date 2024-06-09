@@ -28,4 +28,7 @@ public class TasksEntity {
     private Boolean active;
     private String externallink;
     private Long companyidfk;
+    private String tasktype;
+    private Integer totalsteps;
+    private String taskbarcode;
 }
