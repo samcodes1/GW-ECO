@@ -13,22 +13,22 @@ import com.rtechnologies.echofriend.models.sale.response.SalesProjection;
 @Repository
 public interface SalesRepo extends CrudRepository<SalesEntity, Long> {
 
-    @Query(value = "select s.*,sp.*, p.productimage, p.productprice from sales s inner join saleproduct sp on sp.saleidfk=s.saleid INNER join products p on p.productid=sp.productidfk", nativeQuery = true)
+    @Query(value = "select s.*,sp.*, p.productimage, p.productprice, p.productname from sales s inner join saleproduct sp on sp.saleidfk=s.saleid INNER join products p on p.productid=sp.productidfk", nativeQuery = true)
     List<SalesProjection> findOrders();
 
-    @Query(value = "select s.*,sp.*, p.productimage, p.productprice from sales s inner join saleproduct sp on sp.saleidfk=s.saleid INNER join products p on p.productid=sp.productidfk where s.useridfk=?1", nativeQuery = true)
+    @Query(value = "select s.*,sp.*, p.productimage, p.productprice, p.productname from sales s inner join saleproduct sp on sp.saleidfk=s.saleid INNER join products p on p.productid=sp.productidfk where s.useridfk=?1", nativeQuery = true)
     List<SalesProjection> findOrdersByUserid(Long id);
 
-    @Query(value = "select s.*,sp.*, p.productimage, p.productprice from sales s inner join saleproduct sp on sp.saleidfk=s.saleid INNER join products p on p.productid=sp.productidfk where s.salestimestamp=?1", nativeQuery = true)
+    @Query(value = "select s.*,sp.*, p.productimage, p.productprice, p.productname from sales s inner join saleproduct sp on sp.saleidfk=s.saleid INNER join products p on p.productid=sp.productidfk where s.salestimestamp=?1", nativeQuery = true)
     List<SalesProjection> findOrdersByDateTime(Timestamp orderTimestamp);
 
-    @Query(value = "select s.*,sp.*, p.productimage, p.productprice from sales s inner join saleproduct sp on sp.saleidfk=s.saleid INNER join products p on p.productid=sp.productidfk where s.salestimestamp=?1 and s.useridfk=?2", nativeQuery = true)
+    @Query(value = "select s.*,sp.*, p.productimage, p.productprice, p.productname from sales s inner join saleproduct sp on sp.saleidfk=s.saleid INNER join products p on p.productid=sp.productidfk where s.salestimestamp=?1 and s.useridfk=?2", nativeQuery = true)
     List<SalesProjection> findOrdersByDateTimeUserid(Timestamp orderTimestamp, Long userid);
 
-    @Query(value = "select s.saleid, u.username, u.email, p.productprice, s.salestimestamp, s.`state`  from sales s INNER join users u on u.userid=s.useridfk INNER join saleproduct sp on sp.saleidfk=s.saleid inner join products p on p.productid=sp.productidfk", nativeQuery = true)
+    @Query(value = "select s.saleid, u.username, u.email, p.productprice,, p.productname, s.salestimestamp, s.`state`  from sales s INNER join users u on u.userid=s.useridfk INNER join saleproduct sp on sp.saleidfk=s.saleid inner join products p on p.productid=sp.productidfk", nativeQuery = true)
     List<SalesProjection> findAllSales();
 
-    @Query(value = "select s.saleid, u.username, u.email, p.productprice, s.salestimestamp, s.`state`  from sales s INNER join users u on u.userid=s.useridfk INNER join saleproduct sp on sp.saleidfk=s.saleid inner join products p on p.productid=sp.productidfk where u.userid=?1", nativeQuery = true)
+    @Query(value = "select s.saleid, u.username, u.email, p.productprice, p.productname, s.salestimestamp, s.`state`  from sales s INNER join users u on u.userid=s.useridfk INNER join saleproduct sp on sp.saleidfk=s.saleid inner join products p on p.productid=sp.productidfk where u.userid=?1", nativeQuery = true)
     List<SalesProjection> findAllSalesbyUserid(Long userid);
     
 }

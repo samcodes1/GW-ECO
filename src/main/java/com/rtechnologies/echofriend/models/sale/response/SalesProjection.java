@@ -25,5 +25,6 @@ public interface SalesProjection {
     public String getProductimage();
     public String getUsername();
     public String getEmail();
+    public String getProductname();
 
 }
