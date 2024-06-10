@@ -21,6 +21,7 @@ import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.voucher.request.VoucherRequest;
 import com.rtechnologies.echofriend.models.voucher.response.VoucherResponse;
+import com.rtechnologies.echofriend.repositories.user.UserHistoryRepo;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherRepo;
 import com.rtechnologies.echofriend.utility.Utility;
 

@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,11 +27,13 @@ import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.user.request.AdminUserUpdate;
 import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
+import com.rtechnologies.echofriend.repositories.user.UserHistoryRepo;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherRepo;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherUserRepo;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
+import com.rtechnologies.echofriend.entities.user.UserPointsHistory;
 import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
 import com.rtechnologies.echofriend.entities.voucher.VoucherUserAssociation;
 
@@ -48,6 +51,9 @@ public class UserService {
     VoucherRepo voucherRepoObj;
     @Autowired
     VoucherUserRepo voucherUserRepoObj;
+
+    @Autowired
+    UserHistoryRepo userHistoryRepoObj;
 
     public UserResponse userSignupServiceMethod(UserRequest userRequestObj) throws NoSuchAlgorithmException, ParseException {
         if (userRepoObj.existsByEmail(userRequestObj.getEmail())) {
@@ -215,6 +221,19 @@ public class UserService {
         userRepoObj.save(user);
         
         voucherUserRepoObj.save(redeemdata);
+
+        Optional<UserPointsHistory> history = userHistoryRepoObj.findByUseridfk(userId);
+        if(history.isPresent()){
+            UserPointsHistory historyEntity = history.get();
+            historyEntity.setTotalpointsredeemed(historyEntity.getTotalpointsredeemed()==null?voucher.getVoucherpointscost():historyEntity.getTotalpointsredeemed()+voucher.getVoucherpointscost());
+            userHistoryRepoObj.save(historyEntity);
+        }else{
+            UserPointsHistory historyEntity = new UserPointsHistory(
+                null,userId,0,voucher.getVoucherpointscost()
+            );
+            userHistoryRepoObj.save(historyEntity);
+        }
+
         UserResponse response = new UserResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
@@ -244,6 +263,22 @@ public class UserService {
         );
         userRepoObj.save(user);
         UserResponse response = new UserResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public UserResponse getHistoryOfUserPoints(Long userid){
+        Optional<UserPointsHistory> history = userHistoryRepoObj.findByUseridfk(userid);
+        if(!history.isPresent()){
+            throw new RecordNotFoundException("record not found of user");
+        }
+        UserResponse response = new UserResponse();
+        Map<String, Object> userpointshistory = new HashMap<>();
+        userpointshistory.put("pointsearned", history.get().getTotalpoinysearned());
+        userpointshistory.put("pointsredeemed", history.get().getTotalpointsredeemed());
+        userpointshistory.put("taskscompleted", userHistoryRepoObj.taskcompletecount(userid));
+        userpointshistory.put("vouchersused", userHistoryRepoObj.voucherusercount(userid));
+        userpointshistory.put("recenttasks", userHistoryRepoObj.recenttaskscompleted(userid));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }

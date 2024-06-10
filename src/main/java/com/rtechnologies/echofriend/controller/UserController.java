@@ -20,6 +20,9 @@ import com.rtechnologies.echofriend.appconsts.AppConstants;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -165,6 +168,14 @@ public class UserController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @GetMapping("/userPointsHistory")
+    public ResponseEntity<UserResponse> userpointshistory(@RequestParam Long userid) {
+        UserResponse response = userServiceObj.getHistoryOfUserPoints(userid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
     
     // @PutMapping("/updateUser/{userid}")
     // public ResponseEntity<UserResponse> updateuser(@PathVariable Long userid, @RequestBody String entity) {

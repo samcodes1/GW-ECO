@@ -23,5 +23,6 @@ public interface TaskUserProjection {
     public String getRole();
     public String getUsername();
     public Timestamp getMemebershipexpiry();
+    public String getTaskcategory();
 
 }

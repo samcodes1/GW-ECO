@@ -20,6 +20,7 @@ import com.rtechnologies.echofriend.entities.task.TaskCategoryEntity;
 import com.rtechnologies.echofriend.entities.task.TaskUserAssociation;
 import com.rtechnologies.echofriend.entities.task.TasksEntity;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
+import com.rtechnologies.echofriend.entities.user.UserPointsHistory;
 import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
@@ -32,6 +33,7 @@ import com.rtechnologies.echofriend.repositories.tasks.TaskAssignmentRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskCategoryRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskUserRepo;
+import com.rtechnologies.echofriend.repositories.user.UserHistoryRepo;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
 import com.rtechnologies.echofriend.utility.Utility;
 
@@ -55,6 +57,9 @@ public class TaskService {
 
     @Autowired
     UserRepo userRepoObj;
+
+    @Autowired
+    UserHistoryRepo userHistoryRepoObj;
 
     public TasksResponse createTaskServiceMethod(TasksResquest tasksResquestObj) {
         TasksResponse response = new TasksResponse();
@@ -264,11 +269,22 @@ String barcodeString = barcodeStringBuilder.toString();
             updatepoints.setPoints(updatepoints.getPoints()==null?taskpointsdata.get().getPointsassigned():updatepoints.getPoints()+(taskpointsdata.get().getPointsassigned()*2));
             userRepoObj.save(updatepoints);
         }
-
+        
         TaskUserAssociation updatereq = voucherapplieddata.get();
         updatereq.setIscomplete(true);
         taskUserRepoObj.save(updatereq);
+        Optional<UserPointsHistory> history = userHistoryRepoObj.findByUseridfk(userTaskObj.getUseridfk());
+        if(history.isPresent()){
+            UserPointsHistory historyEntity = history.get();
+            historyEntity.setTotalpoinysearned(historyEntity.getTotalpoinysearned()==null?taskpointsdata.get().getPointsassigned():historyEntity.getTotalpoinysearned()+taskpointsdata.get().getPointsassigned());
+            userHistoryRepoObj.save(historyEntity);
+        }else{
+            UserPointsHistory historyEntity = new UserPointsHistory(
+                null,userTaskObj.getUseridfk(),taskpointsdata.get().getPointsassigned(),0
+            );
+            userHistoryRepoObj.save(historyEntity);
 
+        }
         TasksResponse response = new TasksResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
