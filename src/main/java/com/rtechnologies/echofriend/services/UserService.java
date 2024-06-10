@@ -25,6 +25,7 @@ import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.user.request.AdminUserUpdate;
+import com.rtechnologies.echofriend.models.user.request.ChangePasswordRequest;
 import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
 import com.rtechnologies.echofriend.repositories.user.UserHistoryRepo;
@@ -279,6 +280,18 @@ public class UserService {
         userpointshistory.put("taskscompleted", userHistoryRepoObj.taskcompletecount(userid));
         userpointshistory.put("vouchersused", userHistoryRepoObj.voucherusercount(userid));
         userpointshistory.put("recenttasks", userHistoryRepoObj.recenttaskscompleted(userid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public UserResponse changepassword(ChangePasswordRequest changePasswordRequestObj) throws NoSuchAlgorithmException{
+        Optional<UserEntity> user = userRepoObj.findByEmail(changePasswordRequestObj.getEmail());
+        if(!user.isPresent()){
+            throw new RecordNotFoundException("user not found");
+        }
+        UserEntity userEntity = user.get();
+        userEntity.setPassword(new BCryptPasswordEncoder().encode(changePasswordRequestObj.getPassword()));
+        UserResponse response = new UserResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }

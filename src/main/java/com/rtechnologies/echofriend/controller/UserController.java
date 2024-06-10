@@ -4,9 +4,11 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
 import com.rtechnologies.echofriend.models.user.request.AdminUserUpdate;
+import com.rtechnologies.echofriend.models.user.request.ChangePasswordRequest;
 import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.request.UserUpdateRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
+import com.rtechnologies.echofriend.models.userpayment.response.UserPaymentResponse;
 import com.rtechnologies.echofriend.services.UserService;
 import com.rtechnologies.echofriend.services.VoucherService;
 
@@ -20,8 +22,6 @@ import com.rtechnologies.echofriend.appconsts.AppConstants;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -176,6 +176,12 @@ public class UserController {
         200:500).body(response);
     }
     
+    
+    @PutMapping("/forgotPassword")
+    public ResponseEntity<UserResponse> forgotpassword(@RequestBody ChangePasswordRequest changePasswordRequestObj) throws NoSuchAlgorithmException {
+        UserResponse response = userServiceObj.changepassword(changePasswordRequestObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
+    }
     
     // @PutMapping("/updateUser/{userid}")
     // public ResponseEntity<UserResponse> updateuser(@PathVariable Long userid, @RequestBody String entity) {
