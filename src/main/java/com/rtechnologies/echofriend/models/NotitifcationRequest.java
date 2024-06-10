@@ -14,4 +14,5 @@ public class NotitifcationRequest {
     public String fcmid;
     public String title;
     public String message;
+    public Long userid;
 }
