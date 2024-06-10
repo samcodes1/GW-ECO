@@ -28,4 +28,5 @@ public class OtpEntity {
     private Timestamp expired;
     private Long companyidfk;
     private Timestamp createdat;
+    private String otpgeneratortype;
 }

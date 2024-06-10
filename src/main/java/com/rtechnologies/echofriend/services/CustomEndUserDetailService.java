@@ -68,7 +68,27 @@ public class CustomEndUserDetailService {
             throw new NotFoundException("Company not found with email: " + otp.getEmail());
         }
         OtpEntity otpdata = new OtpEntity(
-            null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getCompanyid(), Utility.getcurrentTimeStamp()
+            null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getCompanyid(), Utility.getcurrentTimeStamp(),"company"
+        );
+        otpRepoObj.save(otpdata);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(otp.getEmail());
+        helper.setSubject("OTP for Password reset");
+        helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
+        javaMailSender.send(message);
+        return null;
+    }
+
+    public OtpResponse sendotptouser(OtpRequest otp) throws MessagingException{
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        String otpCode = Utility.generateOTP();
+        Optional<UserEntity> companydata = userRepository.findByEmail(otp.getEmail());
+        if(!companydata.isPresent()){
+            throw new NotFoundException("Company not found with email: " + otp.getEmail());
+        }
+        OtpEntity otpdata = new OtpEntity(
+            null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getUserid(), Utility.getcurrentTimeStamp(),"user"
         );
         otpRepoObj.save(otpdata);
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -85,7 +105,27 @@ public class CustomEndUserDetailService {
         if(!companydata.isPresent()){
             throw new NotFoundException("Company not found with email: " + otp.getEmail());
         }
-        OtpEntity otpdata = otpRepoObj.otpdata(companydata.get().getCompanyid());
+        OtpEntity otpdata = otpRepoObj.otpdata(companydata.get().getCompanyid(), "company");
+        if(otpdata==null){
+            throw new NotFoundException("OTP expired");
+        }
+        OtpResponse response = new OtpResponse();
+        if(otpdata.getOtp().equalsIgnoreCase(otp.getOtp())){
+            otpdata.setIsused(true);
+            otpRepoObj.save(otpdata);
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }
+        throw new NotFoundException("Otp Failed ");
+    }
+
+    public OtpResponse verifyuser(OtpRequest otp) throws MessagingException{
+
+        Optional<UserEntity> companydata = userRepository.findByEmail(otp.getEmail());
+        if(!companydata.isPresent()){
+            throw new NotFoundException("Company not found with email: " + otp.getEmail());
+        }
+        OtpEntity otpdata = otpRepoObj.otpdata(companydata.get().getUserid(), "user");
         if(otpdata==null){
             throw new NotFoundException("OTP expired");
         }

@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import com.rtechnologies.echofriend.entities.otp.OtpEntity;
 
 public interface OtpRepo extends CrudRepository<OtpEntity, Long>{
-    @Query(value = "select * from otp where companyidfk=?1 and expired >= DATE_SUB(NOW(), INTERVAL 1 MINUTE) order by otpid desc LIMIT 1", nativeQuery = true)
-    OtpEntity otpdata(Long companyid);
+    @Query(value = "select * from otp where companyidfk=?1 and expired >= DATE_SUB(NOW(), INTERVAL 1 MINUTE) and otpgeneratortype=?2 order by otpid desc LIMIT 1", nativeQuery = true)
+    OtpEntity otpdata(Long companyid, String type);
 }

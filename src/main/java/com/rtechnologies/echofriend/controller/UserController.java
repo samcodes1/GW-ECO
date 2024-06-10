@@ -3,12 +3,17 @@ package com.rtechnologies.echofriend.controller;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
+import javax.mail.MessagingException;
+
+import com.rtechnologies.echofriend.models.otp.OtpRequest;
+import com.rtechnologies.echofriend.models.otp.OtpResponse;
 import com.rtechnologies.echofriend.models.user.request.AdminUserUpdate;
 import com.rtechnologies.echofriend.models.user.request.ChangePasswordRequest;
 import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.request.UserUpdateRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
 import com.rtechnologies.echofriend.models.userpayment.response.UserPaymentResponse;
+import com.rtechnologies.echofriend.services.CustomEndUserDetailService;
 import com.rtechnologies.echofriend.services.UserService;
 import com.rtechnologies.echofriend.services.VoucherService;
 
@@ -38,6 +43,9 @@ public class UserController {
 
     @Autowired
     VoucherService voucherServiceObj;
+
+    @Autowired
+    private CustomEndUserDetailService customEndUserDetailService;
 
     @ApiResponses(
         value = {
@@ -180,6 +188,18 @@ public class UserController {
     @PutMapping("/forgotPassword")
     public ResponseEntity<UserResponse> forgotpassword(@RequestBody ChangePasswordRequest changePasswordRequestObj) throws NoSuchAlgorithmException {
         UserResponse response = userServiceObj.changepassword(changePasswordRequestObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
+    }
+
+    @PostMapping("/sendotptouser")
+    public ResponseEntity<?> postMethodName(@RequestBody OtpRequest otp) throws MessagingException {
+        customEndUserDetailService.sendotptouser(otp);
+        return ResponseEntity.ok("OTP SEND");
+    }
+
+    @PostMapping("/verifyOtptouser")
+    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otp) throws MessagingException {
+        OtpResponse response = customEndUserDetailService.verifyuser(otp);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
     

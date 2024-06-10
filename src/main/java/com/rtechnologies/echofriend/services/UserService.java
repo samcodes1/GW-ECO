@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
+import com.rtechnologies.echofriend.models.otp.OtpRequest;
+import com.rtechnologies.echofriend.models.otp.OtpResponse;
 import com.rtechnologies.echofriend.models.user.request.AdminUserUpdate;
 import com.rtechnologies.echofriend.models.user.request.ChangePasswordRequest;
 import com.rtechnologies.echofriend.models.user.request.UserRequest;
@@ -295,4 +297,5 @@ public class UserService {
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
+
 }
