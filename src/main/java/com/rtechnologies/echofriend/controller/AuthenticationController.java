@@ -11,6 +11,7 @@ import com.rtechnologies.echofriend.models.security.CustomUserDetails;
 import com.rtechnologies.echofriend.repositories.adminrepo.AdminRespo;
 import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
+import com.rtechnologies.echofriend.services.CompanyAuthService;
 import com.rtechnologies.echofriend.services.CustomEndUserDetailService;
 import com.rtechnologies.echofriend.services.CustomUserDetailService;
 import com.rtechnologies.echofriend.utility.Utility;
@@ -63,6 +64,9 @@ public class AuthenticationController {
 
     @Autowired
     CompaniesRepo companiesRepoObj;
+
+    @Autowired
+    CompanyAuthService companyAuthServiceobj;
 
     @PostMapping("/login/admin")
     @ApiOperation(value = "Authenticate Admin", notes = "Authenticate user with username/email and password.")
@@ -136,7 +140,7 @@ public class AuthenticationController {
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.generateToken(loginRequest);
         CustomUserDetails userDetails = null;
-        userDetails = customEndUserDetailService.loadUserByUsername(loginRequest.getUsernameOrEmail());
+        userDetails = companyAuthServiceobj.loadUserByUsername(loginRequest.getUsernameOrEmail());
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         if(userDetails != null) {
             return new JwtAuthenticationResponse(jwt, authorities,"ROLE_COMPANY", userDetails.getAdmin(), userDetails.getUserEntity());
@@ -166,7 +170,7 @@ public class AuthenticationController {
 
     @PostMapping("/verifyOtp")
     public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otp) throws MessagingException {
-        customEndUserDetailService.sendotp(otp);
+        customEndUserDetailService.verify(otp);
         return ResponseEntity.ok("OTP SEND");
     }
     
