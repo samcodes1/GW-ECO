@@ -80,23 +80,29 @@ public class CustomEndUserDetailService {
     }
 
     public OtpResponse sendotptouser(OtpRequest otp) throws MessagingException{
-
-        MimeMessage message = javaMailSender.createMimeMessage();
-        String otpCode = Utility.generateOTP();
-        Optional<UserEntity> companydata = userRepository.findByEmail(otp.getEmail());
-        if(!companydata.isPresent()){
-            throw new NotFoundException("Company not found with email: " + otp.getEmail());
+        OtpResponse response = new OtpResponse();
+        try{
+            MimeMessage message = javaMailSender.createMimeMessage();
+            String otpCode = Utility.generateOTP();
+            Optional<UserEntity> companydata = userRepository.findByEmail(otp.getEmail());
+            if(!companydata.isPresent()){
+                throw new NotFoundException("Company not found with email: " + otp.getEmail());
+            }
+            OtpEntity otpdata = new OtpEntity(
+                null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getUserid(), Utility.getcurrentTimeStamp(),"user"
+            );
+            otpRepoObj.save(otpdata);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(otp.getEmail());
+            helper.setSubject("OTP for Password reset");
+            helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
+            javaMailSender.send(message);
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }catch(Exception e){
+            response.setResponseMessage("exception : "+e.toString());
+            return response;
         }
-        OtpEntity otpdata = new OtpEntity(
-            null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getUserid(), Utility.getcurrentTimeStamp(),"user"
-        );
-        otpRepoObj.save(otpdata);
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setTo(otp.getEmail());
-        helper.setSubject("OTP for Password reset");
-        helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
-        javaMailSender.send(message);
-        return null;
     }
 
     public OtpResponse verify(OtpRequest otp) throws MessagingException{

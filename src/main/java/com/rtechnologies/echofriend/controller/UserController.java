@@ -193,8 +193,8 @@ public class UserController {
 
     @PostMapping("/sendotptouser")
     public ResponseEntity<?> postMethodName(@RequestBody OtpRequest otp) throws MessagingException {
-        customEndUserDetailService.sendotptouser(otp);
-        return ResponseEntity.ok("OTP SEND");
+        OtpResponse response = customEndUserDetailService.sendotptouser(otp);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
 
     @PostMapping("/verifyOtptouser")
