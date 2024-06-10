@@ -1,7 +1,10 @@
 package com.rtechnologies.echofriend.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.NotificationEntity;
@@ -30,8 +33,11 @@ public class NotificationService {
 
     public NotificationResponse getNotification(Long id){
         NotificationResponse response = new NotificationResponse();
-        
-        response.setData(notificationRepoObj.findById(id).get());
+        Optional<NotificationEntity> notification = notificationRepoObj.findByUserid(id);
+        if(!notification.isPresent()){
+            throw new NotFoundException("User not found");
+        }
+        response.setData(notification.get());
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
