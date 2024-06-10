@@ -283,6 +283,7 @@ public class UserService {
         userpointshistory.put("vouchersused", userHistoryRepoObj.voucherusercount(userid));
         userpointshistory.put("recenttasks", userHistoryRepoObj.recenttaskscompleted(userid));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(userpointshistory);
         return response;
     }
 

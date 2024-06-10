@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.controller;
 
+import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.config.JwtConfig;
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
@@ -7,6 +8,7 @@ import com.rtechnologies.echofriend.entities.user.UserEntity;
 import com.rtechnologies.echofriend.models.JwtAuthenticationResponse;
 import com.rtechnologies.echofriend.models.LoginRequest;
 import com.rtechnologies.echofriend.models.otp.OtpRequest;
+import com.rtechnologies.echofriend.models.otp.OtpResponse;
 import com.rtechnologies.echofriend.models.security.CustomUserDetails;
 import com.rtechnologies.echofriend.repositories.adminrepo.AdminRespo;
 import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
@@ -170,8 +172,8 @@ public class AuthenticationController {
 
     @PostMapping("/verifyOtp")
     public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otp) throws MessagingException {
-        customEndUserDetailService.verify(otp);
-        return ResponseEntity.ok("OTP SEND");
+        OtpResponse response = customEndUserDetailService.verify(otp);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
     
 }
