@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,8 @@ public class NotificationService {
 
     public NotificationResponse getNotification(Long id){
         NotificationResponse response = new NotificationResponse();
-        Optional<NotificationEntity> notification = notificationRepoObj.findByUserid(id);
-        if(!notification.isPresent()){
-            throw new NotFoundException("User not found");
-        }
-        response.setData(notification.get());
+        List<NotificationEntity> notification = notificationRepoObj.findByUserid(id);
+        response.setData(notification);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
