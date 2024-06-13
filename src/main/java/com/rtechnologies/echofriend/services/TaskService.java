@@ -1,6 +1,7 @@
 package com.rtechnologies.echofriend.services;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -83,22 +84,22 @@ public class TaskService {
         // }
 
         Long adminId = result.getId();
-        StringBuilder barcodeStringBuilder = new StringBuilder();
+        // StringBuilder barcodeStringBuilder = new StringBuilder();
 
-barcodeStringBuilder.append(tasksResquestObj.getTaskPoints()).append("//")
-                    .append(tasksResquestObj.getTaskname()).append("//")
-                    .append(adminId).append("//")
-                    .append(Utility.getcurrentTimeStamp()).append("//")
-                    .append(true).append("//")
-                    .append(tasksResquestObj.getTasktype()).append("//")
-                    .append(tasksResquestObj.getTotalsteps());
+// barcodeStringBuilder.append(tasksResquestObj.getTaskPoints()).append("//")
+//                     .append(tasksResquestObj.getTaskname()).append("//")
+//                     .append(adminId).append("//")
+//                     .append(Utility.getcurrentTimeStamp()).append("//")
+//                     .append(true).append("//")
+//                     .append(tasksResquestObj.getTasktype()).append("//")
+//                     .append(tasksResquestObj.getTotalsteps());
 
-String barcodeString = barcodeStringBuilder.toString();
+// String barcodeString = barcodeStringBuilder.toString();
+        Timestamp timestamp = Utility.getcurrentTimeStamp();
         taskRepoObj.save(new TasksEntity(
             null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), 
-            tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), Utility.getcurrentTimeStamp(),true,tasksResquestObj.getExternallink(),
-            tasksResquestObj.getCompanyid(),tasksResquestObj.getTasktype(),tasksResquestObj.getTotalsteps(),
-            Utility.generateBarcode(barcodeString,BarcodeFormat.CODE_128, 300, 100),barcodeString
+            tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), timestamp,true,tasksResquestObj.getExternallink(),
+            tasksResquestObj.getCompanyid(),tasksResquestObj.getTasktype(),tasksResquestObj.getTotalsteps(),Utility.generateUniqueCode(timestamp)
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -367,23 +368,10 @@ String barcodeString = barcodeStringBuilder.toString();
         // Optional<TaskUserAssociation> taskuserdata = taskUserRepoObj.findByTaskidfkAndUseridfk(taskid, userid);
         Iterable<TasksEntity> all = taskRepoObj.findAll();
         for (TasksEntity tasksEntity : all) {
-
-            StringBuilder barcodeStringBuilder = new StringBuilder();
-
-barcodeStringBuilder.append(tasksEntity.getPointsassigned()).append("//")
-                    .append(tasksEntity.getTaskname()).append("//")
-                    .append(tasksEntity.getTaskcreatedby()).append("//")
-                    .append(tasksEntity.getTaskCreatedTime()).append("//")
-                    .append(tasksEntity.getActive()).append("//")
-                    .append(tasksEntity.getTasktype()).append("//")
-                    .append(tasksEntity.getTotalsteps());
-
-            System.out.println("barcodeString___________ : "+barcodeStringBuilder.toString());
-            // System.out.println(Utility.generateBarcode(barcodeString,BarcodeFormat.CODE_128, 150, 50));
-            tasksEntity.setTaskbarcode(Utility.generateBarcode(barcodeStringBuilder.toString(),BarcodeFormat.CODE_128, 150, 50));
-            tasksEntity.setTaskbarcodeString(barcodeStringBuilder.toString());
+            System.out.println("_________________ "+tasksEntity.getTaskCreatedTime());
+            tasksEntity.setQrcode(Utility.generateUniqueCode(tasksEntity.getTaskCreatedTime()));
             taskRepoObj.save(tasksEntity);
-            System.err.println(Utility.decodeBarcode(Utility.generateBarcode(barcodeStringBuilder.toString(),BarcodeFormat.CODE_128, 150, 50)));
+            // System.err.println(Utility.decodeBarcode(Utility.generateBarcode(barcodeStringBuilder.toString(),BarcodeFormat.CODE_128, 150, 50)));
         }
         // List<TaskCategortProjections> taskuserstatus = taskRepoObj.findtasksbyusertask(userid,taskid);
         TasksResponse response = new TasksResponse();

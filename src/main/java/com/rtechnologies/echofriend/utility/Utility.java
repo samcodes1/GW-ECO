@@ -10,10 +10,12 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
@@ -203,5 +205,41 @@ public class Utility {
         
         // Convert the LocalDateTime to a SQL Timestamp
         return Timestamp.valueOf(expiryTime);
+    }
+
+     public static String generateUniqueCode(Timestamp timestampparam) {
+        // Get current timestamp in milliseconds
+        long timestamp = timestampparam.toInstant().getEpochSecond();
+        
+        // Generate a UUID to ensure uniqueness
+        String uniqueId = UUID.randomUUID().toString();
+        
+        // Combine timestamp and unique identifier
+        String combinedData = timestamp + "-" + uniqueId;
+        
+        // Add some randomness (optional)
+        // You can add more randomness if needed
+        combinedData += Math.random();
+        
+        // Hash the combined data to get a fixed-length string
+        String hash = md5Hash(combinedData);
+        
+        // Take the first 30 characters of the hash
+        return hash.substring(0, 30);
+    }
+
+    private static String md5Hash(String data) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hashBytes = md.digest(data.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashBytes) {
+                sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

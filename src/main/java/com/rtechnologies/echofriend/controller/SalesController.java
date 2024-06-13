@@ -66,7 +66,7 @@ public class SalesController {
 
     @GetMapping("/getIvoiceProducts")
     public ResponseEntity<SaleResponse> getIvoiceProducts(@RequestParam Long invoiceid) {
-        SaleResponse response = salesServiceobj.getIvoiceProducts(userid);
+        SaleResponse response = salesServiceobj.getIvoiceProducts(invoiceid);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }

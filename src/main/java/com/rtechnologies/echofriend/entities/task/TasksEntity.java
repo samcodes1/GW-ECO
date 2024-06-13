@@ -30,7 +30,5 @@ public class TasksEntity {
     private Long companyidfk;
     private String tasktype;
     private Integer totalsteps;
-    @Lob
-    private byte[] taskbarcode;
-    private String taskbarcodeString;
+    private String qrcode;
 }
