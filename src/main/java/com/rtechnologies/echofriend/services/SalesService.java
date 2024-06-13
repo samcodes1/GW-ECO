@@ -97,6 +97,7 @@ public class SalesService {
         
         SaleResponse response = new SaleResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(salesEntity);
         return response;
     }
 
