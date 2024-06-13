@@ -35,6 +35,7 @@ import com.rtechnologies.echofriend.repositories.user.UserRepo;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherRepo;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherUserRepo;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
+import com.rtechnologies.echofriend.entities.task.TaskUserProjection;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
 import com.rtechnologies.echofriend.entities.user.UserPointsHistory;
 import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
@@ -273,7 +274,16 @@ public class UserService {
     public UserResponse getHistoryOfUserPoints(Long userid){
         Optional<UserPointsHistory> history = userHistoryRepoObj.findByUseridfk(userid);
         if(!history.isPresent()){
-            throw new RecordNotFoundException("record not found of user");
+            UserResponse response = new UserResponse();
+            Map<String, Object> userpointshistory = new HashMap<>();
+            userpointshistory.put("pointsearned", 0);
+            userpointshistory.put("pointsredeemed", 0);
+            userpointshistory.put("taskscompleted", 0);
+            userpointshistory.put("vouchersused", 0);
+            userpointshistory.put("recenttasks", new ArrayList<TaskUserProjection>());
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(userpointshistory);
+            return response;
         }
         UserResponse response = new UserResponse();
         Map<String, Object> userpointshistory = new HashMap<>();
