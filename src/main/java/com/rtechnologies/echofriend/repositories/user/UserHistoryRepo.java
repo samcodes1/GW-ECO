@@ -22,7 +22,7 @@ public interface UserHistoryRepo extends CrudRepository<UserPointsHistory, Long>
     nativeQuery = true)
     Integer voucherusercount(Long userid);
 
-    @Query(value = "select tc.taskcategory, t.taskname, t.taskdescription, t.pointsassigned, t.taskid, tb.useridfk from tasks t inner join taskcategory tc on tc.taskcategoryid=t.taskcategoryfk inner join taskuserbridge tb on tb.taskidfk=t.taskid inner join users u on u.userid=tb.useridfk where tb.iscomplete=1 and tb.useridfk=?1 order by tb.taskuserid desc limit 6",
+    @Query(value = "select tc.taskcategory, t.taskname, t.taskdescription, t.pointsassigned, t.taskid, tb.useridfk,t.qrcode from tasks t inner join taskcategory tc on tc.taskcategoryid=t.taskcategoryfk inner join taskuserbridge tb on tb.taskidfk=t.taskid inner join users u on u.userid=tb.useridfk where tb.iscomplete=1 and tb.useridfk=?1 order by tb.taskuserid desc limit 6",
     nativeQuery = true)
     List<TaskUserProjection> recenttaskscompleted(Long userid);
 
