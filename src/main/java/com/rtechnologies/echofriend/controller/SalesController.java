@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
+import com.rtechnologies.echofriend.models.sale.request.InvoiceUpdate;
 import com.rtechnologies.echofriend.models.sale.request.SaleRequest;
 import com.rtechnologies.echofriend.models.sale.response.SaleResponse;
 import com.rtechnologies.echofriend.services.SalesService;
@@ -71,5 +72,11 @@ public class SalesController {
         200:500).body(response);
     }
 
+    @PutMapping("/orderfailed/{invoiceid}")
+    public ResponseEntity<SaleResponse> putMethodName(@PathVariable Long invoiceid, @RequestBody InvoiceUpdate invoiceUpdateObj) {
+        SaleResponse response = salesServiceobj.updatedInvoice(invoiceid, invoiceUpdateObj);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
     
 }

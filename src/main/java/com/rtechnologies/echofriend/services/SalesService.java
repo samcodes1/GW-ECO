@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.webjars.NotFoundException;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
@@ -16,6 +18,7 @@ import com.rtechnologies.echofriend.entities.sales.SalesEntity;
 import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
 import com.rtechnologies.echofriend.entities.voucher.VoucherUserAssociation;
 import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
+import com.rtechnologies.echofriend.models.sale.request.InvoiceUpdate;
 import com.rtechnologies.echofriend.models.sale.request.SaleRequest;
 import com.rtechnologies.echofriend.models.sale.response.SaleResponse;
 import com.rtechnologies.echofriend.repositories.products.ProductsRepo;
@@ -163,6 +166,20 @@ public class SalesService {
         SaleResponse response = new SaleResponse();
 
         response.setData(salesRepoObj.findAllIvoiceProducts(invoiceid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public SaleResponse updatedInvoice( Long invoiceid, InvoiceUpdate invoiceUpdateObj){
+        SaleResponse response = new SaleResponse();
+        Optional<SalesEntity> invoicedata = salesRepoObj.findById(invoiceid);
+        if(!invoicedata.isPresent()){
+            throw new NotFoundException("Sales data not found");
+        }
+        SalesEntity data = invoicedata.get();
+        data.setState("payment_failed");
+        salesRepoObj.save(data);
+        // response.setData(salesRepoObj.findAllIvoiceProducts(invoiceid));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
