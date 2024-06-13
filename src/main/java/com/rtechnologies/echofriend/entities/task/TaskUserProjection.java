@@ -24,5 +24,5 @@ public interface TaskUserProjection {
     public String getUsername();
     public Timestamp getMemebershipexpiry();
     public String getTaskcategory();
-
+    public String getQrcode();
 }

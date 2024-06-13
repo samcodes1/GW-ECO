@@ -26,5 +26,6 @@ public interface SalesProjection {
     public String getUsername();
     public String getEmail();
     public String getProductname();
-
+    public String getTotalcost();
+    public String getTotalproducts();
 }
