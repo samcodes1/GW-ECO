@@ -28,4 +28,7 @@ public interface SalesProjection {
     public String getProductname();
     public String getTotalcost();
     public String getTotalproducts();
+    public Float getDiscountpercentage();
+    public Integer getVoucherpointscost();
+    public String getVoucherbarcode();
 }
