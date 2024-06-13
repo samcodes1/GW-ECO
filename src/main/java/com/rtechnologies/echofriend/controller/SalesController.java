@@ -57,5 +57,19 @@ public class SalesController {
         200:500).body(response);
     }
     
+    @GetMapping("/getUsersInvoice")
+    public ResponseEntity<SaleResponse> getInvoiceOfUser(@RequestParam Long userid) {
+        SaleResponse response = salesServiceobj.getInvouceOfUser(userid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @GetMapping("/getIvoiceProducts")
+    public ResponseEntity<SaleResponse> getIvoiceProducts(@RequestParam Long invoiceid) {
+        SaleResponse response = salesServiceobj.getIvoiceProducts(userid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
     
 }

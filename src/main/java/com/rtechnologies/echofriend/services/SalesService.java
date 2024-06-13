@@ -150,4 +150,20 @@ public class SalesService {
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
+
+    public SaleResponse getInvouceOfUser(Long userid){
+        SaleResponse response = new SaleResponse();
+
+        response.setData(salesRepoObj.findAllSalesInvoice(userid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public SaleResponse getIvoiceProducts(Long invoiceid){
+        SaleResponse response = new SaleResponse();
+
+        response.setData(salesRepoObj.findAllIvoiceProducts(invoiceid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
 }

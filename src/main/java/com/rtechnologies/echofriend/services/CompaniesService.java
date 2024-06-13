@@ -16,6 +16,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity.CompaniesEntityBuilder;
+import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.companies.request.CompaniesRequest;
 import com.rtechnologies.echofriend.models.companies.request.CompanySignUpRequest;
@@ -39,6 +40,10 @@ public class CompaniesService {
     private Cloudinary cloudinary;
 
     public CompaniesResponse addCompanyServiceMethod(CompaniesRequest companiesRequestObj) throws NoSuchAlgorithmException{
+        Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(companiesRequestObj.getCompanyEmail());
+        if(companydata.isPresent()){
+            throw new RecordAlreadyExistsException("Record already exists in the database.");
+        }
         companiesRepoObj.save(new CompaniesEntity(
             null, companiesRequestObj.getCompanyName(), companiesRequestObj.getSubscriptionType(), 
             companiesRequestObj.getProducts(), companiesRequestObj.getSubscriptionExpiry(), Utility.getcurrentDate(), 

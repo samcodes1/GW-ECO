@@ -18,6 +18,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.google.zxing.BarcodeFormat;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
+import com.rtechnologies.echofriend.entities.voucher.VoucherProjection;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.voucher.request.VoucherRequest;
 import com.rtechnologies.echofriend.models.voucher.response.VoucherResponse;
@@ -97,7 +98,7 @@ public class VoucherService {
             vocuherstats.put("totalvoucherredeemed", VoucherRepoObj.countredeemed());
             vocuherstats.put("totalvouchercreated", VoucherRepoObj.voucherCreated());
             vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers());
-            vocuherstats.put("voucherslist", VoucherRepoObj.findAll());
+            vocuherstats.put("voucherslist", VoucherRepoObj.getAllVouchers());
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             response.setData(vocuherstats);
             return response;
@@ -118,7 +119,7 @@ public class VoucherService {
 
     public VoucherResponse getNonRedeemedVouchersForUserservice(Long userid){
         VoucherResponse response = new VoucherResponse();
-        List<VoucherEntity> voucherlst = VoucherRepoObj.findAllVoucherNotRedeemedByUserYet(userid);
+        List<VoucherProjection> voucherlst = VoucherRepoObj.findAllVoucherNotRedeemedByUserYet(userid);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(voucherlst);
         return response;

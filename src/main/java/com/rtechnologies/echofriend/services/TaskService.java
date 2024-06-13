@@ -238,7 +238,8 @@ String barcodeString = barcodeStringBuilder.toString();
 
     @Transactional
     public TasksResponse markTaskComplete(TaskUserAssociation userTaskObj){
-        Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfk(userTaskObj.getTaskidfk());
+        // TODO: one hour check
+        Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfk(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk());
         if(!voucherapplieddata.isPresent()){
             throw new OperationNotAllowedException("This task has not been applied wrong action");
         }

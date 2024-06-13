@@ -9,8 +9,11 @@ import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
 import com.rtechnologies.echofriend.entities.voucher.VoucherProjection;
 
 public interface VoucherRepo extends CrudRepository<VoucherEntity, Long> {
-    @Query(value = "select * from voucher where voucherid not in (select voucheridfk from voucheruserbridge where useridfk=?1)", nativeQuery = true)
-    List<VoucherEntity> findAllVoucherNotRedeemedByUserYet(Long userid);
+    @Query(value = "select v.*, c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk where voucherid not in (select voucheridfk from voucheruserbridge where useridfk=?1)", nativeQuery = true)
+    List<VoucherProjection> findAllVoucherNotRedeemedByUserYet(Long userid);
+
+    @Query(value = "select v.*, c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk)", nativeQuery = true)
+    List<VoucherProjection> getAllVouchers();
 
     @Query(value = "SELECT count(*) FROM voucher inner join voucheruserbridge vu on vu.voucheridfk=voucher.voucherid WHERE DATE(vocuhercreatedat) = CURDATE()", nativeQuery = true)
     Integer countVoucherRedeemedToday();
@@ -36,9 +39,9 @@ public interface VoucherRepo extends CrudRepository<VoucherEntity, Long> {
     @Query(value = "SELECT count(*) FROM voucher WHERE voucherexpiry < CURDATE() where shopidfk=?1", nativeQuery = true)
     Integer countexpiredVouchers(Long companyid);
 
-    @Query(value = "SELECT v.shopidfk,v.usedstatus,v.useridfk,v.voucherbarcode,v.voucherid,v.voucherpointscost,v.discountpercentage,v.voucherexpiry,v.vocuhercreatedat,v.description,v.name,c.companyid,c.companyname,c.subscriptionexpiry,c.subscriptiontype,c.company_email from voucher v inner join companies c on c.companyid=v.shopidfk where c.companyid=?1", nativeQuery = true)
+    @Query(value = "SELECT v.shopidfk,v.usedstatus,v.useridfk,v.voucherbarcode,v.voucherid,v.voucherpointscost,v.discountpercentage,v.voucherexpiry,v.vocuhercreatedat,v.description,v.name,c.companyid,c.companyname,c.subscriptionexpiry,c.subscriptiontype,c.company_email,c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk where c.companyid=?1", nativeQuery = true)
     List<VoucherProjection> getCompanyVouchers(Long companyid); 
     
-    @Query(value = "SELECT v.shopidfk,v.usedstatus,v.useridfk,v.voucherbarcode,v.voucherid,v.voucherpointscost,v.discountpercentage,v.voucherexpiry,v.vocuhercreatedat,v.description,v.name,c.companyid,c.companyname,c.subscriptionexpiry,c.subscriptiontype,c.company_email from voucher v inner join companies c on c.companyid=v.shopidfk where v.voucherid=?1", nativeQuery = true)
+    @Query(value = "SELECT v.shopidfk,v.usedstatus,v.useridfk,v.voucherbarcode,v.voucherid,v.voucherpointscost,v.discountpercentage,v.voucherexpiry,v.vocuhercreatedat,v.description,v.name,c.companyid,c.companyname,c.subscriptionexpiry,c.subscriptiontype,c.company_email,c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk where v.voucherid=?1", nativeQuery = true)
     VoucherProjection getCompanyVouchersByid(Long voucherid);
 }
