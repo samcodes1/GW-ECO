@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.repositories.tasks;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +25,7 @@ public interface TaskUserRepo extends CrudRepository<TaskUserAssociation, Long> 
     Integer countByIscompleteTrueWhereUserid(Long userid);
 
     Optional<TaskUserAssociation> findByTaskidfkAndUseridfk(Long taskidfk, Long useridfk);
+
+    @Query(value = "SELECT * FROM taskuserbridge WHERE taskidfk = ?1 AND useridfk = ?2 AND DATE_ADD(applieddatetime, INTERVAL 1 HOUR) <= ?3", nativeQuery = true)
+    Optional<TaskUserAssociation> findByTaskidfkAndUseridfkDateTime(Long taskidfk, Long useridfk, Timestamp comparetime);
 }

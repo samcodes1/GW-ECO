@@ -231,6 +231,7 @@ public class TaskService {
             throw new OperationNotAllowedException("task already applied");
         }
         userTaskObj.setIscomplete(false);
+        userTaskObj.setApplieddatetime(Utility.getcurrentTimeStamp());
         taskUserRepoObj.save(userTaskObj);
         TasksResponse response = new TasksResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
@@ -240,7 +241,7 @@ public class TaskService {
     @Transactional
     public TasksResponse markTaskComplete(TaskUserAssociation userTaskObj){
         // TODO: one hour check
-        Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfk(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk());
+        Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
         if(!voucherapplieddata.isPresent()){
             throw new OperationNotAllowedException("This task has not been applied wrong action");
         }

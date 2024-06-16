@@ -1,5 +1,7 @@
 package com.rtechnologies.echofriend.entities.task;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,4 +28,5 @@ public class TaskUserAssociation {
     private Long taskidfk;
     private Long useridfk;
     private Boolean iscomplete;
+    private Timestamp applieddatetime;
 }

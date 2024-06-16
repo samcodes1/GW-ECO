@@ -47,7 +47,7 @@ public class CompaniesService {
         companiesRepoObj.save(new CompaniesEntity(
             null, companiesRequestObj.getCompanyName(), companiesRequestObj.getSubscriptionType(), 
             companiesRequestObj.getProducts(), companiesRequestObj.getSubscriptionExpiry(), Utility.getcurrentDate(), 
-            companiesRequestObj.getRole(), companiesRequestObj.getCompanyEmail(), "",-1l,"", Utility.hashPassword(companiesRequestObj.getCompanyName())
+            companiesRequestObj.getRole(), companiesRequestObj.getCompanyEmail(), "",-1l,"", Utility.hashPassword(companiesRequestObj.getPassword())
         ));
         CompaniesResponse response = new CompaniesResponse();
         // response.setResponseCode(AppConstants.SUCCESS);
