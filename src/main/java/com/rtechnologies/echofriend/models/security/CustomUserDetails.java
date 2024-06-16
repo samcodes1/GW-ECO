@@ -1,6 +1,7 @@
 package com.rtechnologies.echofriend.models.security;
 
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
+import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,7 @@ public class CustomUserDetails implements UserDetails {
     private final String userType;  // For example, "TEACHER" or "STUDENT"
     private final Set<String> roles;
     private AdminEntity admin;
+    private CompaniesEntity companyE;
     private UserEntity userEntity;
     public Set<String> getRoles() {
         return roles;
@@ -39,6 +41,7 @@ public class CustomUserDetails implements UserDetails {
         this.userType = "ADMIN";
         this.admin = admin;
         this.userEntity = null;
+        this.companyE = null;
         // Add roles based on your application logic
         this.roles = Set.of("ROLE_ADMIN");
 
@@ -52,8 +55,23 @@ public class CustomUserDetails implements UserDetails {
         this.userType = "`USER`";
         this.userEntity = user;
         this.admin = null;
+        this.companyE = null;
         // Add roles based on your application logic
         this.roles = Set.of("ROLE_USER");
+
+    }
+
+    public CustomUserDetails(CompaniesEntity company) {
+        this.username = company.getCompanyEmail();
+        this.password = company.getPassword();
+        this.authorities = Collections.singletonList(() -> "ROLE_COMPANY");
+        this.userId = company.getCompanyid();
+        this.userType = "`COMPANY`";
+        this.userEntity = null;
+        this.admin = null;
+        this.companyE = company;
+        // Add roles based on your application logic
+        this.roles = Set.of("ROLE_COMPANY");
 
     }
 

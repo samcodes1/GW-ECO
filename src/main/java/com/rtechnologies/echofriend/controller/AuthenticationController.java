@@ -93,7 +93,7 @@ public class AuthenticationController {
 
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            return new JwtAuthenticationResponse(jwt, authorities,"ROLE_ADMIN", userDetails.getAdmin(), userDetails.getUserEntity());
+            return new JwtAuthenticationResponse(jwt, authorities,"ROLE_ADMIN", userDetails.getAdmin(), userDetails.getUserEntity(), userDetails.getCompanyE());
 
         }
 
@@ -121,7 +121,7 @@ public class AuthenticationController {
         userDetails = customEndUserDetailService.loadUserByUsername(loginRequest.getUsernameOrEmail());
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         if(userDetails != null) {
-            return new JwtAuthenticationResponse(jwt, authorities,"ROLE_USER", userDetails.getAdmin(), userDetails.getUserEntity());
+            return new JwtAuthenticationResponse(jwt, authorities,"ROLE_USER", userDetails.getAdmin(), userDetails.getUserEntity(), userDetails.getCompanyE());
         }
         return null;
     }
@@ -142,12 +142,12 @@ public class AuthenticationController {
             throw new NotFoundException("Incorrect password");
         }
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtTokenProvider.generateToken(loginRequest);
+        String jwt = jwtTokenProvider.generateToken(loginRequest, true);
         CustomUserDetails userDetails = null;
         userDetails = companyAuthServiceobj.loadUserByUsername(loginRequest.getUsernameOrEmail());
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         if(userDetails != null) {
-            return new JwtAuthenticationResponse(jwt, authorities,"ROLE_COMPANY", userDetails.getAdmin(), userDetails.getUserEntity());
+            return new JwtAuthenticationResponse(jwt, authorities,"ROLE_COMPANY", userDetails.getAdmin(), userDetails.getUserEntity(), userDetails.getCompanyE());
         }
         return null;
     }

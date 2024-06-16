@@ -71,6 +71,23 @@ public class JwtConfig implements Serializable {
                 .compact();
     }
 
+    public String generateToken(LoginRequest loginRequest, boolean company) {
+        String username = loginRequest.getUsernameOrEmail();
+        Set<String> roles = Set.of("ROLE_COMPANY");
+
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + expirationMs);
+
+        System.out.println("Roles in generate token: " + roles.toString());
+        return Jwts.builder()
+                .setSubject(username)
+                .claim("roles", roles)  // Include roles in the token
+                .setIssuedAt(new Date())
+                .setExpiration(expiryDate)
+                .signWith(secretKey, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
     public String generateToken(LoginRequest loginRequest, int num) {
         String username = loginRequest.getUsernameOrEmail();
         Set<String> roles = Set.of("ROLE_ADMIN");

@@ -27,7 +27,7 @@ public class CompanyAuthService {
                     .password(company.getPassword())
                     .roles(Set.of("ROLE_COMPANY"))
                     // .admin(null)
-                    // .userEntity(company)
+                    .companyE(company)
                     .authorities(Collections.singletonList(() -> "ROLE_COMPANY")) // Assuming "ROLE_TEACHER" as the authority for teachers
                     .build();
         }
