@@ -40,6 +40,8 @@ import org.webjars.NotFoundException;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 @RestController
@@ -131,12 +133,12 @@ public class AuthenticationController {
             @ApiResponse(code = 401, message = "Invalid credentials"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public JwtAuthenticationResponse authenticateCompany(@RequestBody LoginRequest loginRequest) {
+    public JwtAuthenticationResponse authenticateCompany(@RequestBody LoginRequest loginRequest) throws NoSuchAlgorithmException {
         // Find mentor by email
         CompaniesEntity company = companiesRepoObj.findByCompanyEmail(loginRequest.getUsernameOrEmail())
                 .orElseThrow(() -> new NotFoundException("User not found with email: " + loginRequest.getUsernameOrEmail()));
-
-        if (!Utility.compareHashes(loginRequest.getPassword(), company.getPassword())) {
+        System.out.println("HASH ==>> "+Utility.hashPassword(loginRequest.getPassword()));
+        if (!Utility.compareHashes(Utility.hashPassword(loginRequest.getPassword()), company.getPassword())) {
             throw new NotFoundException("Incorrect password");
         }
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
