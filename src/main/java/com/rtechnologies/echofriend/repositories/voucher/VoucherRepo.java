@@ -12,7 +12,7 @@ public interface VoucherRepo extends CrudRepository<VoucherEntity, Long> {
     @Query(value = "select v.*, c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk where voucherid not in (select voucheridfk from voucheruserbridge where useridfk=?1)", nativeQuery = true)
     List<VoucherProjection> findAllVoucherNotRedeemedByUserYet(Long userid);
 
-    @Query(value = "select v.*, c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk)", nativeQuery = true)
+    @Query(value = "select v.*, c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk", nativeQuery = true)
     List<VoucherProjection> getAllVouchers();
 
     @Query(value = "SELECT count(*) FROM voucher inner join voucheruserbridge vu on vu.voucheridfk=voucher.voucherid WHERE DATE(vocuhercreatedat) = CURDATE()", nativeQuery = true)
