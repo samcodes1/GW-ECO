@@ -14,7 +14,7 @@ public interface TaskRepo extends CrudRepository<TasksEntity, Long>{
     @Query(value = "select *, (select count(*) from users inner join taskuserbridge tb on tb.useridfk=users.userid where t.taskid=tb.taskidfk) as participants from tasks t INNER join taskcategory tc on t.taskcategoryfk=tc.taskcategoryid order by participants desc", nativeQuery = true)
     List<TaskCategortProjections> findTopSixTasks();
 
-    @Query(value = "select * from tasks t INNER join taskcategory tc on t.taskcategoryfk=tc.taskcategoryid", nativeQuery = true)
+    @Query(value = "select *, (select count(*) from users inner join taskuserbridge tb on tb.useridfk=users.userid where t.taskid=tb.taskidfk) as participants from tasks t INNER join taskcategory tc on t.taskcategoryfk=tc.taskcategoryid", nativeQuery = true)
     List<TaskCategortProjections> findtaskcategory();
 
     @Query(value = "select *, (select count(*) from users inner join taskuserbridge tb on tb.useridfk=users.userid where t.taskid=tb.taskidfk) as participants  from tasks t INNER join taskcategory tc on t.taskcategoryfk=tc.taskcategoryid where taskid=?1", nativeQuery = true)

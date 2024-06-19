@@ -5,7 +5,13 @@ import java.security.NoSuchAlgorithmException;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.models.admin.request.AdminRequest;
 import com.rtechnologies.echofriend.models.admin.response.AdminResponse;
+import com.rtechnologies.echofriend.models.companies.request.AdminCompanyRequest;
+import com.rtechnologies.echofriend.models.companies.request.CompaniesRequest;
+import com.rtechnologies.echofriend.models.companies.response.CompaniesResponse;
 import com.rtechnologies.echofriend.services.AdminService;
+import com.rtechnologies.echofriend.services.CompaniesService;
+import com.rtechnologies.echofriend.utility.Utility;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,6 +34,9 @@ public class AdminController {
 
     @Autowired
     AdminService adminServiceObj;
+        
+    @Autowired
+    CompaniesService companiesServiceObj;
 
     @ApiResponses(
         value = {
@@ -96,6 +105,15 @@ public class AdminController {
     @DeleteMapping("deleteAdmin/{adminId}")
     public ResponseEntity<AdminResponse> updateAdmin(@PathVariable Long adminId){
         AdminResponse response = adminServiceObj.deleteAdmin(adminId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @PutMapping("/adminUpdateCompany/{companyId}")
+    public ResponseEntity<CompaniesResponse> adminUpdateOmpany(@PathVariable Long companyId, @RequestBody AdminCompanyRequest entity) {
+        CompaniesRequest companiesUpdateRequestObj = CompaniesRequest.builder().subscriptionExpiry(Utility.convertToSqlDate(entity.getSubscriptionexpiry()))
+        .subscriptionType(entity.getSubscriptionType()).build();
+        CompaniesResponse response = companiesServiceObj.updateCompanySubscription(companyId, companiesUpdateRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }

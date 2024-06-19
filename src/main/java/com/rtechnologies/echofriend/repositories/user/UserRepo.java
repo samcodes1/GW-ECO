@@ -22,7 +22,7 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
     @Query("SELECT SUM(u.points) FROM users u")
     Integer sumAllPoints();
 
-    @Query(value = "SELECT *,  (SELECT COUNT(*) FROM taskuserbridge t WHERE t.useridfk = u.userid AND t.iscomplete = true) as taskcount FROM `users` u JOIN taskuserbridge tub ON u.userid = tub.useridfk limit 5",
+    @Query(value = "SELECT *,  (SELECT COUNT(*) FROM taskuserbridge t WHERE t.useridfk = u.userid AND t.iscomplete = true) as taskcount FROM `users` u JOIN taskuserbridge tub ON u.userid = tub.useridfk WHERE joiningdate >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) limit 5",
     nativeQuery = true)
     List<TaskUserProjection> findusersAndTasksCompleted();
 

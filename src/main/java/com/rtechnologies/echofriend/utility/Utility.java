@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -241,5 +242,31 @@ public class Utility {
             e.printStackTrace();
             return null;
         }
+    }
+
+     /**
+     * Converts a string representation of timestamp in UTC to java.sql.Timestamp.
+     *
+     * @param timestampString String in the format "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+     * @return java.sql.Timestamp representing the parsed timestamp
+     * @throws IllegalArgumentException if the input string is not in the expected format
+     */
+    public static Timestamp convertISOToTimestamp(String timestampString) {
+        try {
+            // Parse the input string into Instant
+            Instant instant = Instant.parse(timestampString);
+
+            // Convert Instant to java.sql.Timestamp
+            return Timestamp.from(instant);
+        } catch (Exception e) {
+            // Handle any parsing or conversion exceptions
+            throw new IllegalArgumentException("Invalid timestamp format: " + timestampString, e);
+        }
+    }
+
+    public static java.sql.Date convertToSqlDate(String input) {
+        Instant instant = Instant.parse(input);
+        LocalDate localDate = LocalDateTime.ofInstant(instant, ZoneOffset.UTC).toLocalDate();
+        return java.sql.Date.valueOf(localDate);
     }
 }
