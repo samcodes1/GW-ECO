@@ -110,7 +110,7 @@ public class AdminController {
     }
 
     @PutMapping("/adminUpdateCompany/{companyId}")
-    public ResponseEntity<CompaniesResponse> adminUpdateOmpany(@PathVariable Long companyId, @RequestBody AdminCompanyRequest entity) {
+    public ResponseEntity<CompaniesResponse> adminUpdateOmpany(@PathVariable Long companyId, @RequestBody AdminCompanyRequest entity) throws NoSuchAlgorithmException {
         CompaniesRequest companiesUpdateRequestObj = CompaniesRequest.builder().subscriptionExpiry(Utility.convertToSqlDate(entity.getSubscriptionexpiry()))
         .subscriptionType(entity.getSubscriptionType()).build();
         CompaniesResponse response = companiesServiceObj.updateCompanySubscription(companyId, companiesUpdateRequestObj);

@@ -73,7 +73,7 @@ public class CompaniesService {
     }
 
     @Transactional
-    public CompaniesResponse updateCompanySubscription(Long companyId, CompaniesRequest companiesUpdateRequestObj){
+    public CompaniesResponse updateCompanySubscription(Long companyId, CompaniesRequest companiesUpdateRequestObj) throws NoSuchAlgorithmException{
         Optional<CompaniesEntity> companyObj = companiesRepoObj.findById(companyId);
         CompaniesResponse response = new CompaniesResponse();
         if(!companyObj.isPresent()){
@@ -111,6 +111,10 @@ public class CompaniesService {
         );
         companyEntity.setLocation(
             companiesUpdateRequestObj.getLocation()==null?companyEntity.getLocation():companiesUpdateRequestObj.getLocation()
+        );
+
+        companyEntity.setPassword(
+            companiesUpdateRequestObj.getPassword()==null?companyEntity.getPassword():Utility.hashPassword(companiesUpdateRequestObj.getPassword())
         );
 
         // response.setResponseCode(AppConstants.SUCCESS);

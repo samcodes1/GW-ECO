@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.services;
 
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
 import com.rtechnologies.echofriend.models.companypayment.request.CompanyPaymentRequest;
@@ -26,7 +27,7 @@ public class CompanyPaymentService {
     private CompaniesService companiesServiceObj;
     
     @Transactional
-    public CompanyPaymentResponse companyPaymentServiceMethod(CompanyPaymentRequest companyPaymentRequestObj) throws ParseException{
+    public CompanyPaymentResponse companyPaymentServiceMethod(CompanyPaymentRequest companyPaymentRequestObj) throws ParseException, NoSuchAlgorithmException{
         companyPaymentRepoObj.save(
             new CompanyPaymentEntity(
                 null, companyPaymentRequestObj.getSubscription(), Utility.convertToTimestamp(companyPaymentRequestObj.getPaymentDate()),

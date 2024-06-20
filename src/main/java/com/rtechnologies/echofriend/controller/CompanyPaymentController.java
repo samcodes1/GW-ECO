@@ -1,5 +1,6 @@
 package com.rtechnologies.echofriend.controller;
 
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
 import com.rtechnologies.echofriend.models.companypayment.request.CompanyPaymentRequest;
@@ -37,7 +38,7 @@ public class CompanyPaymentController {
         }
     )
     @PostMapping("/subscriptionPayment")
-    public ResponseEntity<CompanyPaymentResponse> subscriptionPayment(@RequestBody CompanyPaymentRequest companyPaymentRequestObj) throws ParseException {
+    public ResponseEntity<CompanyPaymentResponse> subscriptionPayment(@RequestBody CompanyPaymentRequest companyPaymentRequestObj) throws ParseException, NoSuchAlgorithmException {
         CompanyPaymentResponse response = companyPaymentServiceObj.companyPaymentServiceMethod(companyPaymentRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
