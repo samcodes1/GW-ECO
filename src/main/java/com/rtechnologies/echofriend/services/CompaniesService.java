@@ -22,6 +22,7 @@ import com.rtechnologies.echofriend.models.companies.request.CompaniesRequest;
 import com.rtechnologies.echofriend.models.companies.request.CompanySignUpRequest;
 import com.rtechnologies.echofriend.models.companies.response.CompaniesResponse;
 import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
+import com.rtechnologies.echofriend.repositories.companypayment.CompanyPaymentRepo;
 import com.rtechnologies.echofriend.repositories.products.ProductsRepo;
 import com.rtechnologies.echofriend.utility.Utility;
 
@@ -38,6 +39,9 @@ public class CompaniesService {
 
     @Autowired
     private Cloudinary cloudinary;
+
+    @Autowired
+    CompanyPaymentRepo companyPaymentRepoObj;
 
     public CompaniesResponse addCompanyServiceMethod(CompaniesRequest companiesRequestObj) throws NoSuchAlgorithmException{
         Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(companiesRequestObj.getCompanyEmail());
@@ -172,6 +176,7 @@ public class CompaniesService {
         companyData.put("customers", productsRepoObj.countCompanyCustomer(companyid));
         companyData.put("recentOrders", productsRepoObj.recentOrder(companyid));
         companyData.put("listOfOrders", productsRepoObj.orders(companyid));
+        companyData.put("transactionList", companyPaymentRepoObj.findCompanyAndPaymentById(companyid));
 
         response.setData(companyData);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
