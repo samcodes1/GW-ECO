@@ -30,7 +30,7 @@ public class CompanyPaymentService {
     public CompanyPaymentResponse companyPaymentServiceMethod(CompanyPaymentRequest companyPaymentRequestObj) throws ParseException, NoSuchAlgorithmException{
         companyPaymentRepoObj.save(
             new CompanyPaymentEntity(
-                null, companyPaymentRequestObj.getSubscription(), Utility.convertToTimestamp(companyPaymentRequestObj.getPaymentDate()),
+                null, companyPaymentRequestObj.getSubscription(), Utility.convertISOToTimestamp(companyPaymentRequestObj.getPaymentDate()),
                 companyPaymentRequestObj.getTransactionid(), companyPaymentRequestObj.getCompanyId(), 
                 companyPaymentRequestObj.getAmount()
             )

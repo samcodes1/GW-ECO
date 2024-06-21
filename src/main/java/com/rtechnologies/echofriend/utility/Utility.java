@@ -53,12 +53,12 @@ public class Utility {
         return sb.toString();
     }
 
-    public static Timestamp convertToTimestamp(String dateTimeString) throws java.text.ParseException {
+    // public static Timestamp convertToTimestamp(String dateTimeString) throws java.text.ParseException {
         
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date parsedDate = dateFormat.parse(dateTimeString);
-        return new Timestamp(parsedDate.getTime());
-    }
+    //     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    //     Date parsedDate = dateFormat.parse(dateTimeString);
+    //     return new Timestamp(parsedDate.getTime());
+    // }
 
     public static String hashPassword(String password) throws NoSuchAlgorithmException {
         String saltedPassword = password + AppConstants.SALT;

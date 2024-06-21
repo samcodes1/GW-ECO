@@ -39,7 +39,7 @@ public class BannerService {
 
         bannerRepoObj.save(new BannerEntity(
             null, bannerRequestObj.getBannerName(), bannerRequestObj.getBannerImage(), 
-            Utility.convertToTimestamp(bannerRequestObj.getBannerExpiry()), companiesdata.getCompanyid()
+            Utility.convertISOToTimestamp(bannerRequestObj.getBannerExpiry()), companiesdata.getCompanyid()
         ));
         
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -64,7 +64,7 @@ public class BannerService {
             throw new RecordNotFoundException("Record with banner id '" + bannerId + "' does not exist.");
         }
         BannerEntity bannerEntity = bannerData.get();
-        bannerEntity.setBannerexpiry(Utility.convertToTimestamp(bannerUpdateRequestObj.getBannerExpiry()));
+        bannerEntity.setBannerexpiry(Utility.convertISOToTimestamp(bannerUpdateRequestObj.getBannerExpiry()));
         bannerRepoObj.save(bannerEntity);
         
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
@@ -80,7 +80,7 @@ public class BannerService {
         BannerEntity bannerEntity = bannerData.get();
         bannerEntity.setBannerexpiry(
             (bannerUpdateRequestObj.getBannerExpiry()==null || bannerUpdateRequestObj.getBannerExpiry().isEmpty())?
-            bannerEntity.getBannerexpiry():Utility.convertToTimestamp(bannerUpdateRequestObj.getBannerExpiry())
+            bannerEntity.getBannerexpiry():Utility.convertISOToTimestamp(bannerUpdateRequestObj.getBannerExpiry())
         );
         bannerEntity.setBannerimage(
             bannerUpdateRequestObj.getBannerImage()==null || bannerUpdateRequestObj.getBannerImage().isEmpty()?
