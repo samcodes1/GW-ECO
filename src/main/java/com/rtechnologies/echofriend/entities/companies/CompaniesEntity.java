@@ -30,5 +30,5 @@ public class CompaniesEntity {
     private String companylogo;
     private Long companycategoryfk;
     private String location;
-    private transient String password;
+    private String password;
 }
