@@ -59,13 +59,22 @@ public class CompaniesService {
         CompaniesResponse response = new CompaniesResponse();
         if(companyId==null){
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-            response.setData(companiesRepoObj.findAll());
+            List<CompaniesEntity> companies = companiesRepoObj.findAll();
+            for (int i = 0; i < companies.size(); i++) {
+                String prodCount = productsRepoObj.countCompanyProducts(companies.get(i).getCompanyid()).toString();
+                companies.get(i).setProducts(prodCount);
+            }
+            response.setData(companies);
             return response;
         }
         List<CompaniesEntity> company = new ArrayList<>();
-        company.add(companiesRepoObj.findById(companyId).orElseThrow(
+        CompaniesEntity comp = companiesRepoObj.findById(companyId).orElseThrow(
             ()-> new RecordNotFoundException("Record of company '" + companyId + "' does not exists")
-        ));
+        );
+        
+        String prodCount = productsRepoObj.countCompanyProducts(comp.getCompanyid()).toString();
+        comp.setProducts(prodCount);
+        company.add(comp);
 
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(company);
