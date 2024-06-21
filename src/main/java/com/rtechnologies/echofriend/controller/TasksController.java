@@ -18,8 +18,7 @@ import com.rtechnologies.echofriend.entities.task.TasksEntity;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -155,6 +154,13 @@ public class TasksController {
     @GetMapping("/generatebarcodeforalltasksdummyendpoint")
     public ResponseEntity<TasksResponse> gettaskbyuser() throws IOException {
         TasksResponse response = taskServiceObj.generate();
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+
+    @PutMapping("/promotTask/{taskid}")
+    public ResponseEntity<TasksResponse> promot(@PathVariable Long taskid, @RequestParam(required = false) Integer promotion, @RequestParam(required = false, defaultValue = "true") Boolean promot) {
+        TasksResponse response = taskServiceObj.promot( taskid,  promotion, promot);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }

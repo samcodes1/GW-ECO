@@ -99,7 +99,7 @@ public class TaskService {
         taskRepoObj.save(new TasksEntity(
             null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), 
             tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), timestamp,true,tasksResquestObj.getExternallink(),
-            tasksResquestObj.getCompanyid(),tasksResquestObj.getTasktype(),tasksResquestObj.getTotalsteps(),Utility.generateUniqueCode(timestamp)
+            tasksResquestObj.getCompanyid(),tasksResquestObj.getTasktype(),tasksResquestObj.getTotalsteps(),Utility.generateUniqueCode(timestamp),0
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -381,4 +381,28 @@ public class TaskService {
         return response;
     }
 
+    public TasksResponse promot(Long taskid, Integer promotion, Boolean promot){
+        Optional<TasksEntity> taskinfo = taskRepoObj.findById(taskid);
+        if(!taskinfo.isPresent()){
+            throw new OperationNotAllowedException("Task not applied");
+        }
+        TasksEntity promotionupdate = taskinfo.get();
+
+        Integer currentPromotionValue = promotionupdate.getPromotionranking();
+
+        if(promot!=null && promot){
+            currentPromotionValue = currentPromotionValue==null?promotion:promotion+currentPromotionValue;
+        }else{
+            currentPromotionValue = currentPromotionValue==null?promotion:promotion-currentPromotionValue;
+        }
+
+        promotionupdate.setPromotionranking(
+            currentPromotionValue
+        );
+        taskRepoObj.save(promotionupdate);
+        TasksResponse response = new TasksResponse();
+        // response.setData(taskRepoObj.findtasksbyusertask(userid,taskid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
 }
