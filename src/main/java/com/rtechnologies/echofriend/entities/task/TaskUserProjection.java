@@ -25,4 +25,5 @@ public interface TaskUserProjection {
     public Timestamp getMemebershipexpiry();
     public String getTaskcategory();
     public String getQrcode();
+    public Integer getTotalsteps();
 }
