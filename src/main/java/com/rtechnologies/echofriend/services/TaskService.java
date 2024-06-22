@@ -341,6 +341,18 @@ public class TaskService {
             tasksEntityObj.getExternallink()==null?updateTask.getExternallink():tasksEntityObj.getExternallink()
         );
 
+        updateTask.setTasktype(
+            tasksEntityObj.getTasktype()==null?updateTask.getTasktype():tasksEntityObj.getTasktype()
+        );
+
+        updateTask.setTotalsteps(
+            tasksEntityObj.getTotalsteps()==null?updateTask.getTotalsteps():tasksEntityObj.getTotalsteps()
+        );
+
+        updateTask.setPromotionranking(
+            tasksEntityObj.getPromotionranking()==null?updateTask.getPromotionranking():tasksEntityObj.getPromotionranking()
+        );
+
         response.setData(taskRepoObj.save(updateTask));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
