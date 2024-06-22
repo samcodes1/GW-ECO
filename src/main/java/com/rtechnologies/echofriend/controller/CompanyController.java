@@ -109,7 +109,7 @@ public class CompanyController {
     }
     
     @DeleteMapping("/deleteCompany/{companyId}")
-    public ResponseEntity<CompaniesResponse> deletecompany(@RequestParam Long companyId) {
+    public ResponseEntity<CompaniesResponse> deletecompany(@PathVariable Long companyId) {
         CompaniesResponse response = companiesServiceObj.deletecompany(companyId);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);

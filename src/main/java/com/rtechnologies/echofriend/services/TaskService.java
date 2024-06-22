@@ -181,7 +181,7 @@ public class TaskService {
     public TasksResponse getTaskCategory(Long id){
         // taskCategoryRepoObj.save(taskCategoryEntityObj);
         TasksResponse response = new TasksResponse();
-        if(id == null){
+        if(id != null){
             List<TaskCategoryEntity> res = new ArrayList<>();
             res.add(taskCategoryRepoObj.findById(id).get());
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
