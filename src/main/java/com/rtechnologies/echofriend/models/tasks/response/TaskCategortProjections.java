@@ -26,4 +26,5 @@ public interface TaskCategortProjections {
     public Integer getTotalsteps();
     public String getQrcode();
     public Integer getPromotionranking();
+    public Long getTaskcategoryid();
 }
