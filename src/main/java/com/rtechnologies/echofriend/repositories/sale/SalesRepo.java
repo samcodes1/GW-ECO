@@ -36,5 +36,8 @@ public interface SalesRepo extends CrudRepository<SalesEntity, Long> {
 
     @Query(value = "select s.*,sp.*,p.productname,p.productimage from saleproduct sp inner join sales s on s.saleid=sp.saleidfk inner join products p on p.productid=sp.productidfk where s.saleid=?1", nativeQuery = true)
     List<SalesProjection> findAllIvoiceProducts(Long invoiceid);
+
+    @Query(value = "select p.productname, p.productimage, sp.productidfk,p.productprice,sp.quantity, s.useridfk, p.companyidfk, s.address from sales s inner join saleproduct sp on sp.saleidfk=s.saleid inner join users u on u.userid=s.useridfk inner join products p on p.productid=sp.productidfk where userid=?1", nativeQuery = true)
+    List<SalesProjection> findSalesDataForOrderManagment(Long userid);
     
 }

@@ -1,7 +1,9 @@
 package com.rtechnologies.echofriend.services;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -15,12 +17,14 @@ import org.webjars.NotFoundException;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.sales.SaleProductEntity;
 import com.rtechnologies.echofriend.entities.sales.SalesEntity;
+import com.rtechnologies.echofriend.entities.user.UserEntity;
 import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
 import com.rtechnologies.echofriend.entities.voucher.VoucherUserAssociation;
 import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.models.sale.request.InvoiceUpdate;
 import com.rtechnologies.echofriend.models.sale.request.SaleRequest;
 import com.rtechnologies.echofriend.models.sale.response.SaleResponse;
+import com.rtechnologies.echofriend.models.sale.response.SalesProjection;
 import com.rtechnologies.echofriend.repositories.products.ProductsRepo;
 import com.rtechnologies.echofriend.repositories.sale.SalesProductRepo;
 import com.rtechnologies.echofriend.repositories.sale.SalesRepo;
@@ -181,6 +185,26 @@ public class SalesService {
         data.setState("payment_failed");
         salesRepoObj.save(data);
         // response.setData(salesRepoObj.findAllIvoiceProducts(invoiceid));
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public SaleResponse orderManagmentServiceMethod( Long userid){
+        SaleResponse response = new SaleResponse();
+        
+        // List<SalesProjection> salesdata = salesRepoObj.findAllSalesbyUserid(userid);
+        Optional<UserEntity> userdata = userRepoObj.findById(userid);
+        if(!userdata.isPresent()){
+            throw new NotFoundException("User data not found");
+        }
+        Map<String, Object> ordermanagment = new HashMap<>();
+        ordermanagment.put("userdata", userdata.get());
+
+        List<SalesProjection> salesdata = salesRepoObj.findSalesDataForOrderManagment(userid);
+
+        ordermanagment.put("productlisting", salesdata);
+        ordermanagment.put("billcalculation", salesRepoObj.findAllSalesInvoice(userid));
+
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }

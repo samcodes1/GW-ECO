@@ -31,4 +31,5 @@ public interface SalesProjection {
     public Float getDiscountpercentage();
     public Integer getVoucherpointscost();
     public String getVoucherbarcode();
+    public Long getCompanyidfk();
 }
