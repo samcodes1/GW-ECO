@@ -30,6 +30,7 @@ import com.rtechnologies.echofriend.models.user.request.AdminUserUpdate;
 import com.rtechnologies.echofriend.models.user.request.ChangePasswordRequest;
 import com.rtechnologies.echofriend.models.user.request.UserRequest;
 import com.rtechnologies.echofriend.models.user.response.UserResponse;
+import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
 import com.rtechnologies.echofriend.repositories.user.UserHistoryRepo;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherRepo;
@@ -58,6 +59,9 @@ public class UserService {
 
     @Autowired
     UserHistoryRepo userHistoryRepoObj;
+
+    @Autowired
+    CompaniesRepo companiesRepoObj;
 
     public UserResponse userSignupServiceMethod(UserRequest userRequestObj) throws NoSuchAlgorithmException, ParseException {
         if (userRepoObj.existsByEmail(userRequestObj.getEmail())) {
@@ -305,6 +309,16 @@ public class UserService {
         UserEntity userEntity = user.get();
         userEntity.setPassword(new BCryptPasswordEncoder().encode(changePasswordRequestObj.getPassword()));
         UserResponse response = new UserResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public UserResponse getCompanyCustomer(Long companyid){
+        if(!companiesRepoObj.findById(companyid).isPresent()){
+            throw new RecordNotFoundException("company not found");
+        }
+        UserResponse response = new UserResponse();
+        response.setData(userRepoObj.findCustomerdata(companyid));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }

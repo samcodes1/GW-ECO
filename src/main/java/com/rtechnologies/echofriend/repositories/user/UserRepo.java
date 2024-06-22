@@ -29,4 +29,8 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
     @Query(value = "UPDATE users SET membershiptype =  CASE WHEN memebershipexpiry <= CURDATE() THEN 'FREE' ELSE membershiptype END",
     nativeQuery = true)
     void updateexpired();
+
+    @Query(value = "SELECT u.*,COUNT(sp.saleidfk) as productsbought, SUM(sp.total) as totalmoneyspend FROM companies c inner join products p on p.companyidfk=c.companyid inner join saleproduct sp on sp.productidfk=p.productid inner join sales s on s.saleid=sp.saleidfk INNER join users u on u.userid=s.useridfk where c.companyid=?1 group by u.email, u.userid",
+    nativeQuery = true)
+    List<TaskUserProjection> findCustomerdata(Long companyid);
 }
