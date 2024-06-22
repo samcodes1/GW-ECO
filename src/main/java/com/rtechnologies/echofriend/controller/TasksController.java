@@ -87,7 +87,7 @@ public class TasksController {
         200:500).body(response);
     }
 
-    @GetMapping("/getTaskCategory")
+    @PostMapping("/getTaskCategory")
     public ResponseEntity<TasksResponse> getCategories(@RequestParam(required = false) Long taskCategoryId) {
         TasksResponse response = taskServiceObj.getTaskCategory(taskCategoryId);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
