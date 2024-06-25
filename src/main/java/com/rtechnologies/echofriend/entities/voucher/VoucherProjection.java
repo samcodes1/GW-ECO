@@ -1,9 +1,12 @@
 package com.rtechnologies.echofriend.entities.voucher;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.ToString;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -14,7 +17,7 @@ public interface VoucherProjection {
     public Timestamp getVoucheruserexpry();
     public Boolean getIsused();
     public Long getVoucherid();
-    public byte[] getVoucherbarcode();
+    // public byte[] getVoucherbarcode();
     public Long getShopidfk();
     public String getUsedstatus();
     public String getVoucherimageurl();
@@ -23,7 +26,7 @@ public interface VoucherProjection {
     public String getCompanylogo();
     public String getCompany_email();
     public String getSubscriptiontype();
-    public Timestamp getSubscriptionexpiry();
+    public Date getSubscriptionexpiry();
     public String getCompanyname();
     public String getCompanyid();
     public String getName();

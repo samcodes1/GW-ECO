@@ -18,7 +18,7 @@ public interface VoucherRepo extends CrudRepository<VoucherEntity, Long> {
     @Query(value = "SELECT count(*) FROM voucher inner join voucheruserbridge vu on vu.voucheridfk=voucher.voucherid WHERE DATE(vocuhercreatedat) = CURDATE()", nativeQuery = true)
     Integer countVoucherRedeemedToday();
 
-    @Query(value = "SELECT count(*) FROM voucher inner join voucheruserbridge vu on vu.voucheridfk=voucher.voucherid WHERE DATE(vocuhercreatedat) = CURDATE() and shopidfk=?1", nativeQuery = true)
+    @Query(value = "SELECT count(*) FROM voucher inner join voucheruserbridge vu on vu.voucheridfk=voucher.voucherid WHERE DATE(vocuhercreatedat) = CURDATE() and voucher.shopidfk=?1", nativeQuery = true)
     Integer countVoucherRedeemedToday(Long companyid);
 
     @Query(value = "SELECT count(*) FROM voucher inner join voucheruserbridge vu on vu.voucheridfk=voucher.voucherid", nativeQuery = true)
@@ -36,7 +36,7 @@ public interface VoucherRepo extends CrudRepository<VoucherEntity, Long> {
     @Query(value = "SELECT count(*) FROM voucher WHERE voucherexpiry < CURDATE()", nativeQuery = true)
     Integer countexpiredVouchers();
 
-    @Query(value = "SELECT count(*) FROM voucher WHERE voucherexpiry < CURDATE() where shopidfk=?1", nativeQuery = true)
+    @Query(value = "SELECT count(*) FROM voucher WHERE voucherexpiry < CURDATE() and shopidfk=?1", nativeQuery = true)
     Integer countexpiredVouchers(Long companyid);
 
     @Query(value = "SELECT v.shopidfk,v.usedstatus,v.useridfk,v.voucherbarcode,v.voucherid,v.voucherpointscost,v.discountpercentage,v.voucherexpiry,v.vocuhercreatedat,v.description,v.name,c.companyid,c.companyname,c.subscriptionexpiry,c.subscriptiontype,c.company_email,c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk where c.companyid=?1", nativeQuery = true)
