@@ -133,9 +133,10 @@ public class CompaniesService {
         companyEntity.setCompanycategoryfk(
             companiesUpdateRequestObj.getCompanycategoryfk()==null?companyEntity.getCompanycategoryfk():companiesUpdateRequestObj.getCompanycategoryfk()
         );
-
+        companiesRepoObj.save(companyEntity);
         // response.setResponseCode(AppConstants.SUCCESS);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(companyEntity);
         return response;
     }
 
