@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public interface TaskUserProjection {
     public Long getTaskuserid();
+    public Long getUserid();
     public Long getTaskidfk();
     public Long getUseridfk();
     public Boolean getIscomplete();
