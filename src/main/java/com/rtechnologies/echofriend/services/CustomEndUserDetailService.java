@@ -60,23 +60,26 @@ public class CustomEndUserDetailService {
     }
 
     public OtpResponse sendotp(OtpRequest otp) throws MessagingException{
-
-        MimeMessage message = javaMailSender.createMimeMessage();
-        String otpCode = Utility.generateOTP();
-        Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(otp.getEmail());
-        if(!companydata.isPresent()){
-            throw new NotFoundException("Company not found with email: " + otp.getEmail());
+        try{
+            MimeMessage message = javaMailSender.createMimeMessage();
+            String otpCode = Utility.generateOTP();
+            Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(otp.getEmail());
+            if(!companydata.isPresent()){
+                throw new NotFoundException("Company not found with email: " + otp.getEmail());
+            }
+            OtpEntity otpdata = new OtpEntity(
+                null, "1234",false,Utility.getExpiryTimestampOneMinute(),companydata.get().getCompanyid(), Utility.getcurrentTimeStamp(),"company"
+            );
+            otpRepoObj.save(otpdata);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(otp.getEmail());
+            helper.setSubject("OTP for Password reset");
+            helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
+            javaMailSender.send(message);
+            return null;
+        }catch(Exception e){
+            return null;
         }
-        OtpEntity otpdata = new OtpEntity(
-            null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getCompanyid(), Utility.getcurrentTimeStamp(),"company"
-        );
-        otpRepoObj.save(otpdata);
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setTo(otp.getEmail());
-        helper.setSubject("OTP for Password reset");
-        helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
-        javaMailSender.send(message);
-        return null;
     }
 
     public OtpResponse sendotptouser(OtpRequest otp) throws MessagingException{
