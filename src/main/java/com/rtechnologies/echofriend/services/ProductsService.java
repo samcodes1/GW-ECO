@@ -78,6 +78,21 @@ public class ProductsService {
             throw new RecordNotFoundException("Record of product '" + productId + "' does not exists");
         }
         ProductsEntity updateRecord = productData.get();
+
+        String profilePicUrl = "";
+        if(productsRequestObj.getImagefile() !=null){
+            try {
+                String folder = "product-logo-pics"; // Change this to your preferred folder name
+                String publicId = folder + "/" + productsRequestObj.getImagefile().getName();
+                Map data = cloudinary.uploader().upload(productsRequestObj.getImagefile().getBytes(), ObjectUtils.asMap("public_id", publicId));
+                profilePicUrl = data.get("secure_url").toString();
+            } catch (IOException ioException) {
+                throw new RuntimeException("File uploading failed");
+            }
+        }
+        updateRecord.setProductimage(
+            (profilePicUrl==null || profilePicUrl.isEmpty()) ? updateRecord.getProductimage():profilePicUrl
+        );
         updateRecord.setProductname(
             productsRequestObj.getProductName()==null || productsRequestObj.getProductName().isEmpty()?
             updateRecord.getProductname():productsRequestObj.getProductName()
@@ -88,6 +103,11 @@ public class ProductsService {
         updateRecord.setProductquantity(
             productsRequestObj.getProductQuantity()==null ? updateRecord.getProductquantity() : productsRequestObj.getProductQuantity()
         );
+
+        updateRecord.setProductdescription(
+            productsRequestObj.getProductdescription()==null?updateRecord.getProductdescription():productsRequestObj.getProductdescription()
+        );
+
         ProductsResponse response = new ProductsResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
