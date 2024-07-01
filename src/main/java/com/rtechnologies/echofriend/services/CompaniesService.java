@@ -130,6 +130,10 @@ public class CompaniesService {
             companiesUpdateRequestObj.getPassword()==null?companyEntity.getPassword():Utility.hashPassword(companiesUpdateRequestObj.getPassword())
         );
 
+        companyEntity.setCompanycategoryfk(
+            companiesUpdateRequestObj.getCompanycategoryfk()==null?companyEntity.getCompanycategoryfk():companiesUpdateRequestObj.getCompanycategoryfk()
+        );
+
         // response.setResponseCode(AppConstants.SUCCESS);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
