@@ -15,6 +15,9 @@ public interface ProductsRepo extends JpaRepository<ProductsEntity, Long> {
     @Query(value = "select * from products p inner join productcategory c on c.categoryid=p.categoryidfk inner join producttype pt on pt.producttypeid=p.producttypeidfk", nativeQuery = true)
     List<ProductProjections> findProducts();
 
+    @Query(value = "select * from products p inner join productcategory c on c.categoryid=p.categoryidfk inner join producttype pt on pt.producttypeid=p.producttypeidfk where p.productid=?1", nativeQuery = true)
+    List<ProductProjections> findProducts(Long productid);
+
     @Query(value = "select * from products p inner join productcategory c on c.categoryid=p.categoryidfk inner join producttype pt on pt.producttypeid=p.producttypeidfk where p.categoryidfk=?1", nativeQuery = true)
     List<ProductProjections> findProductsByCategory(Long id);
 

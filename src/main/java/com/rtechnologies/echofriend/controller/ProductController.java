@@ -17,6 +17,7 @@ import com.rtechnologies.echofriend.appconsts.AppConstants;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -38,7 +39,7 @@ public class ProductController {
         }
     )
     @PostMapping("/addProduct")
-    public ResponseEntity<ProductsResponse> addProduct(@RequestBody ProductsRequest productsRequestObj) {
+    public ResponseEntity<ProductsResponse> addProduct(@ModelAttribute ProductsRequest productsRequestObj) {
         ProductsResponse response = productsServiceObj.addProductServiceMethod(productsRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);

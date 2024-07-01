@@ -6,8 +6,6 @@ import java.sql.Timestamp;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import lombok.ToString;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public interface VoucherProjection {
@@ -17,7 +15,7 @@ public interface VoucherProjection {
     public Timestamp getVoucheruserexpry();
     public Boolean getIsused();
     public Long getVoucherid();
-    // public byte[] getVoucherbarcode();
+    public byte[] getVoucherbarcode();
     public Long getShopidfk();
     public String getUsedstatus();
     public String getVoucherimageurl();

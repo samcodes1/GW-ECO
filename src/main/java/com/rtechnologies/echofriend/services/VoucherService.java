@@ -74,7 +74,7 @@ public class VoucherService {
 
         update.setVoucherpointscost(voucherObj.getVoucherpointscost()==null?update.getVoucherpointscost():voucherObj.getVoucherpointscost());
         update.setVoucherbarcode(barcode);
-        update.setVoucherexpiry(voucherObj.getVoucherexpiry()==null?update.getVoucherexpiry():Utility.parseTimestamp(voucherObj.getVoucherexpiry()));
+        update.setVoucherexpiry(voucherObj.getVoucherexpiry()==null?update.getVoucherexpiry():Utility.convertISOToTimestamp(voucherObj.getVoucherexpiry()));
         update.setDiscountpercentage(voucherObj.getDiscountpercentage()==null?update.getDiscountpercentage():voucherObj.getDiscountpercentage());
         update.setName(
             voucherObj.getName()==null?update.getName():voucherObj.getName()

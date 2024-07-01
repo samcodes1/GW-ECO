@@ -1,12 +1,16 @@
 package com.rtechnologies.echofriend.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
 import com.rtechnologies.echofriend.entities.products.ProductsEntity;
@@ -25,6 +29,9 @@ public class ProductsService {
     @Autowired
     ProductsRepo productsRepoObj;
 
+    @Autowired
+    private Cloudinary cloudinary;
+
     public ProductsResponse addProductServiceMethod(@RequestBody ProductsRequest productsRequestObj){
         ProductsResponse response = new ProductsResponse();
         CompaniesEntity companiesdata = companiesRepoObj.findCompanyIdByName(productsRequestObj.getProductOfCompany());
@@ -35,9 +42,20 @@ public class ProductsService {
             throw new RecordNotFoundException("Record with compnay '" + productsRequestObj.getProductOfCompany() + "' does not exist.");
         }
 
+        String profilePicUrl = "";
+        if(productsRequestObj.getImagefile() !=null){
+            try {
+                String folder = "product-logo-pics"; // Change this to your preferred folder name
+                String publicId = folder + "/" + productsRequestObj.getImagefile().getName();
+                Map data = cloudinary.uploader().upload(productsRequestObj.getImagefile().getBytes(), ObjectUtils.asMap("public_id", publicId));
+                profilePicUrl = data.get("secure_url").toString();
+            } catch (IOException ioException) {
+                throw new RuntimeException("File uploading failed");
+            }
+        }
         productsRepoObj.save(new ProductsEntity(
             null, productsRequestObj.getProductName(), productsRequestObj.getProductPrice(),
-            productsRequestObj.getProductQuantity(), productsRequestObj.getProductimage(), 
+            productsRequestObj.getProductQuantity(), profilePicUrl, 
             companiesdata.getCompanyid(),productsRequestObj.getCategoryidfk(), productsRequestObj.getProducttypeidfk(),productsRequestObj.getProductdescription()
         ));
 
@@ -89,12 +107,9 @@ public class ProductsService {
             return response;
         }
 
-        List<ProductsEntity> product = new ArrayList<ProductsEntity>();
-        product.add(productsRepoObj.findById(productId).orElseThrow(
-            ()-> new RecordNotFoundException("Record of product '" + productId + "' does not exists")
-        ));
+        // product.add(productsRepoObj.findProducts(productId));
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        response.setData(product);
+        response.setData(productsRepoObj.findProducts(productId));
         return response;
     }
 

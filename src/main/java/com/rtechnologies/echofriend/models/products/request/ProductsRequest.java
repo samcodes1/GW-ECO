@@ -1,5 +1,7 @@
 package com.rtechnologies.echofriend.models.products.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -19,4 +21,5 @@ public class ProductsRequest {
     private Long producttypeidfk;
     private String productimage;
     private String productdescription;
+    private MultipartFile imagefile;
 }

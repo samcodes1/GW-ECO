@@ -10,5 +10,5 @@ import com.rtechnologies.echofriend.entities.task.TaskCategoryEntity;
 
 @Repository
 public interface TaskCategoryRepo extends CrudRepository<TaskCategoryEntity, Long> {
-    
 }
+

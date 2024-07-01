@@ -176,19 +176,19 @@ public class Utility {
     //     }
     // }
 
-    public static Timestamp parseTimestamp(String timestampString) {
-        String format = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+    // public static Timestamp parseTimestamp(String timestampString) {
+    //     String format = "yyyy-MM-dd HH:mm:ss";
+    //     SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         
-        try {
-            Date parsedDate = dateFormat.parse(timestampString);
-            return new Timestamp(parsedDate.getTime());
-        } catch (ParseException e) {
-            // Handle parsing exception
-            e.printStackTrace();
-            return null;
-        }
-    }
+    //     try {
+    //         Date parsedDate = dateFormat.parse(timestampString);
+    //         return new Timestamp(parsedDate.getTime());
+    //     } catch (ParseException e) {
+    //         // Handle parsing exception
+    //         e.printStackTrace();
+    //         return null;
+    //     }
+    // }
 
     public static String generateOTP() {
         // Generate a random 5-digit number
