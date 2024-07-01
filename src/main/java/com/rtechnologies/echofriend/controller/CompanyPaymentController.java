@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
 import com.rtechnologies.echofriend.models.companypayment.request.CompanyPaymentRequest;
+import com.rtechnologies.echofriend.models.companypayment.request.CompanyRecord;
 import com.rtechnologies.echofriend.models.companypayment.response.CompanyPaymentResponse;
 import com.rtechnologies.echofriend.services.CompanyPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,20 @@ public class CompanyPaymentController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @PostMapping("/companyRecord")
+    public ResponseEntity<CompanyPaymentResponse> enterCompnayRecors(@RequestBody CompanyRecord companyRecord) {
+        CompanyPaymentResponse response = companyPaymentServiceObj.enterCompanyRecord(companyRecord);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
+    @GetMapping("/getCompanyRecord")
+    public ResponseEntity<CompanyPaymentResponse> getCompanyRecord(Long companyId) {
+        CompanyPaymentResponse response = companyPaymentServiceObj.getCompanyRecord(companyId);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
+    
     
 }
