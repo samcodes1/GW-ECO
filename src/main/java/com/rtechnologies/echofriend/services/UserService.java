@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -69,13 +70,24 @@ public class UserService {
         }
 
         String profilePicUrl = "";
+        // try {
+        //     String folder = "profile-pics"; // Change this to your preferred folder name
+        //     String publicId = folder + "/" + userRequestObj.getProfilephoto().getName();
+        //     Map data = cloudinary.uploader().upload(userRequestObj.getProfilephoto().getBytes(), ObjectUtils.asMap("public_id", publicId));
+        //     profilePicUrl = data.get("secure_url").toString();
+        // } catch (IOException ioException) {
+        //     throw new RuntimeException("File uploading failed");
+        // }
+
         try {
             String folder = "profile-pics"; // Change this to your preferred folder name
-            String publicId = folder + "/" + userRequestObj.getProfilephoto().getName();
+            // Generate a unique identifier for the file name
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + userRequestObj.getProfilephoto().getName();
+            String publicId = folder + "/" + uniqueFileName;
             Map data = cloudinary.uploader().upload(userRequestObj.getProfilephoto().getBytes(), ObjectUtils.asMap("public_id", publicId));
             profilePicUrl = data.get("secure_url").toString();
         } catch (IOException ioException) {
-            throw new RuntimeException("File uploading failed");
+            throw new RuntimeException("File uploading failed", ioException);
         }
 
         String hashedPassword = new BCryptPasswordEncoder().encode(userRequestObj.getPassword());
@@ -126,13 +138,23 @@ public class UserService {
 
         String profilePicUrl = "";
         if(userUpdateRequestObj.getProfilephoto() != null) {
+            // try {
+            //     String folder = "profile-pics"; // Change this to your preferred folder name
+            //     String publicId = folder + "/" + userUpdateRequestObj.getProfilephoto().getName();
+            //     Map data = cloudinary.uploader().upload(userUpdateRequestObj.getProfilephoto().getBytes(), ObjectUtils.asMap("public_id", publicId));
+            //     profilePicUrl = data.get("secure_url").toString();
+            // } catch (IOException ioException) {
+            //     throw new RuntimeException("File uploading failed");
+            // }
             try {
                 String folder = "profile-pics"; // Change this to your preferred folder name
-                String publicId = folder + "/" + userUpdateRequestObj.getProfilephoto().getName();
+                // Generate a unique identifier for the file name
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + userUpdateRequestObj.getProfilephoto().getName();
+                String publicId = folder + "/" + uniqueFileName;
                 Map data = cloudinary.uploader().upload(userUpdateRequestObj.getProfilephoto().getBytes(), ObjectUtils.asMap("public_id", publicId));
                 profilePicUrl = data.get("secure_url").toString();
             } catch (IOException ioException) {
-                throw new RuntimeException("File uploading failed");
+                throw new RuntimeException("File uploading failed", ioException);
             }
         } else {
             profilePicUrl = existingUser.getProfilephoto();
