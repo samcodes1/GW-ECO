@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public interface CompanyProjection {
+    public Long getProductid();
     public String getUsername();
     public String getCompanyname();
     public Float getProductprice();

@@ -53,7 +53,7 @@ public interface ProductsRepo extends JpaRepository<ProductsEntity, Long> {
     nativeQuery = true)
     List<CompanyProjection> getCompanyProducts();
 
-    @Query(value = "select p.productname, p.productprice, c.companyname, pc.category, p.productdescription, p.productimage from products p INNER join companies c on c.companyid=p.companyidfk inner join productcategory pc on pc.categoryid=p.categoryidfk where c.companyid=?1",
+    @Query(value = "select p.productid, p.productname, p.productprice, c.companyname, pc.category, p.productdescription, p.productimage from products p INNER join companies c on c.companyid=p.companyidfk inner join productcategory pc on pc.categoryid=p.categoryidfk where c.companyid=?1",
     nativeQuery = true)
     List<CompanyProjection> getCompanyProductsbyCompanyId(Long companyid);
 
