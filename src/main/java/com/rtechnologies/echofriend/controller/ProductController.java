@@ -68,7 +68,7 @@ public class ProductController {
         }
     )
     @PutMapping("/updateProduct/{productId}")
-    public ResponseEntity<ProductsResponse> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequestObj) {
+    public ResponseEntity<ProductsResponse> updateProduct(@PathVariable Long productId, @ModelAttribute ProductsRequest productsRequestObj) {
         ProductsResponse response = productsServiceObj.updateProduct(productId, productsRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
