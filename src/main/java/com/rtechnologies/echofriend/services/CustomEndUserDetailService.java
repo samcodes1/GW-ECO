@@ -121,7 +121,10 @@ public class CustomEndUserDetailService {
         OtpResponse response = new OtpResponse();
         if(otpdata.getOtp().equalsIgnoreCase(otp.getOtp())){
             otpdata.setIsused(true);
+            
             otpRepoObj.save(otpdata);
+
+            response.setData(otpdata);
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             return response;
         }

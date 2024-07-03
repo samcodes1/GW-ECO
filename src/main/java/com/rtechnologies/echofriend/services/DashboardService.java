@@ -57,8 +57,9 @@ public class DashboardService {
     public DashboardResponse getDashboarddatav2(){
         DashboardResponse response = new DashboardResponse();
         Map<String, Object> dashboarddata = new HashMap<>();
+        Integer points = userRepoObj.sumAllPoints();
         dashboarddata.put("totalusers", userRepoObj.count());
-        dashboarddata.put("totalpointsearned", userRepoObj.sumAllPoints());
+        dashboarddata.put("totalpointsearned", points==null?0:points);
         dashboarddata.put("totaltaskscompleted", taskUserRepoObj.countByIscompleteTrue());
         dashboarddata.put("totalcompanies", companiesRepoObj.count());
 
