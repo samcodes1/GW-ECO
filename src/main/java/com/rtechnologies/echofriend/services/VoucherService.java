@@ -45,6 +45,7 @@ public class VoucherService {
         ve.setUsedstatus(voucherObj.getUsedstatus());
         ve.setVoucherpointscost(voucherObj.getVoucherpointscost());
         ve.setDiscountpercentage(voucherObj.getDiscountpercentage());
+        ve.setIsdiscountpercentage(voucherObj.isIsdiscountpercentage());
         ve.setVoucherexpiry(Utility.convertISOToTimestamp(voucherObj.getVoucherexpiry()));
         ve.setVocuhercreatedat(Utility.getcurrentTimeStamp());
         ve.setName(voucherObj.getName());

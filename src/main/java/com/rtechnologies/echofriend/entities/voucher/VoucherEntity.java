@@ -43,5 +43,5 @@ public class VoucherEntity {
     private Timestamp voucherexpiry;
     private String name;
     private String description;
-
+    private Boolean isdiscountpercentage;
 }

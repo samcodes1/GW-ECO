@@ -70,10 +70,17 @@ public class SalesService {
         );
         
         VoucherEntity voucherEntity = voucherRepoObj.findById(saleRequestObj.getVoucherid()==null?-1:saleRequestObj.getVoucherid()).orElse(
-            new VoucherEntity(null,null, null,null,null, null,0.0f, Utility.getcurrentTimeStamp(), Utility.getcurrentTimeStamp(), "","")
+            new VoucherEntity(null,null, null,null,null, null,0.0f, Utility.getcurrentTimeStamp(), Utility.getcurrentTimeStamp(), "","",null)
         );
 
-        Float discountAmount = (voucherEntity.getDiscountpercentage() / 100) * totalBill[0];
+        Float discountAmount = null;
+        if(voucherEntity.getIsdiscountpercentage()==null){
+            discountAmount = 0.0f;
+        }else if(voucherEntity.getIsdiscountpercentage()){
+            discountAmount = (voucherEntity.getDiscountpercentage() / 100) * totalBill[0];
+        }else{
+            discountAmount = voucherEntity.getDiscountpercentage();// else will have amount not its percentage
+        }
 
         float finalAmount = totalBill[0] - discountAmount;
 
