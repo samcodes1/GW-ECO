@@ -31,5 +31,5 @@ public interface VoucherProjection {
     public String getDescription();
     public Timestamp getVocuhercreatedat();
     public Timestamp getVoucherexpiry();
-
+    public Boolean getIsdiscountpercentage();
 }
