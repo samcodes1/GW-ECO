@@ -15,6 +15,7 @@ import com.rtechnologies.echofriend.services.VoucherService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,13 +29,13 @@ public class VoucherController {
     VoucherService voucherServiceObj;
 
     @PostMapping("/createVoucher")
-    public ResponseEntity<VoucherResponse> createVoucher(@ModelAttribute VoucherRequest voucherEntityObj) {
+    public ResponseEntity<VoucherResponse> createVoucher(@RequestBody VoucherRequest voucherEntityObj) {
         VoucherResponse response = voucherServiceObj.createVoucherService(voucherEntityObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
 
     @PutMapping("/updateVoucher/{voucherId}")
-    public ResponseEntity<VoucherResponse> updateVoucher(@PathVariable Long voucherId, @ModelAttribute VoucherRequest voucherEntityObj) {
+    public ResponseEntity<VoucherResponse> updateVoucher(@PathVariable Long voucherId, @RequestBody VoucherRequest voucherEntityObj) {
         System.err.println("LANDED IN UPDATE");
         VoucherResponse response = voucherServiceObj.updateVoucherService(voucherId, voucherEntityObj);
         System.err.println("LANDED IN UPDATE");
