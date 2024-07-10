@@ -137,8 +137,8 @@ public class TasksController {
     }
 
     @GetMapping("/getCompanytasks")
-    public ResponseEntity<TasksResponse> getCompanyTasks(@RequestParam(required = false) Long companyid) {
-        TasksResponse response = taskServiceObj.getCompanyTasks(companyid);
+    public ResponseEntity<TasksResponse> getCompanyTasksCate(@RequestParam(required = false) Long companyid, @RequestParam(required = false) Long companytaskcategoryid) {
+        TasksResponse response = taskServiceObj.getCompanyTasks(companyid, companytaskcategoryid);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }

@@ -37,6 +37,9 @@ public interface TaskRepo extends CrudRepository<TasksEntity, Long>{
     @Query(value = "select * from tasks t inner join companies c on c.companyid=t.companyidfk inner join taskcategory tc on tc.taskcategoryid=t.taskcategoryfk where t.companyidfk=?1", nativeQuery = true)
     List<TaskCategortProjections> findtasksbycompany(Long id);
 
+    @Query(value = "select * from tasks t inner join taskcategory tc on tc.taskcategoryid=t.taskcategoryfk inner join companies c on c.companycategoryfk=tc.taskcategoryid where tc.taskcategoryid=?1", nativeQuery = true)
+    List<TaskCategortProjections> findtasksbycompanyCategory(Long companyCategoryid);
+
     @Query(value = "select * from tasks t inner join taskuserbridge tb on tb.taskidfk=t.taskid inner join users u on u.userid=tb.useridfk where tb.useridfk=?1 and tb.taskidfk=?2", nativeQuery = true)
     List<TaskCategortProjections> findtasksbyusertask(Long userid, Long taskid);
 }

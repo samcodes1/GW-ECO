@@ -22,6 +22,8 @@ public interface TaskCategortProjections {
     public String getExternallink();
     
     public Long getCompanyidfk();
+    public Long getCompanyid();
+    public String getCompanyname();
     public String getTasktype();
     public Integer getTotalsteps();
     public String getQrcode();

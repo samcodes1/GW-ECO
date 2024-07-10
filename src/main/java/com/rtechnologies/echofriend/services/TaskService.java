@@ -358,11 +358,20 @@ public class TaskService {
         return response;
     }
 
-    public TasksResponse getCompanyTasks(Long companyid){
+    public TasksResponse getCompanyTasks(Long companyid, Long companytaskcategoryid){
         TasksResponse response = new TasksResponse();
-        response.setData(taskRepoObj.findtasksbycompany(companyid));
-        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        return response;
+        if(companyid!=null && companytaskcategoryid==null){
+            response.setData(taskRepoObj.findtasksbycompany(companyid));
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }else if(companyid==null && companytaskcategoryid!=null){
+            response.setData(taskRepoObj.findtasksbycompanyCategory(companytaskcategoryid));
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }
+        // response.setData(taskRepoObj.findtasksbycompany(companyid));
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
     }
 
     public TasksResponse getTasksbyUser( Long taskid, Long userid){
