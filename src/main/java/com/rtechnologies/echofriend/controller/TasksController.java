@@ -103,28 +103,28 @@ public class TasksController {
 
     @PostMapping("/applyForTask")
     public ResponseEntity<TasksResponse> postMethodName(@RequestBody TaskUserAssociation userTaskObj) {
-        try {
+        // try {
             TasksResponse response = taskServiceObj.applyForTask(userTaskObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
-        } catch (Exception e) {
-            TasksResponse response = new TasksResponse();
-            response.setResponseMessage(e.toString());
-            return ResponseEntity.status(500).body(response);
-        }
+        // } catch (Exception e) {
+        //     TasksResponse response = new TasksResponse();
+        //     response.setResponseMessage(e.toString());
+        //     return ResponseEntity.status(500).body(response);
+        // }
     }
 
     @PutMapping("/markTaskComplete")
     public ResponseEntity<TasksResponse> markTaskComplete(@RequestBody TaskUserAssociation userTaskObj) {
-        try{
+        // try{
             TasksResponse response = taskServiceObj.markTaskComplete(userTaskObj);
             return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
             200:500).body(response);
-        } catch (Exception e) {
-            TasksResponse response = new TasksResponse();
-            response.setResponseMessage(e.toString());
-            return ResponseEntity.status(500).body(response);
-        }
+        // } catch (Exception e) {
+        //     TasksResponse response = new TasksResponse();
+        //     response.setResponseMessage(e.toString());
+        //     return ResponseEntity.status(500).body(response);
+        // }
     }
     
     @GetMapping("/getTasks")
