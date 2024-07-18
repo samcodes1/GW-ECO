@@ -40,4 +40,11 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler{
         resp.setResponseMessage(ex.getMessage());
         return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleInternalServerError(Exception ex) {
+        EcoFriendlyBaseResponse resp = new EcoFriendlyBaseResponse();
+        resp.setResponseMessage("Internal Server Error: " + ex.getMessage()); // Customize the message as needed
+        return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
