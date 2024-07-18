@@ -426,4 +426,31 @@ public class TaskService {
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
+
+    public TasksResponse getTasksUseridtaskId(Long userid, Long taskid){
+        TasksResponse response = new TasksResponse();
+        // if(userid==null && taskid==null){
+
+        // }else 
+        if(userid!=null && taskid==null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(taskUserRepoObj.findTaskByUserid(userid));
+            return response; 
+        }else if(userid==null && taskid!=null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(taskUserRepoObj.findTaskByTaskId(taskid));
+            return response; 
+        }else if(userid!=null && taskid!=null){
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(taskUserRepoObj.findTaskByTaskIdUserid(taskid, userid));
+            return response; 
+        }else{
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            response.setData(new ArrayList<>());
+            return response; 
+        }
+        // response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        // response.setData(taskUserRepoObj.findTaskByUseridCompleteStatus(userid, taskstatus));
+        // return response;
+    }
 }

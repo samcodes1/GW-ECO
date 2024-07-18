@@ -164,4 +164,13 @@ public class TasksController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    // One that will give task info based on task id and user id
+    // (including if the task is marked or not and if the current user has completed that specific task.)
+    @GetMapping("/getTasksByTaskIdUserId")
+    public ResponseEntity<TasksResponse> getTasksByTaskIdUserId(@RequestParam(required = false) Long userid, @RequestParam(required = false) Long tasksid) {
+        TasksResponse response = taskServiceObj.getTasksUseridtaskId(userid, tasksid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
 }

@@ -28,4 +28,16 @@ public interface TaskUserRepo extends CrudRepository<TaskUserAssociation, Long> 
 
     @Query(value = "SELECT * FROM taskuserbridge WHERE taskidfk = ?1 AND useridfk = ?2 AND DATE_ADD(applieddatetime, INTERVAL 1 HOUR) <= ?3", nativeQuery = true)
     Optional<TaskUserAssociation> findByTaskidfkAndUseridfkDateTime(Long taskidfk, Long useridfk, Timestamp comparetime);
+
+    @Query(value = "select * from taskuserbridge tu inner join tasks t on t.taskid=tu.taskidfk where tu.useridfk=?1",
+    nativeQuery = true)
+    List<TaskUserProjection> findTaskByUserid(Long userid);
+
+    @Query(value = "select * from taskuserbridge tu inner join tasks t on t.taskid=tu.taskidfk where t.taskid=?1",
+    nativeQuery = true)
+    List<TaskUserProjection> findTaskByTaskId(Long taskid);
+
+    @Query(value = "select * from taskuserbridge tu inner join tasks t on t.taskid=tu.taskidfk where t.taskid=?1 and tu.useridfk=?2",
+    nativeQuery = true)
+    List<TaskUserProjection> findTaskByTaskIdUserid(Long taskid, Long userid);
 }
