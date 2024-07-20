@@ -34,7 +34,7 @@ public interface SalesRepo extends CrudRepository<SalesEntity, Long> {
     @Query(value = "select SUM(sp.quantity) as totalproducts, SUM(total) as totalcost,s.address,s.salestimestamp, s.`state`, s.saleid,v.voucherid,v.voucherbarcode,v.voucherpointscost,v.discountpercentage from sales s inner join saleproduct sp on sp.saleidfk=s.saleid LEFT join voucher v on sp.voucheridfk=v.voucherid where s.useridfk=?1 GROUP by s.saleid,v.voucherid", nativeQuery = true)
     List<SalesProjection> findAllSalesInvoice(Long userid);
 
-    @Query(value = "select s.*,sp.*,p.productname,p.productimage from saleproduct sp inner join sales s on s.saleid=sp.saleidfk inner join products p on p.productid=sp.productidfk where s.saleid=?1", nativeQuery = true)
+    @Query(value = "select s.*,sp.*,p.productname,p.productimage, p.productprice from saleproduct sp inner join sales s on s.saleid=sp.saleidfk inner join products p on p.productid=sp.productidfk where s.saleid=?1", nativeQuery = true)
     List<SalesProjection> findAllIvoiceProducts(Long invoiceid);
 
     @Query(value = "select p.productname, p.productimage, sp.productidfk,p.productprice,sp.quantity, s.useridfk, p.companyidfk, s.address from sales s inner join saleproduct sp on sp.saleidfk=s.saleid inner join users u on u.userid=s.useridfk inner join products p on p.productid=sp.productidfk where userid=?1", nativeQuery = true)
