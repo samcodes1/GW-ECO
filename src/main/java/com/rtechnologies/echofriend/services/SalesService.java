@@ -87,9 +87,9 @@ public class SalesService {
         System.out.println("FINAL AMOUNT>>>>>>> "+finalAmount);
         final Float tolerance = 0.01f;
 
-        if(Math.abs(finalAmount - saleRequestObj.getTotal()) > tolerance){
-            throw new OperationNotAllowedException("Calculated total does not match the user input total");
-        }
+        // if(Math.abs(finalAmount - saleRequestObj.getTotal()) > tolerance){
+        //     throw new OperationNotAllowedException("Calculated total does not match the user input total");
+        // }
 
         saleRequestObj.getProductidQuantity().forEach(
             (productid, quantity)->{
