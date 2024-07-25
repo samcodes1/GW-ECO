@@ -230,24 +230,55 @@ public class TaskService {
         // if(voucherapplieddata.isPresent()){
         //     throw new OperationNotAllowedException("task already applied");
         // }
-        System.out.println(Utility.getcurrentTimeStamp());
-        Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
-        if(voucherapplieddata.isPresent()){
-            throw new OperationNotAllowedException("task already applied");
+        Optional<TasksEntity> task = taskRepoObj.findById(userTaskObj.getTaskidfk());
+        if(!task.isPresent()){
+            throw new OperationNotAllowedException("task not present");
         }
-
-        userTaskObj.setIscomplete(false);
-        userTaskObj.setApplieddatetime(Utility.getcurrentTimeStamp());
-        taskUserRepoObj.save(userTaskObj);
-        TasksResponse response = new TasksResponse();
-        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-        return response;
+        if(task.get().getTasktype().contains("qr") && task.get().getTasktype().contains("recycle")){
+            System.out.println(Utility.getcurrentTimeStamp());
+            Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTimeWeek(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
+            if(voucherapplieddata.isPresent()){
+                throw new OperationNotAllowedException("task already applied");
+            }
+    
+            userTaskObj.setIscomplete(false);
+            userTaskObj.setApplieddatetime(Utility.getcurrentTimeStamp());
+            taskUserRepoObj.save(userTaskObj);
+            TasksResponse response = new TasksResponse();
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }else{
+            System.out.println(Utility.getcurrentTimeStamp());
+            Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
+            if(voucherapplieddata.isPresent()){
+                throw new OperationNotAllowedException("task already applied");
+            }
+    
+            userTaskObj.setIscomplete(false);
+            userTaskObj.setApplieddatetime(Utility.getcurrentTimeStamp());
+            taskUserRepoObj.save(userTaskObj);
+            TasksResponse response = new TasksResponse();
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }
     }
 
     @Transactional
     public TasksResponse markTaskComplete(TaskUserAssociation userTaskObj){
         // TODO: one hour check
-        Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
+        Optional<TaskUserAssociation> voucherapplieddata;// = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
+        
+        Optional<TasksEntity> task = taskRepoObj.findById(userTaskObj.getTaskidfk());
+        if(!task.isPresent()){
+            throw new OperationNotAllowedException("task not present");
+        }
+
+        if(task.get().getTasktype().contains("qr") && task.get().getTasktype().contains("recycle")){
+            voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTimeWeek(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
+        }else{
+            voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
+        }
+
         if(!voucherapplieddata.isPresent()){
             throw new OperationNotAllowedException("This task has not been applied wrong action");
         }
