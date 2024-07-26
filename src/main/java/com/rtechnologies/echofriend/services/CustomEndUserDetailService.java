@@ -13,6 +13,7 @@ import com.rtechnologies.echofriend.repositories.user.UserRepo;
 import com.rtechnologies.echofriend.utility.Utility;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -61,7 +62,7 @@ public class CustomEndUserDetailService {
 
     public OtpResponse sendotp(OtpRequest otp) throws MessagingException{
         try{
-            MimeMessage message = javaMailSender.createMimeMessage();
+            SimpleMailMessage message = new SimpleMailMessage();
             String otpCode = Utility.generateOTP();
             Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(otp.getEmail());
             if(!companydata.isPresent()){
@@ -71,11 +72,26 @@ public class CustomEndUserDetailService {
                 null, "1234",false,Utility.getExpiryTimestampOneMinute(),companydata.get().getCompanyid(), Utility.getcurrentTimeStamp(),"company"
             );
             otpRepoObj.save(otpdata);
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo(otp.getEmail());
-            helper.setSubject("OTP for Password reset");
-            helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
+            System.out.println("SENDING NOW1");
+            // MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            message.setFrom("alibangash00123@gmail.com");
+            System.out.println("SENDING NOW2");
+            message.setTo(otp.getEmail());
+            System.out.println("SENDING NOW3");
+            message.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.");
+            System.out.println("SENDING NOW4");
+            message.setSubject("OTP!");
+            // helper.setTo(otp.getEmail());
+            // helper.setSubject("OTP for Password reset");
+            // helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
+            System.out.println("SENDING NOW");
             javaMailSender.send(message);
+            System.out.println("send....................");
+            // MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            // helper.setTo(otp.getEmail());
+            // helper.setSubject("OTP for Password reset");
+            // helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
+            // javaMailSender.send(message);
             return null;
         }catch(Exception e){
             return null;
@@ -85,7 +101,7 @@ public class CustomEndUserDetailService {
     public OtpResponse sendotptouser(OtpRequest otp) throws MessagingException{
         OtpResponse response = new OtpResponse();
         try{
-            MimeMessage message = javaMailSender.createMimeMessage();
+            SimpleMailMessage message = new SimpleMailMessage();
             String otpCode = Utility.generateOTP();
             Optional<UserEntity> companydata = userRepository.findByEmail(otp.getEmail());
             if(!companydata.isPresent()){
@@ -94,12 +110,23 @@ public class CustomEndUserDetailService {
             OtpEntity otpdata = new OtpEntity(
                 null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getUserid(), Utility.getcurrentTimeStamp(),"user"
             );
+            System.out.println("SENDING NOW10000");
             otpRepoObj.save(otpdata);
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo(otp.getEmail());
-            helper.setSubject("OTP for Password reset");
-            helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
+            System.out.println("SENDING NOW1");
+            // MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            message.setFrom("alibangash00123@gmail.com");
+            System.out.println("SENDING NOW2");
+            message.setTo(otp.getEmail());
+            System.out.println("SENDING NOW3");
+            message.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.");
+            System.out.println("SENDING NOW4");
+            message.setSubject("OTP!");
+            // helper.setTo(otp.getEmail());
+            // helper.setSubject("OTP for Password reset");
+            // helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
+            System.out.println("SENDING NOW");
             javaMailSender.send(message);
+            System.out.println("send....................");
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             return response;
         }catch(Exception e){
