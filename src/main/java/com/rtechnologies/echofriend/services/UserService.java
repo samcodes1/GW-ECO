@@ -330,6 +330,7 @@ public class UserService {
         }
         UserEntity userEntity = user.get();
         userEntity.setPassword(new BCryptPasswordEncoder().encode(changePasswordRequestObj.getPassword()));
+        userRepoObj.save(userEntity);
         UserResponse response = new UserResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
