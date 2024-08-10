@@ -494,4 +494,9 @@ public class TaskService {
         // response.setData(taskUserRepoObj.findTaskByUseridCompleteStatus(userid, taskstatus));
         // return response;
     }
+
+    public TasksResponse getTaskStatusService(Long taskid){
+        // taskUserRepoObj
+        return null;
+    }
 }

@@ -185,4 +185,11 @@ public class TasksController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
+
+    @GetMapping("/getTaskStatus")
+    public ResponseEntity<TasksResponse> getTaskStatus(@RequestParam Long tasksid) {
+        TasksResponse response = taskServiceObj.getTaskStatusService(tasksid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+        200:500).body(response);
+    }
 }

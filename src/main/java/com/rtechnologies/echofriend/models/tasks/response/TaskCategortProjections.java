@@ -29,4 +29,5 @@ public interface TaskCategortProjections {
     public String getQrcode();
     public Integer getPromotionranking();
     public Long getTaskcategoryid();
+    public Integer getTaskduration();
 }
