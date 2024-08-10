@@ -32,4 +32,5 @@ public class TasksEntity {
     private Integer totalsteps;
     private String qrcode;
     private Integer promotionranking;
+    private Integer taskduration;
 }

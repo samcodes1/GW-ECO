@@ -20,5 +20,6 @@ public class TasksResquest {
     private String tasktype;
     private Integer totalsteps;
     private String taskbarcode;
+    private Integer taskduration;// in hours
     // private Timestamp taskCreatedTimestamp;
 }

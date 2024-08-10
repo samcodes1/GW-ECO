@@ -99,7 +99,7 @@ public class TaskService {
         taskRepoObj.save(new TasksEntity(
             null, tasksResquestObj.getTaskDescription(),tasksResquestObj.getTaskPoints(), 
             tasksResquestObj.getTaskname(),adminId,tasksResquestObj.getTaskcategory(), timestamp,true,tasksResquestObj.getExternallink(),
-            tasksResquestObj.getCompanyid(),tasksResquestObj.getTasktype(),tasksResquestObj.getTotalsteps(),Utility.generateUniqueCode(timestamp),0
+            tasksResquestObj.getCompanyid(),tasksResquestObj.getTasktype(),tasksResquestObj.getTotalsteps(),Utility.generateUniqueCode(timestamp),0,tasksResquestObj.getTaskduration()
         ));
 
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -388,6 +388,10 @@ public class TaskService {
 
         updateTask.setPromotionranking(
             tasksEntityObj.getPromotionranking()==null?updateTask.getPromotionranking():tasksEntityObj.getPromotionranking()
+        );
+
+        updateTask.setTaskduration(
+            tasksEntityObj.getTaskduration()==null?updateTask.getTaskduration():tasksEntityObj.getTaskduration()
         );
 
         response.setData(taskRepoObj.save(updateTask));
