@@ -3,6 +3,7 @@ package com.rtechnologies.echofriend.services;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import com.rtechnologies.echofriend.entities.admin.AdminEntity;
 import com.rtechnologies.echofriend.entities.task.TaskAssigmentEntity;
 import com.rtechnologies.echofriend.entities.task.TaskCategoryEntity;
 import com.rtechnologies.echofriend.entities.task.TaskUserAssociation;
+import com.rtechnologies.echofriend.entities.task.TaskUserProjection;
 import com.rtechnologies.echofriend.entities.task.TasksEntity;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
 import com.rtechnologies.echofriend.entities.user.UserPointsHistory;
@@ -496,7 +498,10 @@ public class TaskService {
     }
 
     public TasksResponse getTaskStatusService(Long taskid){
-        // taskUserRepoObj
-        return null;
+        TaskUserProjection dbres = taskUserRepoObj.taskstatus(taskid);
+        TasksResponse response = new TasksResponse();
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        response.setData(dbres==null?new HashMap<>():dbres);
+        return response; 
     }
 }

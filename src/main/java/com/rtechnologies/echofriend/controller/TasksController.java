@@ -187,8 +187,8 @@ public class TasksController {
     }
 
     @GetMapping("/getTaskStatus")
-    public ResponseEntity<TasksResponse> getTaskStatus(@RequestParam Long tasksid) {
-        TasksResponse response = taskServiceObj.getTaskStatusService(tasksid);
+    public ResponseEntity<TasksResponse> getTaskStatus(@RequestParam Long taskuserid) {
+        TasksResponse response = taskServiceObj.getTaskStatusService(taskuserid);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
     }
