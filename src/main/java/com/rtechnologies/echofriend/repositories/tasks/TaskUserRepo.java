@@ -29,6 +29,9 @@ public interface TaskUserRepo extends CrudRepository<TaskUserAssociation, Long> 
     @Query(value = "SELECT * FROM taskuserbridge WHERE taskidfk = ?1 AND useridfk = ?2 AND DATE_ADD(applieddatetime, INTERVAL 1 HOUR) >= ?3 order by taskuserid desc limit 1", nativeQuery = true)
     Optional<TaskUserAssociation> findByTaskidfkAndUseridfkDateTime(Long taskidfk, Long useridfk, Timestamp comparetime);
 
+    @Query(value = "SELECT * FROM taskuserbridge WHERE taskidfk = ?1 AND useridfk = ?2 AND DATE_ADD(applieddatetime, INTERVAL ?4 HOUR) >= ?3 order by taskuserid desc limit 1", nativeQuery = true)
+    Optional<TaskUserAssociation> findByTaskidfkAndUseridfkDateTimeDuration(Long taskidfk, Long useridfk, Timestamp comparetime, Integer duration);
+
     @Query(value = "SELECT * FROM taskuserbridge WHERE taskidfk = ?1 AND useridfk = ?2 AND DATE_ADD(applieddatetime, INTERVAL 168 HOUR) >= ?3 order by taskuserid desc limit 1", nativeQuery = true)
     Optional<TaskUserAssociation> findByTaskidfkAndUseridfkDateTimeWeek(Long taskidfk, Long useridfk, Timestamp comparetime);
 

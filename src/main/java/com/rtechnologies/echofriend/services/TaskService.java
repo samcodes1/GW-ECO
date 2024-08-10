@@ -249,7 +249,21 @@ public class TaskService {
             TasksResponse response = new TasksResponse();
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             return response;
-        }else{
+        }else if(task.get().getTaskduration()!=null){
+            System.out.println(Utility.getcurrentTimeStamp());
+            Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTimeDuration(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp(),task.get().getTaskduration());
+            if(voucherapplieddata.isPresent()){
+                throw new OperationNotAllowedException("task already applied");
+            }
+    
+            userTaskObj.setIscomplete(false);
+            userTaskObj.setApplieddatetime(Utility.getcurrentTimeStamp());
+            taskUserRepoObj.save(userTaskObj);
+            TasksResponse response = new TasksResponse();
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
+        }
+        else{
             System.out.println(Utility.getcurrentTimeStamp());
             Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
             if(voucherapplieddata.isPresent()){
