@@ -28,4 +28,5 @@ public interface  TaskUserProjection {
     public String getQrcode();
     public Integer getTotalsteps();
     public String getApplieddatetime();
+    public Integer getTaskduration();
 }
