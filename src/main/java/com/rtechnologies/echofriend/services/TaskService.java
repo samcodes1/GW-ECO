@@ -511,8 +511,8 @@ public class TaskService {
         // return response;
     }
 
-    public TasksResponse getTaskStatusService(Long taskid){
-        TaskUserProjection dbres = taskUserRepoObj.taskstatus(taskid);
+    public TasksResponse getTaskStatusService(Long taskid, Long userid){
+        List<TaskUserProjection> dbres = taskUserRepoObj.taskstatus(taskid, userid);
         TasksResponse response = new TasksResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(dbres==null?new HashMap<>():dbres);

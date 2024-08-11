@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public interface TaskUserProjection {
+public interface  TaskUserProjection {
     public Long getTaskuserid();
     public Long getUserid();
     public Long getTaskidfk();
@@ -27,4 +27,5 @@ public interface TaskUserProjection {
     public String getTaskcategory();
     public String getQrcode();
     public Integer getTotalsteps();
+    public String getApplieddatetime();
 }

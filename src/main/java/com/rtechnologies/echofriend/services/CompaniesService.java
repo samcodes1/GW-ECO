@@ -48,10 +48,21 @@ public class CompaniesService {
         if(companydata.isPresent()){
             throw new RecordAlreadyExistsException("Record already exists in the database.");
         }
+        String profilePicUrl = "";
+        if(companiesRequestObj.getCompanylogo()!=null){
+            try {
+                String folder = "company-logo-pics"; // Change this to your preferred folder name
+                String publicId = folder + "/" + companiesRequestObj.getCompanylogo().getName();
+                Map data = cloudinary.uploader().upload(companiesRequestObj.getCompanylogo().getBytes(), ObjectUtils.asMap("public_id", publicId));
+                profilePicUrl = data.get("secure_url").toString();
+            } catch (IOException ioException) {
+                throw new RuntimeException("File uploading failed");
+            }
+        }
         companiesRepoObj.save(new CompaniesEntity(
             null, companiesRequestObj.getCompanyName(), companiesRequestObj.getSubscriptionType(), 
             companiesRequestObj.getProducts(), companiesRequestObj.getSubscriptionExpiry(), Utility.getcurrentDate(), 
-            companiesRequestObj.getRole(), companiesRequestObj.getCompanyEmail(), "",-1l,"", Utility.hashPassword(companiesRequestObj.getPassword())
+            companiesRequestObj.getRole(), companiesRequestObj.getCompanyEmail(), profilePicUrl,-1l,"", Utility.hashPassword(companiesRequestObj.getPassword())
         ));
         CompaniesResponse response = new CompaniesResponse();
         // response.setResponseCode(AppConstants.SUCCESS);
