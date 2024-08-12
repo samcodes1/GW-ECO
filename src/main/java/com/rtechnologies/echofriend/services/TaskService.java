@@ -262,6 +262,19 @@ public class TaskService {
             TasksResponse response = new TasksResponse();
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             return response;
+        }if(task.get().getTasktype().equalsIgnoreCase("Pedometer")){
+            System.out.println(Utility.getcurrentTimeStamp());
+            // Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkSteps(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk());
+            // if(voucherapplieddata.isPresent()){
+            //     throw new OperationNotAllowedException("task already applied");
+            // }
+    
+            userTaskObj.setIscomplete(false);
+            userTaskObj.setApplieddatetime(Utility.getcurrentTimeStamp());
+            taskUserRepoObj.save(userTaskObj);
+            TasksResponse response = new TasksResponse();
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
         }
         else{
             System.out.println(Utility.getcurrentTimeStamp());
@@ -291,7 +304,11 @@ public class TaskService {
 
         if(task.get().getTasktype().contains("qr") && task.get().getTasktype().contains("recycle")){
             voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTimeWeek(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
-        }else{
+        }
+        else if(task.get().getTasktype().equalsIgnoreCase("Pedometer")){
+            voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk());
+        }
+        else{
             voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
         }
 
