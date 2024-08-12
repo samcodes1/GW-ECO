@@ -23,4 +23,5 @@ public class AdminUserUpdate {
     private String role;
     @Enumerated(EnumType.STRING) 
     private Membershiptype membership;
+    private Integer points;
 }

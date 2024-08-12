@@ -291,6 +291,11 @@ public class UserService {
         user.setMemebershipexpiry(
             updateReq.getExpiryUpdate()==null?user.getMemebershipexpiry():updateReq.getExpiryUpdate()
         );
+
+        user.setPoints(
+            updateReq.getPoints()==null?user.getPoints():updateReq.getPoints()
+        );
+
         userRepoObj.save(user);
         UserResponse response = new UserResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
