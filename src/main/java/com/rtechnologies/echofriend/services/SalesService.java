@@ -55,6 +55,21 @@ public class SalesService {
 
     @Transactional
     public SaleResponse placeOrder(SaleRequest saleRequestObj){
+
+        Optional<UserEntity> user = userRepoObj.findById(saleRequestObj.getUserid());
+        if(!user.isPresent()){
+            throw new OperationNotAllowedException("User Does not exists "+ saleRequestObj.getUserid());
+        }
+        UserEntity userEntity = user.get();
+        if(userEntity.getPoints() < saleRequestObj.getTotal()){
+            throw new OperationNotAllowedException("User Does not have Enough Points "+userEntity.getUserid());
+        }
+
+
+        userEntity.setPoints(
+            userEntity.getPoints() - saleRequestObj.getTotal().intValue()
+        );
+
         SalesEntity salesEntity = new SalesEntity(
             null, saleRequestObj.getUserid(), Utility.getcurrentDate(), Utility.getcurrentTimeStamp(),saleRequestObj.getAddress(),"pending"
         );
@@ -105,7 +120,7 @@ public class SalesService {
             uservoucher.setIsused(true);
             voucherUserRepoObj.save(uservoucher);
         }
-        
+        userRepoObj.save(userEntity);
         SaleResponse response = new SaleResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(salesEntity);
