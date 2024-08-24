@@ -76,7 +76,7 @@ public class DashboardService {
         DashboardResponse response = new DashboardResponse();
         Map<String, Object> dashboarddata = new HashMap<>();
         dashboarddata.put("pointsearned", userRepoObj.findById(id).get().getPoints());
-        dashboarddata.put("pointsredeemed", userRepoObj.sumAllPoints());
+        dashboarddata.put("pointsredeemed", userRepoObj.sumAllPoints());// TODO: where clause fix here
         dashboarddata.put("totaltaskscompleted", taskUserRepoObj.countByIscompleteTrueWhereUserid(id));
         dashboarddata.put("voucherslist", voucherUserRepoObj.countUnusedVoucher(id));
         response.setData(dashboarddata);

@@ -210,7 +210,7 @@ public class VoucherService {
 
         List<VoucherProjection> voucherlist = VoucherRepoObj.getVouchernotUsed(voucherid, useremail.get().getUserid());
         if(voucherlist==null || voucherlist.isEmpty()){
-            throw new RecordNotFoundException("Voucher Not Found");
+            throw new RecordNotFoundException("The user has not applied this voucher.");
         }
         VoucherUserAssociation voucheruserid = voucherUserRepoObj.findById(voucherlist.get(0).getVoucheruserid()).get();
 

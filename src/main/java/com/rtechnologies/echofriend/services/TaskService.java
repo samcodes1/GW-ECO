@@ -236,20 +236,21 @@ public class TaskService {
         if(!task.isPresent()){
             throw new OperationNotAllowedException("task not present");
         }
-        if(task.get().getTasktype().contains("qr") && task.get().getTasktype().contains("recycle")){
-            System.out.println(Utility.getcurrentTimeStamp());
-            Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTimeWeek(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
-            if(voucherapplieddata.isPresent()){
-                throw new OperationNotAllowedException("task already applied");
-            }
+        // if(task.get().getTasktype().contains("qr") && task.get().getTasktype().contains("recycle")){
+        //     System.out.println(Utility.getcurrentTimeStamp());
+        //     Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTimeWeek(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
+        //     if(voucherapplieddata.isPresent()){
+        //         throw new OperationNotAllowedException("task already applied");
+        //     }
     
-            userTaskObj.setIscomplete(false);
-            userTaskObj.setApplieddatetime(Utility.getcurrentTimeStamp());
-            taskUserRepoObj.save(userTaskObj);
-            TasksResponse response = new TasksResponse();
-            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
-            return response;
-        }else if(task.get().getTaskduration()!=null){
+        //     userTaskObj.setIscomplete(false);
+        //     userTaskObj.setApplieddatetime(Utility.getcurrentTimeStamp());
+        //     taskUserRepoObj.save(userTaskObj);
+        //     TasksResponse response = new TasksResponse();
+        //     response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        //     return response;
+        // }else 
+        if(task.get().getTaskduration()!=null){
             System.out.println(Utility.getcurrentTimeStamp());
             Optional<TaskUserAssociation> voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTimeDuration(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp(),task.get().getTaskduration());
             if(voucherapplieddata.isPresent()){
