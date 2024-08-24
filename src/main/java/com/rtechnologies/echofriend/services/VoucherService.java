@@ -100,7 +100,7 @@ public class VoucherService {
         return response;
     }
 
-    public VoucherResponse getVoucherService(Long voucherid){
+    public VoucherResponse getVoucherService(Long voucherid, String listFlag){
         VoucherResponse response = new VoucherResponse();
         if(voucherid==null){
             
@@ -109,7 +109,16 @@ public class VoucherService {
             vocuherstats.put("totalvoucherredeemed", VoucherRepoObj.countredeemed());
             vocuherstats.put("totalvouchercreated", VoucherRepoObj.voucherCreated());
             vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers());
-            vocuherstats.put("voucherslist", VoucherRepoObj.getAllVouchers());
+            if(listFlag==null || listFlag.equals("all")){
+                vocuherstats.put("voucherslist", VoucherRepoObj.getAllVouchers());
+            }else if(listFlag.equals("expired")){
+                vocuherstats.put("voucherslist", VoucherRepoObj.getExpiredVouchers());
+            }else if(listFlag.equals("nonExpired")){
+                vocuherstats.put("voucherslist", VoucherRepoObj.getNonExpiredVouchers());
+            }else{
+                vocuherstats.put("voucherslist", new ArrayList<>());
+            }
+
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             response.setData(vocuherstats);
             return response;
