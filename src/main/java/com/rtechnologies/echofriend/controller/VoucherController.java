@@ -78,9 +78,9 @@ public class VoucherController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
 
-    @GetMapping("/getUsedVoucher")
-    public ResponseEntity<VoucherResponse> getUsedVouchers(@RequestParam(required = false) Long userid) {
-        VoucherResponse response = voucherServiceObj.getUsedVouchers(userid);
+    @GetMapping("/getUsedVoucher/{userId}")
+    public ResponseEntity<VoucherResponse> getUsedVouchers(@PathVariable Long userId) {
+        VoucherResponse response = voucherServiceObj.getUsedVouchers(userId);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
 
