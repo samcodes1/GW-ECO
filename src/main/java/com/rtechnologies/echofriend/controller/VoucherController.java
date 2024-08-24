@@ -77,6 +77,16 @@ public class VoucherController {
         VoucherResponse response = voucherServiceObj.getCompanyVoucherById(voucherid);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
-    
-    
+
+    @GetMapping("/getUsedVoucher")
+    public ResponseEntity<VoucherResponse> getUsedVouchers(@RequestParam(required = false) Long userid) {
+        VoucherResponse response = voucherServiceObj.getUsedVouchers(userid);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
+    }
+
+    @PutMapping("/steVoucherUsed/{voucherid}/{email}")
+    public ResponseEntity<VoucherResponse> putMethodName(@PathVariable Long voucherid, @PathVariable String email) {
+        VoucherResponse response = voucherServiceObj.updateVoucherToUsed(voucherid, email);
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
+    }
 }

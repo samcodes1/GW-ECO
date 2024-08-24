@@ -17,19 +17,29 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.google.zxing.BarcodeFormat;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
+import com.rtechnologies.echofriend.entities.user.UserEntity;
 import com.rtechnologies.echofriend.entities.voucher.VoucherEntity;
 import com.rtechnologies.echofriend.entities.voucher.VoucherProjection;
+import com.rtechnologies.echofriend.entities.voucher.VoucherUserAssociation;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.voucher.request.VoucherRequest;
 import com.rtechnologies.echofriend.models.voucher.response.VoucherResponse;
 import com.rtechnologies.echofriend.repositories.user.UserHistoryRepo;
+import com.rtechnologies.echofriend.repositories.user.UserRepo;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherRepo;
+import com.rtechnologies.echofriend.repositories.voucher.VoucherUserRepo;
 import com.rtechnologies.echofriend.utility.Utility;
 
 @Service
 public class VoucherService {
     @Autowired
     VoucherRepo VoucherRepoObj;
+
+    @Autowired
+    UserRepo userRepoObj; 
+
+    @Autowired
+    VoucherUserRepo voucherUserRepoObj;
 
     @Autowired
     private Cloudinary cloudinary;
@@ -165,6 +175,37 @@ public class VoucherService {
         // vocuherstats.put("companyvouchers", );
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(VoucherRepoObj.getCompanyVouchers(id));
+        return response;
+    }
+
+    public VoucherResponse getUsedVouchers(Long userid){
+        VoucherResponse response = new VoucherResponse();
+        // vocuherstats.put("companyvouchers", );
+        if(userid==null){
+            response.setData(VoucherRepoObj.getUsedVoucher());
+        }else{
+            response.setData(VoucherRepoObj.getUsedVoucherAgainstUser(userid));
+        }
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+        return response;
+    }
+
+    public VoucherResponse updateVoucherToUsed(Long voucherid, String email){
+        VoucherResponse response = new VoucherResponse();
+        Optional<UserEntity> useremail = userRepoObj.findByEmail(email);
+        if(!useremail.isPresent()){
+            throw new RecordNotFoundException("User Not Found");
+        }
+
+        List<VoucherProjection> voucherlist = VoucherRepoObj.getVouchernotUsed(voucherid, useremail.get().getUserid());
+        if(voucherlist==null || voucherlist.isEmpty()){
+            throw new RecordNotFoundException("Voucher Not Found");
+        }
+        VoucherUserAssociation voucheruserid = voucherUserRepoObj.findById(voucherlist.get(0).getVoucheruserid()).get();
+
+        voucheruserid.setIsused(true);
+        voucherUserRepoObj.save(voucheruserid);
+        response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
 }

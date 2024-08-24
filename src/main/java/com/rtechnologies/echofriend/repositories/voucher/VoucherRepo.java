@@ -44,4 +44,13 @@ public interface VoucherRepo extends CrudRepository<VoucherEntity, Long> {
     
     @Query(value = "SELECT v.shopidfk,v.usedstatus,v.voucherbarcode,v.voucherid,v.isdiscountpercentage,v.voucherpointscost,v.discountpercentage,v.voucherexpiry,v.vocuhercreatedat,v.description,v.name,c.companyid,c.companyname,c.subscriptionexpiry,c.subscriptiontype,c.company_email,c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk where v.voucherid=?1", nativeQuery = true)
     VoucherProjection getCompanyVouchersByid(Long voucherid);
+
+    @Query(value = "select * from voucher v inner join voucheruserbridge vub on vub.voucheridfk=v.voucherid where v.voucherid in (select DISTINCT(vub.voucheridfk) from voucheruserbridge where vub.isused=1)", nativeQuery = true)
+    List<VoucherProjection> getUsedVoucher(); 
+
+    @Query(value = "select * from voucher v inner join voucheruserbridge vub on vub.voucheridfk=v.voucherid where v.voucherid in (select DISTINCT(vub.voucheridfk) from voucheruserbridge where vub.isused=1 and vub.useridfk=?1)", nativeQuery = true)
+    List<VoucherProjection> getUsedVoucherAgainstUser(Long userid); 
+
+    @Query(value = "select * from voucher v inner join voucheruserbridge vub on vub.voucheridfk=v.voucherid where vub.useridfk=?2 and vub.voucheridfk=?1 and (vub.voucheruserexpry < NOW() or vub.isused !=1)", nativeQuery = true)
+    List<VoucherProjection> getVouchernotUsed(Long voucherid, Long userid); 
 }
