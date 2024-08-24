@@ -84,7 +84,7 @@ public class VoucherController {
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
 
-    @PutMapping("/steVoucherUsed/{voucherid}/{email}")
+    @PutMapping("/setVoucherUsed/{voucherid}/{email}")
     public ResponseEntity<VoucherResponse> putMethodName(@PathVariable Long voucherid, @PathVariable String email) {
         VoucherResponse response = voucherServiceObj.updateVoucherToUsed(voucherid, email);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
