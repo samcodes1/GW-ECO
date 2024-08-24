@@ -181,10 +181,21 @@ public class VoucherService {
     public VoucherResponse getUsedVouchers(Long userid){
         VoucherResponse response = new VoucherResponse();
         // vocuherstats.put("companyvouchers", );
+        
         if(userid==null){
-            response.setData(VoucherRepoObj.getUsedVoucher());
+            List<VoucherProjection> dbres = VoucherRepoObj.getUsedVoucher();
+            if(dbres==null || dbres.isEmpty()){
+                throw new RecordNotFoundException("Voucher Not Found");
+            }else{
+                response.setData(dbres);
+            }
         }else{
-            response.setData(VoucherRepoObj.getUsedVoucherAgainstUser(userid));
+            List<VoucherProjection> dbres = VoucherRepoObj.getUsedVoucherAgainstUser(userid);
+            if(dbres==null || dbres.isEmpty()){
+                throw new RecordNotFoundException("Voucher Not Found");
+            }else{
+                response.setData(dbres);
+            }
         }
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
