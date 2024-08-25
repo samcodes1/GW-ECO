@@ -18,4 +18,7 @@ public interface VoucherUserRepo extends CrudRepository<VoucherUserAssociation, 
 
     @Query(value = "select COUNT(voucheruserid) from voucheruserbridge where isused=false and useridfk=?1", nativeQuery = true)
     Integer countUnusedVoucher(Long id);
+
+    @Query(value = "select COUNT(voucheruserid) from voucheruserbridge where isused=true and useridfk=?1", nativeQuery = true)
+    Integer countUsedVoucher(Long id);
 }

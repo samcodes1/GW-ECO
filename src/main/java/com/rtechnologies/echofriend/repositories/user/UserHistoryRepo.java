@@ -26,4 +26,8 @@ public interface UserHistoryRepo extends CrudRepository<UserPointsHistory, Long>
     nativeQuery = true)
     List<TaskUserProjection> recenttaskscompleted(Long userid);
 
+    @Query(value = "select * from userhistory where useridfk=?1",
+    nativeQuery = true)
+    UserPointsHistory userhistory(Long userid);
+
 }

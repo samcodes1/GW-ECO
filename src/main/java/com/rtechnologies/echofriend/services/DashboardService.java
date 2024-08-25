@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rtechnologies.echofriend.appconsts.AppConstants;
+import com.rtechnologies.echofriend.entities.user.UserPointsHistory;
 import com.rtechnologies.echofriend.models.dashboard.DashboardResponse;
 import com.rtechnologies.echofriend.repositories.companies.CompaniesRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskCategoryRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskRepo;
 import com.rtechnologies.echofriend.repositories.tasks.TaskUserRepo;
+import com.rtechnologies.echofriend.repositories.user.UserHistoryRepo;
 import com.rtechnologies.echofriend.repositories.user.UserRepo;
 import com.rtechnologies.echofriend.repositories.voucher.VoucherUserRepo;
 
@@ -42,6 +44,9 @@ public class DashboardService {
     TaskRepo taskRepoObj;
     @Autowired
     TaskCategoryRepo taskCategoryRepoObj;
+
+    @Autowired
+    UserHistoryRepo userHistoryRepoObj;
 
     public DashboardResponse getDashboarddata(){
         DashboardResponse response = new DashboardResponse();
@@ -75,9 +80,11 @@ public class DashboardService {
     public DashboardResponse getDashboarddataUser(Long id){
         DashboardResponse response = new DashboardResponse();
         Map<String, Object> dashboarddata = new HashMap<>();
+        UserPointsHistory userhist = userHistoryRepoObj.userhistory(id);
         dashboarddata.put("pointsearned", userRepoObj.findById(id).get().getPoints());
-        dashboarddata.put("pointsredeemed", userRepoObj.sumAllPoints());// TODO: where clause fix here
+        dashboarddata.put("pointsredeemed", userhist.getTotalpointsredeemed());//userRepoObj.sumAllPoints());// TODO: where clause fix here
         dashboarddata.put("totaltaskscompleted", taskUserRepoObj.countByIscompleteTrueWhereUserid(id));
+        dashboarddata.put("usedvouchers", voucherUserRepoObj.countUsedVoucher(id));
         dashboarddata.put("voucherslist", voucherUserRepoObj.countUnusedVoucher(id));
         response.setData(dashboarddata);
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
