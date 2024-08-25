@@ -169,7 +169,7 @@ public class VoucherService {
     public VoucherResponse getCompanyVouchers(Long id, String filterFlag){
         VoucherResponse response = new VoucherResponse();
         Map<String, Object> vocuherstats = new HashMap<>();
-        vocuherstats.put("runningvouchers", VoucherRepoObj.countVoucherRedeemedToday(id));
+        vocuherstats.put("runningvouchers", VoucherRepoObj.countNonexpiredVouchers(id));//VoucherRepoObj.countVoucherRedeemedToday(id));
         vocuherstats.put("totalvoucherredeemed", VoucherRepoObj.countredeemed(id));
         vocuherstats.put("totalvouchercreated", VoucherRepoObj.voucherCreated(id));
         vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers(id));

@@ -47,6 +47,10 @@ public interface VoucherRepo extends CrudRepository<VoucherEntity, Long> {
 
     @Query(value = "SELECT count(*) FROM voucher WHERE voucherexpiry < CURDATE() and shopidfk=?1", nativeQuery = true)
     Integer countexpiredVouchers(Long companyid);
+
+    @Query(value = "SELECT count(*) FROM voucher WHERE voucherexpiry > CURDATE() and shopidfk=?1", nativeQuery = true)
+    Integer countNonexpiredVouchers(Long companyid);
+
     // commnet added
     @Query(value = "SELECT v.shopidfk,v.usedstatus,v.voucherbarcode,v.voucherid,v.isdiscountpercentage,v.voucherpointscost,v.discountpercentage,v.voucherexpiry,v.vocuhercreatedat,v.description,v.name,c.companyid,c.companyname,c.subscriptionexpiry,c.subscriptiontype,c.company_email,c.companylogo from voucher v inner join companies c on c.companyid=v.shopidfk where c.companyid=?1", nativeQuery = true)
     List<VoucherProjection> getCompanyVouchers(Long companyid); 

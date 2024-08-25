@@ -303,9 +303,9 @@ public class TaskService {
             throw new OperationNotAllowedException("task not present");
         }
 
-        if(task.get().getTasktype().contains("qr") && task.get().getTasktype().contains("recycle")){
-            voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTimeWeek(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
-        }
+        // if(task.get().getTasktype().contains("qr") && task.get().getTasktype().contains("recycle")){
+        //     voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTimeWeek(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk(), Utility.getcurrentTimeStamp());
+        // }
         else if(task.get().getTasktype().equalsIgnoreCase("Pedometer")){
             voucherapplieddata = taskUserRepoObj.findByTaskidfkAndUseridfkDateTime(userTaskObj.getTaskidfk(), userTaskObj.getUseridfk());
         }
