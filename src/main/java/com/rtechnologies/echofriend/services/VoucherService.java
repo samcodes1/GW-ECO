@@ -105,7 +105,7 @@ public class VoucherService {
         if(voucherid==null){
             
             Map<String, Object> vocuherstats = new HashMap<>();
-            vocuherstats.put("runningvouchers", VoucherRepoObj.countVoucherRedeemedToday());
+            vocuherstats.put("runningvouchers", VoucherRepoObj.countNonexpiredVouchers());
             vocuherstats.put("totalvoucherredeemed", VoucherRepoObj.countredeemed());
             vocuherstats.put("totalvouchercreated", VoucherRepoObj.voucherCreated());
             vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers());
@@ -166,14 +166,24 @@ public class VoucherService {
         return response;
     }
 
-    public VoucherResponse getCompanyVouchers(Long id){
+    public VoucherResponse getCompanyVouchers(Long id, String filterFlag){
         VoucherResponse response = new VoucherResponse();
         Map<String, Object> vocuherstats = new HashMap<>();
         vocuherstats.put("runningvouchers", VoucherRepoObj.countVoucherRedeemedToday(id));
         vocuherstats.put("totalvoucherredeemed", VoucherRepoObj.countredeemed(id));
         vocuherstats.put("totalvouchercreated", VoucherRepoObj.voucherCreated(id));
         vocuherstats.put("expiredvoucher", VoucherRepoObj.countexpiredVouchers(id));
-        vocuherstats.put("companyvouchers", VoucherRepoObj.getCompanyVouchers(id));
+
+        if(filterFlag==null || filterFlag.equals("all")){
+            vocuherstats.put("companyvouchers", VoucherRepoObj.getCompanyVouchers(id));
+        }else if(filterFlag.equals("expired")){
+            vocuherstats.put("voucherslist", VoucherRepoObj.getCompanyExpiredVouchers(id));
+        }else if(filterFlag.equals("nonExpired")){
+            vocuherstats.put("voucherslist", VoucherRepoObj.getCompanyNonExpiredVouchers(id));
+        }else{
+            vocuherstats.put("voucherslist", new ArrayList<>());
+        }
+        
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(vocuherstats);
         return response;

@@ -67,8 +67,8 @@ public class VoucherController {
     }
 
     @GetMapping("/getCompanyVouchers")
-    public ResponseEntity<VoucherResponse> getCompanyVouchers(@RequestParam(required = false) Long companyid) {
-        VoucherResponse response = voucherServiceObj.getCompanyVouchers(companyid);
+    public ResponseEntity<VoucherResponse> getCompanyVouchers(@RequestParam(required = false) Long companyid, @RequestParam(required = false) String filterFlag) {
+        VoucherResponse response = voucherServiceObj.getCompanyVouchers(companyid, filterFlag);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
 
