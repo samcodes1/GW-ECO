@@ -107,7 +107,7 @@ public class ProductsService {
         updateRecord.setProductdescription(
             productsRequestObj.getProductdescription()==null?updateRecord.getProductdescription():productsRequestObj.getProductdescription()
         );
-
+        productsRepoObj.save(updateRecord);
         ProductsResponse response = new ProductsResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
