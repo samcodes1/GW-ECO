@@ -17,7 +17,7 @@ public class VoucherRequest {
     private String usedstatus;
     private Integer voucherpointscost;
     private Float discountpercentage;
-    private boolean isdiscountpercentage;
+    private Boolean isdiscountpercentage;
     private String voucherexpiry;
     private String name;
     private String description;

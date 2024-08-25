@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -103,10 +104,21 @@ public class ProductsService {
         updateRecord.setProductquantity(
             productsRequestObj.getProductQuantity()==null ? updateRecord.getProductquantity() : productsRequestObj.getProductQuantity()
         );
-
+        updateRecord.setCategoryidfk(
+            productsRequestObj.getCategoryidfk()==null?updateRecord.getCategoryidfk():productsRequestObj.getCategoryidfk()
+        );
         updateRecord.setProductdescription(
             productsRequestObj.getProductdescription()==null?updateRecord.getProductdescription():productsRequestObj.getProductdescription()
         );
+        updateRecord.setProducttypeidfk(
+            productsRequestObj.getProducttypeidfk()==null?updateRecord.getProducttypeidfk():productsRequestObj.getProducttypeidfk()
+        );
+
+        if(productsRequestObj.getProductOfCompany()!=null && !productsRequestObj.getProductOfCompany().isEmpty()){
+            CompaniesEntity company = companiesRepoObj.findCompanyIdByName(productsRequestObj.getProductOfCompany());
+            updateRecord.setCompanyidfk(company.getCompanyid());
+        }
+
         productsRepoObj.save(updateRecord);
         ProductsResponse response = new ProductsResponse();
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
