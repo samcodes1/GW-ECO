@@ -1,14 +1,18 @@
 package com.rtechnologies.echofriend.services;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.banner.BannerEntity;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
@@ -27,19 +31,34 @@ public class BannerService {
     @Autowired
     CompaniesRepo companiesRepoObj;
 
-    public BannerResponse addBannerServiceMethod(@RequestBody BannerRequest bannerRequestObj) throws ParseException{
+    @Autowired
+    private Cloudinary cloudinary;
+
+    public BannerResponse addBannerServiceMethod(BannerRequest bannerRequestObj) throws ParseException{
         BannerResponse response = new BannerResponse();
-        CompaniesEntity companiesdata = companiesRepoObj.findCompanyIdByName(bannerRequestObj.getCompanyBanner());
-        if(companiesdata == null){
+        Optional<CompaniesEntity> companiesdata = companiesRepoObj.findById(bannerRequestObj.getCompanyBanner());
+        if(!companiesdata.isPresent()){
             // response.setResponseCode(AppConstants.RECORD_DOES_NOT_EXISTS);
             response.setResponseMessage(AppConstants.COMPANY_DOES_NOT_EXISTS);
             throw new RecordNotFoundException("Record with compnay '" + bannerRequestObj.getCompanyBanner() + "' does not exist.");
             
         }
 
+        String profilePicUrl = "";
+        if(bannerRequestObj.getBannerImage()!=null){
+            try {
+                String folder = "company-banner-pics"; // Change this to your preferred folder name
+                String publicId = folder + "/" + bannerRequestObj.getBannerImage().getName();
+                Map data = cloudinary.uploader().upload(bannerRequestObj.getBannerImage().getBytes(), ObjectUtils.asMap("public_id", publicId));
+                profilePicUrl = data.get("secure_url").toString();
+            } catch (IOException ioException) {
+                throw new RuntimeException("File uploading failed");
+            }
+        }
+
         bannerRepoObj.save(new BannerEntity(
-            null, bannerRequestObj.getBannerName(), bannerRequestObj.getBannerImage(), 
-            Utility.convertISOToTimestamp(bannerRequestObj.getBannerExpiry()), companiesdata.getCompanyid()
+            null, bannerRequestObj.getBannerName(), profilePicUrl, 
+            Utility.convertISOToTimestamp(bannerRequestObj.getBannerExpiry()), companiesdata.get().getCompanyid()
         ));
         
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -77,14 +96,27 @@ public class BannerService {
         if(!bannerData.isPresent()){
             throw new RecordNotFoundException("Record of bannerId '" + bannerId + "' does not exist.");
         }
+
+        String profilePicUrl = "";
+        if(bannerUpdateRequestObj.getBannerImage()!=null){
+            try {
+                String folder = "company-banner-pics"; // Change this to your preferred folder name
+                String publicId = folder + "/" + bannerUpdateRequestObj.getBannerImage().getName();
+                Map data = cloudinary.uploader().upload(bannerUpdateRequestObj.getBannerImage().getBytes(), ObjectUtils.asMap("public_id", publicId));
+                profilePicUrl = data.get("secure_url").toString();
+            } catch (IOException ioException) {
+                throw new RuntimeException("File uploading failed");
+            }
+        }
+
         BannerEntity bannerEntity = bannerData.get();
         bannerEntity.setBannerexpiry(
             (bannerUpdateRequestObj.getBannerExpiry()==null || bannerUpdateRequestObj.getBannerExpiry().isEmpty())?
             bannerEntity.getBannerexpiry():Utility.convertISOToTimestamp(bannerUpdateRequestObj.getBannerExpiry())
         );
         bannerEntity.setBannerimage(
-            bannerUpdateRequestObj.getBannerImage()==null || bannerUpdateRequestObj.getBannerImage().isEmpty()?
-            bannerEntity.getBannerimage() :bannerUpdateRequestObj.getBannerImage()
+            profilePicUrl==null || profilePicUrl.isEmpty()?
+            bannerEntity.getBannerimage() :profilePicUrl
         );
         bannerEntity.setBannername(
             (bannerUpdateRequestObj.getBannerName()==null || bannerUpdateRequestObj.getBannerName().isEmpty())?

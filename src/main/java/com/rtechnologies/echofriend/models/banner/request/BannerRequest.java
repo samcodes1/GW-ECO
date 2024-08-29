@@ -1,5 +1,7 @@
 package com.rtechnologies.echofriend.models.banner.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class BannerRequest {
     private String bannerName;
-    private String bannerImage;
+    private MultipartFile bannerImage;
     private String bannerExpiry;
-    private String companyBanner;
+    private Long companyBanner;
 }

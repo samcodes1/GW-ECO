@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -44,7 +45,7 @@ public class BannerController {
         }
     )
     @PostMapping("/addBanner")
-    public ResponseEntity<BannerResponse> addBanner(@RequestBody BannerRequest bannerRequestObj) throws ParseException {
+    public ResponseEntity<BannerResponse> addBanner(@ModelAttribute BannerRequest bannerRequestObj) throws ParseException {
         BannerResponse response = bannerServiceObj.addBannerServiceMethod(bannerRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
         200:500).body(response);
@@ -58,7 +59,7 @@ public class BannerController {
         }
     )
     @PutMapping("/updateBannerExpiry/{bannerId}")
-    public ResponseEntity<BannerResponse> putMethodName(@PathVariable Long bannerId, @RequestBody BannerRequest bannerUpdateRequestObj) throws ParseException {
+    public ResponseEntity<BannerResponse> putMethodName(@PathVariable Long bannerId, @ModelAttribute BannerRequest bannerUpdateRequestObj) throws ParseException {
         
         BannerResponse response = bannerServiceObj.updateBannerExpiryServiceMethod(bannerId, bannerUpdateRequestObj);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
@@ -66,7 +67,7 @@ public class BannerController {
     }
 
     @PutMapping("/updateBanner/{bannerId}")
-    public ResponseEntity<BannerResponse> updateBanner(@PathVariable Long bannerId, @RequestBody BannerRequest bannerUpdateRequest) throws ParseException {
+    public ResponseEntity<BannerResponse> updateBanner(@PathVariable Long bannerId, @ModelAttribute BannerRequest bannerUpdateRequest) throws ParseException {
         //TODO: process PUT request
         BannerResponse response = bannerServiceObj.updateBannerServiceMethod(bannerId, bannerUpdateRequest);
         return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?

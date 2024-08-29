@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,7 +49,9 @@ public class ProductsService {
         if(productsRequestObj.getImagefile() !=null){
             try {
                 String folder = "product-logo-pics"; // Change this to your preferred folder name
-                String publicId = folder + "/" + productsRequestObj.getImagefile().getName();
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + productsRequestObj.getImagefile().getName();
+
+                String publicId = folder + "/" + uniqueFileName;
                 Map data = cloudinary.uploader().upload(productsRequestObj.getImagefile().getBytes(), ObjectUtils.asMap("public_id", publicId));
                 profilePicUrl = data.get("secure_url").toString();
             } catch (IOException ioException) {
@@ -84,7 +88,11 @@ public class ProductsService {
         if(productsRequestObj.getImagefile() !=null){
             try {
                 String folder = "product-logo-pics"; // Change this to your preferred folder name
-                String publicId = folder + "/" + productsRequestObj.getImagefile().getName();
+
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + productsRequestObj.getImagefile().getName();
+
+                String publicId = folder + "/" + uniqueFileName;
+                System.out.println("file name:> "+publicId);
                 Map data = cloudinary.uploader().upload(productsRequestObj.getImagefile().getBytes(), ObjectUtils.asMap("public_id", publicId));
                 profilePicUrl = data.get("secure_url").toString();
             } catch (IOException ioException) {

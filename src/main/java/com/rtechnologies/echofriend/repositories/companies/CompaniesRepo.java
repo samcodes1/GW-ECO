@@ -14,8 +14,8 @@ public interface CompaniesRepo extends JpaRepository<CompaniesEntity, Long> {
     @Query("SELECT a FROM companies a WHERE a.companyname = :companyName")
     public CompaniesEntity findCompanyIdByName(@Param("companyName") String companyName);  
 
-    @Query("SELECT a FROM companies a INNER JOIN banner b ON a.companyid=b.companyidfk WHERE a.companyname = :companyName AND b.bannerid = :bannerId")
-    public CompaniesEntity findCompanyIdByNameAndBannerId(@Param("companyName") String companyName, Long bannerId);  
+    @Query("SELECT a FROM companies a INNER JOIN banner b ON a.companyid=b.companyidfk WHERE a.companyid = :companyId AND b.bannerid = :bannerId")
+    public CompaniesEntity findCompanyIdByNameAndBannerId(@Param("companyId") Long companyId, Long bannerId);  
    
     @Query("select count(*) from companies")
     long count();
