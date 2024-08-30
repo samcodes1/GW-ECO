@@ -75,7 +75,7 @@ public class ProductsService {
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
-
+//http://gw-eco-production.up.railway.app
     public ProductsResponse updateProduct(Long productId, ProductsRequest productsRequestObj){
         // productsRepoObj.deleteById(productId);
         Optional<ProductsEntity> productData = productsRepoObj.findById(productId);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,10 @@ public class BannerService {
         if(bannerRequestObj.getBannerImage()!=null){
             try {
                 String folder = "company-banner-pics"; // Change this to your preferred folder name
-                String publicId = folder + "/" + bannerRequestObj.getBannerImage().getName();
+
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + bannerRequestObj.getBannerImage().getName();
+
+                String publicId = folder + "/" + uniqueFileName;
                 Map data = cloudinary.uploader().upload(bannerRequestObj.getBannerImage().getBytes(), ObjectUtils.asMap("public_id", publicId));
                 profilePicUrl = data.get("secure_url").toString();
             } catch (IOException ioException) {
@@ -101,7 +105,8 @@ public class BannerService {
         if(bannerUpdateRequestObj.getBannerImage()!=null){
             try {
                 String folder = "company-banner-pics"; // Change this to your preferred folder name
-                String publicId = folder + "/" + bannerUpdateRequestObj.getBannerImage().getName();
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + bannerUpdateRequestObj.getBannerImage().getName();
+                String publicId = folder + "/" + uniqueFileName;
                 Map data = cloudinary.uploader().upload(bannerUpdateRequestObj.getBannerImage().getBytes(), ObjectUtils.asMap("public_id", publicId));
                 profilePicUrl = data.get("secure_url").toString();
             } catch (IOException ioException) {
