@@ -26,6 +26,7 @@ public class CompaniesEntity {
     private Date subscriptionexpiry;
     private Date joindate;
     private String role;
+    @Column(unique = true) // This ensures that the companyEmail field is unique
     private String companyEmail;
     private String companylogo;
     private Long companycategoryfk;
