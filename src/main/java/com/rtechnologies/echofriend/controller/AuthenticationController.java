@@ -168,8 +168,9 @@ public class AuthenticationController {
 
     @PostMapping("/sendotp")
     public ResponseEntity<?> postMethodName(@RequestBody OtpRequest otp) throws MessagingException {
-        customEndUserDetailService.sendotp(otp);
-        return ResponseEntity.ok("OTP SEND");
+        OtpResponse  response = customEndUserDetailService.sendotp(otp);
+        // return ResponseEntity.ok("OTP SEND");
+        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE) ? 200 : 500).body(response);
     }
 
     @PostMapping("/verifyOtp")

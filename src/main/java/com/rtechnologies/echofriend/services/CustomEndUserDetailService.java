@@ -61,6 +61,7 @@ public class CustomEndUserDetailService {
     }
 
     public OtpResponse sendotp(OtpRequest otp) throws MessagingException{
+        OtpResponse response = new OtpResponse();
         try{
             SimpleMailMessage message = new SimpleMailMessage();
             String otpCode = Utility.generateOTP();
@@ -69,12 +70,12 @@ public class CustomEndUserDetailService {
                 throw new NotFoundException("Company not found with email: " + otp.getEmail());
             }
             OtpEntity otpdata = new OtpEntity(
-                null, "1234",false,Utility.getExpiryTimestampOneMinute(),companydata.get().getCompanyid(), Utility.getcurrentTimeStamp(),"company"
+                null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getCompanyid(), Utility.getcurrentTimeStamp(),"company"
             );
             otpRepoObj.save(otpdata);
             System.out.println("SENDING NOW1");
             // MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            message.setFrom("alibangash00123@gmail.com");
+            message.setFrom("greenwavegib@gmail.com");
             System.out.println("SENDING NOW2");
             message.setTo(otp.getEmail());
             System.out.println("SENDING NOW3");
@@ -92,9 +93,11 @@ public class CustomEndUserDetailService {
             // helper.setSubject("OTP for Password reset");
             // helper.setText("Your password reset OTP : "+otpCode+" \n Dont share with anyone.", true);
             // javaMailSender.send(message);
-            return null;
+            response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
+            return response;
         }catch(Exception e){
-            return null;
+            response.setResponseMessage("exception : "+e.toString());
+            return response;
         }
     }
 
@@ -110,11 +113,11 @@ public class CustomEndUserDetailService {
             OtpEntity otpdata = new OtpEntity(
                 null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getUserid(), Utility.getcurrentTimeStamp(),"user"
             );
-            System.out.println("SENDING NOW10000");
+            System.out.println("SENDING NOW10000 OTP+++ = "+otpCode);
             otpRepoObj.save(otpdata);
             System.out.println("SENDING NOW1");
             // MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            message.setFrom("alibangash00123@gmail.com");
+            message.setFrom("greenwavegib@gmail.com");
             System.out.println("SENDING NOW2");
             message.setTo(otp.getEmail());
             System.out.println("SENDING NOW3");
@@ -130,6 +133,7 @@ public class CustomEndUserDetailService {
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             return response;
         }catch(Exception e){
+            System.out.println("EXCEPTION OCCURED: > "+ e.toString());
             response.setResponseMessage("exception : "+e.toString());
             return response;
         }
@@ -159,7 +163,7 @@ public class CustomEndUserDetailService {
     }
 
     public OtpResponse verifyuser(OtpRequest otp) throws MessagingException{
-
+        OtpResponse response = new OtpResponse();
         Optional<UserEntity> companydata = userRepository.findByEmail(otp.getEmail());
         if(!companydata.isPresent()){
             throw new NotFoundException("Company not found with email: " + otp.getEmail());
@@ -168,7 +172,7 @@ public class CustomEndUserDetailService {
         if(otpdata==null){
             throw new NotFoundException("OTP expired");
         }
-        OtpResponse response = new OtpResponse();
+
         if(otpdata.getOtp().equalsIgnoreCase(otp.getOtp())){
             otpdata.setIsused(true);
             otpRepoObj.save(otpdata);
