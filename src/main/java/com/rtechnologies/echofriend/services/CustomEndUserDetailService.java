@@ -63,7 +63,7 @@ public class CustomEndUserDetailService {
 
     public OtpResponse sendotp(OtpRequest otp) throws MessagingException{
         OtpResponse response = new OtpResponse();
-        try{
+        // try{
             SimpleMailMessage message = new SimpleMailMessage();
             String otpCode = Utility.generateOTP();
             Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(otp.getEmail());
@@ -96,15 +96,15 @@ public class CustomEndUserDetailService {
             // javaMailSender.send(message);
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             return response;
-        }catch(Exception e){
-            response.setResponseMessage("exception : "+e.toString());
-            return response;
-        }
+        // }catch(Exception e){
+        //     response.setResponseMessage("exception : "+e.toString());
+        //     return response;
+        // }
     }
 
     public OtpResponse sendotptouser(OtpRequest otp) throws MessagingException{
         OtpResponse response = new OtpResponse();
-        try{
+        // try{
             SimpleMailMessage message = new SimpleMailMessage();
             String otpCode = Utility.generateOTP();
             Optional<UserEntity> companydata = userRepository.findByEmail(otp.getEmail());
@@ -133,11 +133,11 @@ public class CustomEndUserDetailService {
             System.out.println("send....................");
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             return response;
-        }catch(Exception e){
-            System.out.println("EXCEPTION OCCURED: > "+ e.toString());
-            response.setResponseMessage("exception : "+e.toString());
-            return response;
-        }
+        // }catch(Exception e){
+        //     System.out.println("EXCEPTION OCCURED: > "+ e.toString());
+        //     response.setResponseMessage("exception : "+e.toString());
+        //     return response;
+        // }
     }
 
     public OtpResponse verify(OtpRequest otp) throws MessagingException{

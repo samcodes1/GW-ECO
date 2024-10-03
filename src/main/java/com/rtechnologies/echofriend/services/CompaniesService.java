@@ -16,6 +16,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity.CompaniesEntityBuilder;
+import com.rtechnologies.echofriend.exceptions.OperationNotAllowedException;
 import com.rtechnologies.echofriend.exceptions.RecordAlreadyExistsException;
 import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.companies.request.CompaniesRequest;
@@ -98,6 +99,10 @@ public class CompaniesService {
 
     @Transactional
     public CompaniesResponse updateCompanySubscription(Long companyId, CompaniesRequest companiesUpdateRequestObj) throws NoSuchAlgorithmException{
+        System.out.println(companiesUpdateRequestObj.toString());
+        // if(companiesUpdateRequestObj==null){
+        //     throw new OperationNotAllowedException("No Data Found In Your Request");
+        // }
         Optional<CompaniesEntity> companyObj = companiesRepoObj.findById(companyId);
         CompaniesResponse response = new CompaniesResponse();
         if(!companyObj.isPresent()){
@@ -105,7 +110,6 @@ public class CompaniesService {
             response.setResponseMessage(AppConstants.RECORD_DOES_NOT_EXISTS_MESSAGE);
             // return response;
             throw new RecordNotFoundException("Record with compnayid '" + companyId + "' does not exist.");
-            
         }
 
         String profilePicUrl = "";
