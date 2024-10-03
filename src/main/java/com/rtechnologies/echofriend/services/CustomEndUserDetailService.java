@@ -4,6 +4,7 @@ import com.rtechnologies.echofriend.appconsts.AppConstants;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
 import com.rtechnologies.echofriend.entities.otp.OtpEntity;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
+import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.otp.OtpRequest;
 import com.rtechnologies.echofriend.models.otp.OtpResponse;
 import com.rtechnologies.echofriend.models.security.CustomUserDetails;
@@ -67,7 +68,7 @@ public class CustomEndUserDetailService {
             String otpCode = Utility.generateOTP();
             Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(otp.getEmail());
             if(!companydata.isPresent()){
-                throw new NotFoundException("Company not found with email: " + otp.getEmail());
+                throw new RecordNotFoundException("Company not found with email: " + otp.getEmail());
             }
             OtpEntity otpdata = new OtpEntity(
                 null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getCompanyid(), Utility.getcurrentTimeStamp(),"company"
@@ -108,7 +109,7 @@ public class CustomEndUserDetailService {
             String otpCode = Utility.generateOTP();
             Optional<UserEntity> companydata = userRepository.findByEmail(otp.getEmail());
             if(!companydata.isPresent()){
-                throw new NotFoundException("Company not found with email: " + otp.getEmail());
+                throw new RecordNotFoundException("Company not found with email: " + otp.getEmail());
             }
             OtpEntity otpdata = new OtpEntity(
                 null, otpCode,false,Utility.getExpiryTimestampOneMinute(),companydata.get().getUserid(), Utility.getcurrentTimeStamp(),"user"
@@ -143,11 +144,11 @@ public class CustomEndUserDetailService {
 
         Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(otp.getEmail());
         if(!companydata.isPresent()){
-            throw new NotFoundException("Company not found with email: " + otp.getEmail());
+            throw new RecordNotFoundException("Company not found with email: " + otp.getEmail());
         }
         OtpEntity otpdata = otpRepoObj.otpdata(companydata.get().getCompanyid(), "company");
         if(otpdata==null){
-            throw new NotFoundException("OTP expired");
+            throw new RecordNotFoundException("OTP expired");
         }
         OtpResponse response = new OtpResponse();
         if(otpdata.getOtp().equalsIgnoreCase(otp.getOtp())){
@@ -159,18 +160,18 @@ public class CustomEndUserDetailService {
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             return response;
         }
-        throw new NotFoundException("Otp Failed ");
+        throw new RecordNotFoundException("Otp Failed ");
     }
 
     public OtpResponse verifyuser(OtpRequest otp) throws MessagingException{
         OtpResponse response = new OtpResponse();
         Optional<UserEntity> companydata = userRepository.findByEmail(otp.getEmail());
         if(!companydata.isPresent()){
-            throw new NotFoundException("Company not found with email: " + otp.getEmail());
+            throw new RecordNotFoundException("Company not found with email: " + otp.getEmail());
         }
         OtpEntity otpdata = otpRepoObj.otpdata(companydata.get().getUserid(), "user");
         if(otpdata==null){
-            throw new NotFoundException("OTP expired");
+            throw new RecordNotFoundException("OTP expired");
         }
 
         if(otpdata.getOtp().equalsIgnoreCase(otp.getOtp())){
@@ -179,7 +180,7 @@ public class CustomEndUserDetailService {
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             return response;
         }
-        throw new NotFoundException("Otp Failed ");
+        throw new RecordNotFoundException("Otp Failed ");
     }
 }
 

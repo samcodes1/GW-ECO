@@ -5,6 +5,7 @@ import com.rtechnologies.echofriend.config.JwtConfig;
 import com.rtechnologies.echofriend.entities.admin.AdminEntity;
 import com.rtechnologies.echofriend.entities.companies.CompaniesEntity;
 import com.rtechnologies.echofriend.entities.user.UserEntity;
+import com.rtechnologies.echofriend.exceptions.RecordNotFoundException;
 import com.rtechnologies.echofriend.models.JwtAuthenticationResponse;
 import com.rtechnologies.echofriend.models.LoginRequest;
 import com.rtechnologies.echofriend.models.otp.OtpRequest;
@@ -139,7 +140,7 @@ public class AuthenticationController {
                 .orElseThrow(() -> new NotFoundException("User not found with email: " + loginRequest.getUsernameOrEmail()));
         System.out.println("HASH ==>> "+Utility.hashPassword(loginRequest.getPassword()));
         if (!Utility.compareHashes(Utility.hashPassword(loginRequest.getPassword()), company.getPassword())) {
-            throw new NotFoundException("Incorrect password");
+            throw new RecordNotFoundException("Incorrect password");
         }
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.generateToken(loginRequest, true);
