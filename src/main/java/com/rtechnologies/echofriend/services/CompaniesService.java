@@ -31,7 +31,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class CompaniesService {
-    
+
     @Autowired
     CompaniesRepo companiesRepoObj;
 
@@ -44,13 +44,13 @@ public class CompaniesService {
     @Autowired
     CompanyPaymentRepo companyPaymentRepoObj;
 
-    public CompaniesResponse addCompanyServiceMethod(CompaniesRequest companiesRequestObj) throws NoSuchAlgorithmException{
+    public CompaniesResponse addCompanyServiceMethod(CompaniesRequest companiesRequestObj) throws NoSuchAlgorithmException {
         Optional<CompaniesEntity> companydata = companiesRepoObj.findByCompanyEmail(companiesRequestObj.getCompanyEmail());
-        if(companydata.isPresent()){
+        if (companydata.isPresent()) {
             throw new RecordAlreadyExistsException("Record already exists in the database.");
         }
         String profilePicUrl = "";
-        if(companiesRequestObj.getCompanylogo()!=null){
+        if (companiesRequestObj.getCompanylogo() != null) {
             try {
                 String folder = "company-logo-pics"; // Change this to your preferred folder name
                 String publicId = folder + "/" + companiesRequestObj.getCompanylogo().getName();
@@ -61,9 +61,9 @@ public class CompaniesService {
             }
         }
         companiesRepoObj.save(new CompaniesEntity(
-            null, companiesRequestObj.getCompanyName(), companiesRequestObj.getSubscriptionType(), 
-            companiesRequestObj.getProducts(), companiesRequestObj.getSubscriptionExpiry(), Utility.getcurrentDate(), 
-            companiesRequestObj.getRole(), companiesRequestObj.getCompanyEmail(), profilePicUrl,-1l,"", Utility.hashPassword(companiesRequestObj.getPassword())
+                null, companiesRequestObj.getCompanyName(), companiesRequestObj.getSubscriptionType(),
+                companiesRequestObj.getProducts(), companiesRequestObj.getSubscriptionExpiry(), Utility.getcurrentDate(),
+                companiesRequestObj.getRole(), companiesRequestObj.getCompanyEmail(), profilePicUrl, -1l, "", Utility.hashPassword(companiesRequestObj.getPassword())
         ));
         CompaniesResponse response = new CompaniesResponse();
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -71,9 +71,9 @@ public class CompaniesService {
         return response;
     }
 
-    public CompaniesResponse getAllCompanies(Long companyId){
+    public CompaniesResponse getAllCompanies(Long companyId) {
         CompaniesResponse response = new CompaniesResponse();
-        if(companyId==null){
+        if (companyId == null) {
             response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
             List<CompaniesEntity> companies = companiesRepoObj.findAll();
             for (int i = 0; i < companies.size(); i++) {
@@ -85,9 +85,9 @@ public class CompaniesService {
         }
         List<CompaniesEntity> company = new ArrayList<>();
         CompaniesEntity comp = companiesRepoObj.findById(companyId).orElseThrow(
-            ()-> new RecordNotFoundException("Record of company '" + companyId + "' does not exists")
+                () -> new RecordNotFoundException("Record of company '" + companyId + "' does not exists")
         );
-        
+
         String prodCount = productsRepoObj.countCompanyProducts(comp.getCompanyid()).toString();
         comp.setProducts(prodCount);
         company.add(comp);
@@ -98,14 +98,14 @@ public class CompaniesService {
     }
 
     @Transactional
-    public CompaniesResponse updateCompanySubscription(Long companyId, CompaniesRequest companiesUpdateRequestObj) throws NoSuchAlgorithmException{
+    public CompaniesResponse updateCompanySubscription(Long companyId, CompaniesRequest companiesUpdateRequestObj) throws NoSuchAlgorithmException {
         System.out.println(companiesUpdateRequestObj.toString());
         // if(companiesUpdateRequestObj==null){
         //     throw new OperationNotAllowedException("No Data Found In Your Request");
         // }
         Optional<CompaniesEntity> companyObj = companiesRepoObj.findById(companyId);
         CompaniesResponse response = new CompaniesResponse();
-        if(!companyObj.isPresent()){
+        if (!companyObj.isPresent()) {
             // response.setResponseCode(AppConstants.RECORD_DOES_NOT_EXISTS);
             response.setResponseMessage(AppConstants.RECORD_DOES_NOT_EXISTS_MESSAGE);
             // return response;
@@ -113,7 +113,7 @@ public class CompaniesService {
         }
 
         String profilePicUrl = "";
-        if(companiesUpdateRequestObj.getCompanylogo()!=null){
+        if (companiesUpdateRequestObj.getCompanylogo() != null) {
             try {
                 String folder = "company-logo-pics"; // Change this to your preferred folder name
                 String publicId = folder + "/" + companiesUpdateRequestObj.getCompanylogo().getName();
@@ -126,27 +126,27 @@ public class CompaniesService {
 
         CompaniesEntity companyEntity = companyObj.get();
         companyEntity.setSubscriptiontype(
-            companiesUpdateRequestObj.getSubscriptionType()==null?companyEntity.getSubscriptiontype():companiesUpdateRequestObj.getSubscriptionType()
+                companiesUpdateRequestObj.getSubscriptionType() == null ? companyEntity.getSubscriptiontype() : companiesUpdateRequestObj.getSubscriptionType()
         );
         companyEntity.setSubscriptionexpiry(
-            companiesUpdateRequestObj.getSubscriptionExpiry()==null?companyEntity.getSubscriptionexpiry():companiesUpdateRequestObj.getSubscriptionExpiry()
+                companiesUpdateRequestObj.getSubscriptionExpiry() == null ? companyEntity.getSubscriptionexpiry() : companiesUpdateRequestObj.getSubscriptionExpiry()
         );
         companyEntity.setCompanyname(
-            companiesUpdateRequestObj.getCompanyName()==null?companyEntity.getCompanyname():companiesUpdateRequestObj.getCompanyName()
+                companiesUpdateRequestObj.getCompanyName() == null ? companyEntity.getCompanyname() : companiesUpdateRequestObj.getCompanyName()
         );
         companyEntity.setCompanylogo(
-            profilePicUrl.isEmpty()?companyEntity.getCompanylogo():profilePicUrl
+                profilePicUrl.isEmpty() ? companyEntity.getCompanylogo() : profilePicUrl
         );
         companyEntity.setLocation(
-            companiesUpdateRequestObj.getLocation()==null?companyEntity.getLocation():companiesUpdateRequestObj.getLocation()
+                companiesUpdateRequestObj.getLocation() == null ? companyEntity.getLocation() : companiesUpdateRequestObj.getLocation()
         );
 
         companyEntity.setPassword(
-            companiesUpdateRequestObj.getPassword()==null?companyEntity.getPassword():Utility.hashPassword(companiesUpdateRequestObj.getPassword())
+                companiesUpdateRequestObj.getPassword() == null ? companyEntity.getPassword() : Utility.hashPassword(companiesUpdateRequestObj.getPassword())
         );
 
         companyEntity.setCompanycategoryfk(
-            companiesUpdateRequestObj.getCompanycategoryfk()==null?companyEntity.getCompanycategoryfk():companiesUpdateRequestObj.getCompanycategoryfk()
+                companiesUpdateRequestObj.getCompanycategoryfk() == null ? companyEntity.getCompanycategoryfk() : companiesUpdateRequestObj.getCompanycategoryfk()
         );
         companiesRepoObj.save(companyEntity);
         // response.setResponseCode(AppConstants.SUCCESS);
@@ -155,9 +155,9 @@ public class CompaniesService {
         return response;
     }
 
-    public CompaniesResponse getCompanyDashboarddata(Long companyId){
+    public CompaniesResponse getCompanyDashboarddata(Long companyId) {
         CompaniesResponse response = new CompaniesResponse();
-        Map<String, Object> companyData =  new HashMap<>();
+        Map<String, Object> companyData = new HashMap<>();
         CompaniesEntity company = companiesRepoObj.findById(companyId).get();
         companyData.put("poductCount", productsRepoObj.countCompanyProducts(companyId));
         companyData.put("vouchersCreated", productsRepoObj.countCompanyVoucher(companyId));
@@ -166,30 +166,34 @@ public class CompaniesService {
         companyData.put("joiningdate", company.getJoindate());
         companyData.put("role", company.getRole());
         companyData.put("subscription", company.getSubscriptiontype());
-        
+
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         response.setData(companyData);
         return response;
     }
 
-    public CompaniesResponse companysignup(CompanySignUpRequest companySignUpRequestObj) throws NoSuchAlgorithmException{
+    public CompaniesResponse companysignup(CompanySignUpRequest companySignUpRequestObj) throws NoSuchAlgorithmException {
         CompaniesResponse response = new CompaniesResponse();
+
+        System.out.println("sub type "+ companySignUpRequestObj.getSubscriptiontype());
         CompaniesEntityBuilder companyEntity = CompaniesEntity.builder()
-        .companyEmail(companySignUpRequestObj.getCompanyEmail())
-        .companyname(companySignUpRequestObj.getCompanyName())
-        .location(companySignUpRequestObj.getLocation())
-        .companycategoryfk(companySignUpRequestObj.getCategory())
-        .joindate(Utility.getcurrentDate())
-        .password(Utility.hashPassword(companySignUpRequestObj.getPassword()));
+                .companyEmail(companySignUpRequestObj.getCompanyEmail())
+                .companyname(companySignUpRequestObj.getCompanyName())
+                .location(companySignUpRequestObj.getLocation())
+                .companycategoryfk(companySignUpRequestObj.getCategory())
+                .joindate(Utility.getcurrentDate())
+                .password(Utility.hashPassword(companySignUpRequestObj.getPassword()))
+                .subscriptiontype(companySignUpRequestObj.getSubscriptiontype())
+                .subscriptionexpiry(companySignUpRequestObj.getSubscriptionexpiry());
 
         companiesRepoObj.save(companyEntity.build());
         response.setResponseMessage(AppConstants.SUCCESS_MESSAGE);
         return response;
     }
 
-    public CompaniesResponse companyDashboard(Long companyid){
+    public CompaniesResponse companyDashboard(Long companyid) {
         CompaniesResponse response = new CompaniesResponse();
-        Map<String, Object> companyData =  new HashMap<>();
+        Map<String, Object> companyData = new HashMap<>();
         companyData.put("products", productsRepoObj.countCompanyProducts(companyid));
         companyData.put("orders", productsRepoObj.countCompanyOrderToday(companyid));
         companyData.put("totalOrders", productsRepoObj.countCompanyTotalOrder(companyid));
@@ -203,7 +207,7 @@ public class CompaniesService {
         return response;
     }
 
-    public CompaniesResponse deletecompany(Long companyid){
+    public CompaniesResponse deletecompany(Long companyid) {
         CompaniesResponse response = new CompaniesResponse();
         companiesRepoObj.deleteById(companyid);
         // response.setData(companyData);

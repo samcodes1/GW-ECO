@@ -21,4 +21,5 @@ public class CompaniesResponse extends EcoFriendlyBaseResponse {
     private String subscriptionType;
     private String products;
     private Date expiryDate;
+    private Date subscriptionexpiry;
 }

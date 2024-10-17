@@ -94,12 +94,12 @@ public class CompanyController {
         200:500).body(response);
     }
 
-    @PostMapping("/companySignUp")
-    public ResponseEntity<CompaniesResponse> signup(@RequestBody CompanySignUpRequest companySignUpRequestObj) throws NoSuchAlgorithmException {
-        CompaniesResponse response = companiesServiceObj.companysignup(companySignUpRequestObj);
-        return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
-        200:500).body(response);
-    }
+        @PostMapping("/companySignUp")
+        public ResponseEntity<CompaniesResponse> signup(@RequestBody CompanySignUpRequest companySignUpRequestObj) throws NoSuchAlgorithmException {
+            CompaniesResponse response = companiesServiceObj.companysignup(companySignUpRequestObj);
+            return ResponseEntity.status(response.getResponseMessage().equalsIgnoreCase(AppConstants.SUCCESS_MESSAGE)?
+            200:500).body(response);
+        }
 
     @GetMapping("/companyDashboard")
     public ResponseEntity<CompaniesResponse> companydashboard(@RequestParam Long companyId) {
